@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Gamelog</title>
+</head>
+<body>
+<h1>Create New Player</h1>
+<form action="#" th:action="@{/player}" th:object="${player}" method="post">
+    <p>Name: <input type="text" th:field="*{name}"/></p>
+    <p>Password: <input type="text" th:field="*{password}" /></p>
+    <p><input type="submit" value="Create User" /><input type="reset" value="Reset" /></p>
+</form>
+</body>
+</html>
