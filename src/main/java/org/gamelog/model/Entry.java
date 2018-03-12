@@ -5,57 +5,40 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@IdClass(EntryId.class)
 public class Entry implements Serializable{
-    @ManyToOne
-    @Id
-    private Player playerId;
-
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Integer id;
+    @EmbeddedId
+    private EntryId id;
 
     @Column(nullable = false)
     private boolean isPrivate = true;
-
-    @ManyToOne
-    @Id
-    private Game gameId;
 
     private Integer rating;
 
     private String review;
 
-    public Player getPlayerId() {
-        return playerId;
+    @Column(nullable = false)
+    private boolean isFavorite = false;
+
+    public Entry(Player playerId, Game gameId) {
+        this.id = new EntryId(playerId, gameId);
     }
 
-    public void setPlayerId(Player playerId) {
-        this.playerId = playerId;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    protected Entry(){}
 
     public boolean isPrivate() {
         return isPrivate;
     }
 
+    public EntryId getId() {
+        return id;
+    }
+
+    public void setId(EntryId id) {
+        this.id = id;
+    }
+
     public void setPrivate(boolean aPrivate) {
         isPrivate = aPrivate;
-    }
-
-    public Game getGameId() {
-        return gameId;
-    }
-
-    public void setGameId(Game gameId) {
-        this.gameId = gameId;
     }
 
     public Integer getRating() {
@@ -63,7 +46,8 @@ public class Entry implements Serializable{
     }
 
     public void setRating(Integer rating) {
-        this.rating = rating;
+        if(rating >= 0 && rating <= 10)
+            this.rating = rating;
     }
 
     public String getReview() {
@@ -82,7 +66,12 @@ public class Entry implements Serializable{
         isFavorite = favorite;
     }
 
-    @Column(nullable = false)
-
-    private boolean isFavorite = false;
+    @Override
+    public boolean equals(Object o){
+        if(o == this)
+            return true;
+        if(!(o instanceof Entry))
+            return false;
+        return getId().equals(((Entry) o).getId());
+    }
 }
