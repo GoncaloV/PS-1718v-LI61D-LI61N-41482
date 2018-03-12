@@ -6,7 +6,7 @@ import javax.persistence.Id;
 
 //TODO
 @Entity
-public class Gamelist {
+public class Tag {
     @Id
     @GeneratedValue
     private long id;

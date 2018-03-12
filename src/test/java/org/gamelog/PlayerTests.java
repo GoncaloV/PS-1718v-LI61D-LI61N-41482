@@ -21,9 +21,7 @@ public class PlayerTests {
 	@Test
 	public void createPlayer(){
 	    // Setup
-        Player p1 = new Player();
-        p1.setName(NAME);
-        p1.setPassword(PASSWORD);
+        Player p1 = new Player(NAME, PASSWORD);
         playerRepository.save(p1);
         Player p2 = playerRepository.findOne(p1.getId());
 
@@ -38,9 +36,7 @@ public class PlayerTests {
 	@Test
     public void findPlayer(){
         // Setup
-        Player p1 = new Player();
-        p1.setName(NAME);
-        p1.setPassword(PASSWORD);
+        Player p1 = new Player(NAME, PASSWORD);
         playerRepository.save(p1);
         Player p2 = playerRepository.findOne(p1.getId());
 
@@ -56,9 +52,7 @@ public class PlayerTests {
     public void updatePlayer(){
 	    // Setup
         // First create a player
-        Player p1 = new Player();
-        p1.setName(NAME);
-        p1.setPassword(PASSWORD);
+        Player p1 = new Player(NAME, PASSWORD);
         playerRepository.save(p1);
         Player p2 = playerRepository.findOne(p1.getId());
         // Ensure values are correct
@@ -82,9 +76,7 @@ public class PlayerTests {
     @Test
     public void deletePlayer() {
         // Setup
-        Player p1 = new Player();
-        p1.setName(NAME);
-        p1.setPassword(PASSWORD);
+        Player p1 = new Player(NAME, PASSWORD);
         playerRepository.save(p1);
 
         // Ensure creation succeeds
