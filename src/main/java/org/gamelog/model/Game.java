@@ -10,6 +10,12 @@ public class Game {
     @Id
     private long id;
 
+    @Formula("(SELECT COUNT(*) FROM entry e WHERE e.game_id = id)")
+    private long favorites;
+
+    @Formula("(SELECT AVG(e.rating) FROM entry e WHERE e.game_id = id)")
+    private Float averageRatings;
+
     protected Game() {}
 
     public Game(long id) {
@@ -20,7 +26,11 @@ public class Game {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public long getFavorites() {
+        return favorites;
+    }
+
+    public float getAverageRatings() {
+        return averageRatings;
     }
 }
