@@ -10,7 +10,7 @@ public class Game {
     @Id
     private long id;
 
-    @Formula("(SELECT COUNT(*) FROM entry e WHERE e.game_id = id)")
+    @Formula("(SELECT COUNT(*) FROM entry e WHERE e.game_id = id AND e.is_favorite)")
     private long favorites;
 
     @Formula("(SELECT AVG(e.rating) FROM entry e WHERE e.game_id = id)")
