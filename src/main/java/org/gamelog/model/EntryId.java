@@ -28,7 +28,7 @@ public class EntryId implements Serializable{
         this.game = game;
     }
 
-    public EntryId() {}
+    protected EntryId() {}
 
     public EntryId(Player player, Game game) {
         this.player = player;

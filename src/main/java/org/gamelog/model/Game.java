@@ -1,16 +1,20 @@
 package org.gamelog.model;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-//TODO
 @Entity
 public class Game {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
     private long id;
+
+    protected Game() {}
+
+    public Game(long id) {
+        this.id = id;
+    }
 
     public long getId() {
         return id;

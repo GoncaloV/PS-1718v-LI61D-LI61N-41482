@@ -29,7 +29,7 @@ public class EntryTests {
         // Setup
         Player p = new Player("P1", "PASS1");
         playerRepository.save(p);
-        Game g = new Game();
+        Game g = new Game(1);
         gameRepository.save(g);
         Entry e1 = new Entry(p, g);
         entryRepository.save(e1);
@@ -48,7 +48,7 @@ public class EntryTests {
         // Setup
         Player p = new Player("P1", "PASS1");
         playerRepository.save(p);
-        Game g = new Game();
+        Game g = new Game(1);
         gameRepository.save(g);
         Entry e1 = new Entry(p, g);
         entryRepository.save(e1);
@@ -67,7 +67,7 @@ public class EntryTests {
         // Setup
         Player p = new Player("P1", "PASS1");
         playerRepository.save(p);
-        Game g = new Game();
+        Game g = new Game(1);
         gameRepository.save(g);
         Entry e1 = new Entry(p, g);
         e1.setFavorite(true);
@@ -112,7 +112,7 @@ public class EntryTests {
         // Setup
         Player p = new Player("P1", "PASS1");
         playerRepository.save(p);
-        Game g = new Game();
+        Game g = new Game(1);
         gameRepository.save(g);
         Entry e1 = new Entry(p, g);
         entryRepository.save(e1);
