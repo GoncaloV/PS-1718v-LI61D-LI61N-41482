@@ -56,17 +56,14 @@ public class PlayerTests {
         playerRepository.save(p1);
         Player p2 = playerRepository.findOne(p1.getId());
         // Ensure values are correct
-        assert p2.getName().equals(p1.getName());
         assert p2.getPassword().equals(p1.getPassword());
 
         // Then update it
-        p1.setName(UPDATED_NAME); // NOTE: In a real situation, a player will not be able to change their name.
         p1.setPassword(UPDATED_PASSWORD);
         playerRepository.save(p1);
         p2 = playerRepository.findOne(p1.getId());
 
         // Assert
-        assert p2.getName().equals(p1.getName());
         assert p2.getPassword().equals(p1.getPassword());
 
         // Cleanup

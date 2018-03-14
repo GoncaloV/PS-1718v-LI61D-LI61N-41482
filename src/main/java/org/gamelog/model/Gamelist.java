@@ -12,6 +12,8 @@ public class Gamelist {
     private String name;
     @ManyToMany
     private List<Game> games;
+    @ManyToMany
+    private List<Tag> tags;
 
     protected Gamelist() { }
 
@@ -24,14 +26,9 @@ public class Gamelist {
         return id;
     }
 
-    public void setId(GamelistId id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -39,11 +36,7 @@ public class Gamelist {
     public List<Game> getGames() {
         return games;
     }
-
-    public void setGames(List<Game> games) {
-        this.games = games;
-    }
-
+    public void removeGame(Game game) { games.remove(game); }
     public void addGame(Game game){
         games.add(game);
     }

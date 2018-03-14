@@ -25,16 +25,12 @@ public class Entry implements Serializable{
 
     protected Entry(){}
 
-    public boolean isPrivate() {
-        return isPrivate;
-    }
-
     public EntryId getId() {
         return id;
     }
 
-    public void setId(EntryId id) {
-        this.id = id;
+    public boolean isPrivate() {
+        return isPrivate;
     }
 
     public void setPrivate(boolean aPrivate) {
