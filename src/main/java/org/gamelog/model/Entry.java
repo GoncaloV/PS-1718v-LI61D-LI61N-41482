@@ -3,6 +3,8 @@ package org.gamelog.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 public class Entry implements Serializable{
@@ -15,6 +17,9 @@ public class Entry implements Serializable{
     private Integer rating;
 
     private String review;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Tag> tags = new LinkedList<>();
 
     @Column(nullable = false)
     private boolean isFavorite = false;
@@ -61,6 +66,10 @@ public class Entry implements Serializable{
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
     }
+
+    public List<Tag> getTags() { return tags; }
+    public void addTag(Tag t){ tags.add(t); }
+    public void removeTag(Tag t){ tags.remove(t); }
 
     @Override
     public boolean equals(Object o){
