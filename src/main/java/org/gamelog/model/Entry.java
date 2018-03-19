@@ -18,7 +18,7 @@ public class Entry implements Serializable{
 
     private String review;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     private List<Tag> tags = new LinkedList<>();
 
     @Column(nullable = false)
