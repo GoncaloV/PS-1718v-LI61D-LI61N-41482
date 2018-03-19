@@ -18,7 +18,7 @@ public class MainController {
 
     @GetMapping(path="")
     public String getIndex(Model model) {
-        model.addAttribute("player", new Player("DEFAULT", "DEFAULT"));
+        model.addAttribute("player", new Player("", ""));
         return "index";
     }
 

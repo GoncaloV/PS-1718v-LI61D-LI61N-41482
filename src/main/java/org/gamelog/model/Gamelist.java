@@ -1,9 +1,5 @@
 package org.gamelog.model;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-import org.springframework.web.bind.annotation.ModelAttribute;
-
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,7 +14,7 @@ public class Gamelist {
     private String name;
     @ManyToMany
     private List<Game> games = new LinkedList<>();
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Tag> tags = new LinkedList<>();
 
     protected Gamelist() { }
