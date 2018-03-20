@@ -1,21 +1,14 @@
 package org.gamelog.controller;
 
 import org.gamelog.model.Player;
+import org.gamelog.service.PlayerService;
 import org.springframework.ui.Model;
-import org.gamelog.repos.PlayerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping
 public class MainController {
-    @Autowired
-    private PlayerRepository playerRepository;
-
     @GetMapping(path="")
     public String getIndex(Model model) {
         model.addAttribute("player", new Player("", ""));
@@ -23,8 +16,22 @@ public class MainController {
     }
 
     @PostMapping(path="/player")
-    public String createPlayer(@ModelAttribute Player player){
-        playerRepository.save(player);
-        return "result";
+    public String registerPlayer(@ModelAttribute Player player, Model model){
+            if(PlayerService.savePlayer(player)){
+                return "result";
+            }
+            model.addAttribute("error", "Error: failed to create user.");
+            return "index";
+    }
+
+    // Temporary path to check the database
+    @GetMapping(path="/players")
+    public @ResponseBody Iterable<Player> getAllPlayers(Model model){
+        return PlayerService.getAllPlayers();
+    }
+
+    @GetMapping(path="/login")
+    public String login(Model model){
+        return "login";
     }
 }

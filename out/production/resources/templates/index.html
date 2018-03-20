@@ -5,11 +5,21 @@
     <title>Gamelog</title>
 </head>
 <body>
-<h1>Create New Player</h1>
+<span th:if="${error != null}" th:text="${error}"/>
+<h1>Register</h1>
 <form action="#" th:action="@{/player}" th:object="${player}" method="post">
     <p>Name: <input type="text" th:field="*{name}"/></p>
     <p>Password: <input type="text" th:field="*{password}" /></p>
-    <p><input type="submit" value="Create User" /><input type="reset" value="Reset" /></p>
+    <p><input type="submit" value="Create Player" /></p>
 </form>
+<h1>Login</h1>
+<a href="/login"><input type="button" value="Login" /></a>
+<form action="#" th:action="@{/login}" th:object="${player}" method="get">
+    <p>Name: <input type="text" th:field="*{name}"/></p>
+    <p>Password: <input type="text" th:field="*{password}" /></p>
+    <p><input type="submit" value="Login" /></p>
+</form>
+<br/>
+<a href="/players">All players</a>
 </body>
 </html>
