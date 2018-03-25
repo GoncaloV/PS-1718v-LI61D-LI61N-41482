@@ -1,5 +1,8 @@
 package org.gamelog;
 
+import org.gamelog.model.Player;
+import org.gamelog.service.PlayerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,11 +16,14 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
+    @Autowired
+    PlayerService playerService;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
+                .antMatchers("/", "/player").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -31,9 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     @Bean
     @Override
     public UserDetailsService userDetailsService() {
-        UserDetails user = User.withUsername("user").password("password").roles("USER").build();
-        InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager();
-        inMemoryUserDetailsManager.createUser(user);
-        return inMemoryUserDetailsManager;
+        playerService.loadAll();
+        return playerService.getInMemoryUserDetailsManager();
     }
 }

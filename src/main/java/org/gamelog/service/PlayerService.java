@@ -3,32 +3,54 @@ package org.gamelog.service;
 import org.gamelog.model.Player;
 import org.gamelog.repos.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 
 @Service
 public class PlayerService {
-    private static PlayerRepository playerRepository;
+    @Autowired
+    private PlayerRepository playerRepository;
 
-    public static boolean savePlayer(Player p) {
-        try {
-            playerRepository.save(p);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+    private InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager();
+
+    public void save(Player p) {
+        playerRepository.save(p);
+        inMemoryUserDetailsManager.createUser(User.withUsername(p.getName()).password(p.getPassword()).roles("USER").build());
     }
 
-    public static Iterable<Player> getAllPlayers() {
+    public Iterable<Player> findAll() {
         return playerRepository.findAll();
     }
 
-    public static Player getPlayerById(long id){
+    public Player findById(long id){
         return playerRepository.findOne(id);
     }
 
-    @Autowired
-    public void setPlayerRepository(PlayerRepository playerRepository) {
-        PlayerService.playerRepository = playerRepository;
+    public Player findByName(String name){
+        return playerRepository.findPlayerByName(name);
+    }
+
+    public void deleteAll() {
+        playerRepository.deleteAll();
+    }
+
+    public void delete(Player p){
+        playerRepository.delete(p);
+    }
+
+    public InMemoryUserDetailsManager getInMemoryUserDetailsManager() {
+        return inMemoryUserDetailsManager;
+    }
+
+    public void loadAll() {
+        for (Player p : findAll()) {
+            inMemoryUserDetailsManager.createUser(User.withUsername(p.getName()).password(p.getPassword()).roles("USER").build());
+        }
     }
 }
