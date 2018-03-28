@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 
 @Service
-public class PlayerService {
+public class PlayerService /* implements UserDetailsService */{
     @Autowired
     private PlayerRepository playerRepository;
 
@@ -21,6 +21,7 @@ public class PlayerService {
 
     public void save(Player p) {
         playerRepository.save(p);
+        if(inMemoryUserDetailsManager.userExists(p.getName())) return;
         inMemoryUserDetailsManager.createUser(User.withUsername(p.getName()).password(p.getPassword()).roles("USER").build());
     }
 
@@ -53,4 +54,13 @@ public class PlayerService {
             inMemoryUserDetailsManager.createUser(User.withUsername(p.getName()).password(p.getPassword()).roles("USER").build());
         }
     }
+
+    /*
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Player player = findByName(username);
+        if (player != null) return User.withUsername(username).password(player.getPassword()).roles("USER").build();
+        else throw new UsernameNotFoundException(username);
+    }
+    */
 }

@@ -6,9 +6,9 @@
 </head>
 <body>
     <h1 th:text="${game.name}"></h1>
-    <img src="${game.coverUrl}"/>
+    <img src="${game.coverUrl}"></img>
     <p th:text="${game.summary}"></p>
     <p>Favorites: <span th:text="${game.favorites}"></span></p>
-    <!--<p>Average Rating: <div th:if="${game.averageRatings}">No ratings yet!</div></p>-->
+    <p>Average Rating: <div th:if="${game.averageRatings}">No ratings yet!</div></p>
 </body>
 </html>

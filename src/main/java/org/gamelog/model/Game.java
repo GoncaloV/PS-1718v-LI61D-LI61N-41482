@@ -16,6 +16,10 @@ public class Game {
     @Formula("(SELECT AVG(e.rating) FROM entry e WHERE e.game_id = id)")
     private Float averageRatings;
 
+    private String name;
+    private String summary;
+    private String coverUrl;
+
     protected Game() {}
 
     public Game(long id) {
@@ -32,5 +36,29 @@ public class Game {
 
     public float getAverageRatings() {
         return averageRatings;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public String getCoverUrl() {
+        return coverUrl;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public void setCoverUrl(String coverUrl) {
+        this.coverUrl = "https:" + coverUrl;
     }
 }
