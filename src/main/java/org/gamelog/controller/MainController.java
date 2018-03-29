@@ -49,7 +49,6 @@ public class MainController {
     @GetMapping(path="/game/{gameid}")
     public String getGamePage(@PathVariable("gameid") String gameid, Model model){
         Game game = gameService.getGameInfoById(Long.parseLong(gameid));
-        System.out.println(game.getCoverUrl());
         model.addAttribute("game", game);
         return "game";
     }

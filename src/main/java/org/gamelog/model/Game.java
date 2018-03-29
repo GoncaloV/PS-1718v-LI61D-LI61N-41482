@@ -34,7 +34,7 @@ public class Game {
         return favorites;
     }
 
-    public float getAverageRatings() {
+    public Float getAverageRatings() {
         return averageRatings;
     }
 
