@@ -16,6 +16,7 @@ public class Game {
     @Formula("(SELECT AVG(e.rating) FROM entry e WHERE e.game_id = id)")
     private Float averageRatings;
 
+    // Obtained from API
     private String name;
     private String summary;
     private String coverUrl;
