@@ -2,6 +2,7 @@ package org.gamelog.model;
 
 import org.hibernate.annotations.Formula;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -59,7 +60,5 @@ public class Game {
         this.summary = summary;
     }
 
-    public void setCoverUrl(String coverUrl) {
-        this.coverUrl = "https:" + coverUrl;
-    }
+    public void setCoverUrl(String coverUrl) { this.coverUrl = coverUrl; }
 }

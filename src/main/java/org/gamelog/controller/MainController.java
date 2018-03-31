@@ -8,6 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 @Controller
 @RequestMapping(path="/")
@@ -25,14 +30,14 @@ public class MainController {
     }
 
     @PostMapping(path="/player")
-    public String registerPlayer(@ModelAttribute Player player, Model model){
+    public String registerPlayer(@ModelAttribute Player player){
         playerService.save(player);
         return "result";
     }
 
     // Temporary path to check the database
     @GetMapping(path="/players")
-    public @ResponseBody Iterable<Player> getAllPlayers(Model model){
+    public @ResponseBody Iterable<Player> getAllPlayers(){
         return playerService.findAll();
     }
 
@@ -47,9 +52,20 @@ public class MainController {
     }
 
     @GetMapping(path="/game/{gameid}")
-    public String getGamePage(@PathVariable("gameid") String gameid, Model model){
-        Game game = gameService.getGameInfoById(Long.parseLong(gameid));
-        model.addAttribute("game", game);
+    public Future<String> getGamePage(@PathVariable("gameid") String gameid, Model model){
+        CompletableFuture<String> future = new CompletableFuture();
+        gameService.getGameInfoById(Long.parseLong(gameid)).thenAccept(game -> {
+            model.addAttribute("game", game);
+            future.complete("game");
+        });
+        return future;
+    }
+
+    @GetMapping(path="search")
+    public String search(@RequestParam("query") String query, Model model){
+        CompletableFuture<String> future = new CompletableFuture<>();
+        //gameService.search(query);
         return "game";
+        //TODO
     }
 }
