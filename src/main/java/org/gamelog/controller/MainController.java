@@ -4,6 +4,8 @@ import org.gamelog.model.Game;
 import org.gamelog.model.Player;
 import org.gamelog.service.GameService;
 import org.gamelog.service.PlayerService;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
@@ -62,10 +64,14 @@ public class MainController {
     }
 
     @GetMapping(path="search")
-    public String search(@RequestParam("query") String query, Model model){
+    public Future<String> search(@RequestParam("query") String query, @RequestParam(value = "page", defaultValue = "0") int page, Model model){
         CompletableFuture<String> future = new CompletableFuture<>();
-        //gameService.search(query);
-        return "game";
-        //TODO
+        gameService.search(query, page).thenAccept(games -> {
+            model.addAttribute("games", games);
+            future.complete("searchresults");
+        });
+        model.addAttribute("query", query);
+        model.addAttribute("page", page);
+        return future;
     }
 }

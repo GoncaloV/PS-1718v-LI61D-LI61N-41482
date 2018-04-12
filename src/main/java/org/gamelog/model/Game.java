@@ -28,6 +28,12 @@ public class Game {
         this.id = id;
     }
 
+    public Game(long id, String name, String coverUrl) {
+        this.id = id;
+        this.name = name;
+        this.coverUrl = coverUrl;
+    }
+
     public long getId() {
         return id;
     }

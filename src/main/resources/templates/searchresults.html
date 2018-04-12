@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Gamelog</title>
+</head>
+<body>
+<h1>Search results:</h1>
+<table>
+    <tr th:each="game : ${games}">
+        <td> <a th:href="'/game/' + ${game.id}" th:text="${game.name}"></a></td>
+        <td><img th:src="${game.coverUrl}"/></td>
+    </tr>
+</table>
+<a th:if="${page} > 0" th:href="@{/search(query=${query}, page=${page}-1)}">Previous</a>
+<a th:href="@{/search(query=${query}, page=${page}+1)}">Next</a>
+</body>
+</html>
