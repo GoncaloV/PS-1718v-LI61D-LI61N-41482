@@ -5,6 +5,7 @@ import org.hibernate.annotations.Formula;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
 @Entity
 public class Game {
@@ -19,6 +20,7 @@ public class Game {
 
     // Obtained from API
     private String name;
+    @Lob // Summaries tend to be very long.
     private String summary;
     private String coverUrl;
 

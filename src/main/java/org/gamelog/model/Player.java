@@ -43,12 +43,7 @@ public class Player implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new GrantedAuthority() {
-            @Override
-            public String getAuthority() {
-                return "USER";
-            }
-        });
+        return Collections.singleton(() -> "USER");
     }
 
     @Override

@@ -8,16 +8,12 @@ import org.gamelog.repos.EntryRepository;
 import org.gamelog.repos.GameRepository;
 import org.gamelog.repos.PlayerRepository;
 import org.gamelog.repos.TagRepository;
-import org.hibernate.Hibernate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.LinkedList;
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

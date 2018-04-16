@@ -1,19 +1,22 @@
 package org.gamelog.service;
 
-import callback.OnSuccessCallback;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import org.gamelog.GameDeserializer;
 import org.gamelog.model.Game;
 import org.gamelog.repos.GameRepository;
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import wrapper.Endpoints;
 import wrapper.IGDBWrapper;
-import wrapper.Parameters;
 import wrapper.Version;
+import com.google.gson.Gson;
+import org.asynchttpclient.*;
+import static org.asynchttpclient.Dsl.*;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -21,72 +24,53 @@ public class GameService {
     @Autowired
     private GameRepository gameRepository;
 
-    // IGDB query
-    private IGDBWrapper wrapper = new IGDBWrapper("71aeb38d5afbf91d50825fc9c24e86ff", Version.STANDARD, false);
     private final String DEFAULT_SIZE = "thumb";
     private final String DESIRED_SIZE = "cover_big";
-    private final String ORDER = "popularity:desc";
+
+    private final String API_KEY = "71aeb38d5afbf91d50825fc9c24e86ff";
+    private AsyncHttpClient asyncHttpClient = asyncHttpClient();
+
+    private Gson gson = new GsonBuilder().registerTypeAdapter(Game.class, new GameDeserializer()).create();
 
     public CompletableFuture<Game> getGameInfoById(Long id){
-        Parameters params = new Parameters().addIds(id.toString()).addFields("name, summary, cover");
         CompletableFuture<Game> gameCompletableFuture = new CompletableFuture<>();
 
-        Game game;
         if(gameRepository.exists(id)) {
-            game = gameRepository.findOne(id);
+            Game game = gameRepository.findOne(id);
+            gameCompletableFuture.complete(game);
         } else {
-            game = new Game(id);
-            gameRepository.save(game);
+            String uri = "https://api-endpoint.igdb.com/games/" + id + "?fields=name,summary,cover";
+            Request request = get(uri).addHeader("user-key", API_KEY).addHeader("Accept", "application/json").build();
+
+            // Fetch data from API using AsyncHttpClient and Gson
+            asyncHttpClient
+                    .executeRequest(request)
+                    .toCompletableFuture()
+                    .thenAccept(response -> {
+                        Type gameListType = new TypeToken<Collection<Game>>(){}.getType();
+                        List<Game> games = gson.fromJson(response.getResponseBody(), gameListType);
+                        Game game = games.get(0);
+                        game.setCoverUrl(game.getCoverUrl().replace(DEFAULT_SIZE, DESIRED_SIZE));
+                        gameRepository.save(games.get(0));
+                        gameCompletableFuture.complete(games.get(0));
+                    }).join();
         }
-
-        // Fetch data from API
-        wrapper.games(params, new OnSuccessCallback(){
-            @Override
-            public void onSuccess(JSONArray result) {
-                JSONObject jsonGame = result.getJSONObject(0);
-                String name = jsonGame.getString("name");
-                String summary = jsonGame.getString("summary");
-                JSONObject cover = jsonGame.getJSONObject("cover");
-                String imageUrl = cover.getString("url").replace(DEFAULT_SIZE, DESIRED_SIZE);
-                game.setName(name);
-                game.setSummary(summary);
-                game.setCoverUrl(imageUrl);
-                gameCompletableFuture.complete(game);
-            }
-
-            @Override
-            public void onError(Exception error) {
-                gameCompletableFuture.completeExceptionally(error);
-            }
-        });
         return gameCompletableFuture;
     }
 
     public CompletableFuture<ArrayList<Game>> search(String query, int page){
-        Parameters params = new Parameters().addSearch(query).addFields("id, name, cover").addOrder(ORDER).addOffset(String.valueOf(page*10));
         CompletableFuture<ArrayList<Game>> completableFuture = new CompletableFuture<>();
+        String uri = "https://api-endpoint.igdb.com/games/?search=" + query + "&fields=name,summary,cover&offset=" + page*10;
+        Request request = get(uri).addHeader("user-key", API_KEY).addHeader("Accept", "application/json").build();
 
-        wrapper.search(Endpoints.GAMES, params, new OnSuccessCallback() {
-            @Override
-            public void onSuccess(@NotNull JSONArray jsonArray) {
-                ArrayList<Game> games = new ArrayList<>();
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    long id = jsonObject.getLong("id");
-                    String title = jsonObject.getString("name");
-                    JSONObject cover = jsonObject.optJSONObject("cover");
-                    String url = cover != null ? cover.optString("url") : null;
-                    games.add(new Game(id, title, url));
-                }
-                completableFuture.complete(games);
-            }
-
-            @Override
-            public void onError(@NotNull Exception error) {
-                completableFuture.completeExceptionally(error);
-            }
-        });
-
+        asyncHttpClient
+                .executeRequest(request)
+                .toCompletableFuture()
+                .thenAccept(response -> {
+                    Type gameListType = new TypeToken<Collection<Game>>(){}.getType();
+                    ArrayList<Game> games = gson.fromJson(response.getResponseBody(), gameListType);
+                    completableFuture.complete(games);
+                }).join();
         return completableFuture;
     }
 }
