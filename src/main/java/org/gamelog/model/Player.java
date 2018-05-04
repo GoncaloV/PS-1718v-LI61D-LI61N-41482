@@ -54,22 +54,26 @@ public class Player implements UserDetails {
     public void setPassword(String password) { this.password = password; }
 
     // Accounts are never expired, always return true.
+    @Transient
     @Override
     public boolean isAccountNonExpired() { return true; }
 
     // Accounts are never locked, always return true.
+    @Transient
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
     // Credentials are never expired, always return true;
+    @Transient
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     // All accounts are enabled, always return true;
+    @Transient
     @Override
     public boolean isEnabled() {
         return true;

@@ -1,23 +1,24 @@
 package org.gamelog.service;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import org.asynchttpclient.AsyncHttpClient;
+import org.asynchttpclient.Request;
 import org.gamelog.GameDeserializer;
 import org.gamelog.model.Game;
 import org.gamelog.repos.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import wrapper.IGDBWrapper;
-import wrapper.Version;
-import com.google.gson.Gson;
-import org.asynchttpclient.*;
-import static org.asynchttpclient.Dsl.*;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+
+import static org.asynchttpclient.Dsl.asyncHttpClient;
+import static org.asynchttpclient.Dsl.get;
 
 @Service
 public class GameService {
@@ -43,17 +44,17 @@ public class GameService {
             Request request = get(uri).addHeader("user-key", API_KEY).addHeader("Accept", "application/json").build();
 
             // Fetch data from API using AsyncHttpClient and Gson
-            asyncHttpClient
+            gameCompletableFuture = asyncHttpClient
                     .executeRequest(request)
                     .toCompletableFuture()
-                    .thenAccept(response -> {
+                    .thenApply(response -> {
                         Type gameListType = new TypeToken<Collection<Game>>(){}.getType();
                         List<Game> games = gson.fromJson(response.getResponseBody(), gameListType);
                         Game game = games.get(0);
                         game.setCoverUrl(game.getCoverUrl().replace(DEFAULT_SIZE, DESIRED_SIZE));
                         gameRepository.save(games.get(0));
-                        gameCompletableFuture.complete(games.get(0));
-                    }).join();
+                        return games.get(0);
+                    });
         }
         return gameCompletableFuture;
     }
@@ -63,14 +64,18 @@ public class GameService {
         String uri = "https://api-endpoint.igdb.com/games/?search=" + query + "&fields=name,summary,cover&offset=" + page*10;
         Request request = get(uri).addHeader("user-key", API_KEY).addHeader("Accept", "application/json").build();
 
-        asyncHttpClient
+        completableFuture = asyncHttpClient
                 .executeRequest(request)
                 .toCompletableFuture()
-                .thenAccept(response -> {
+                .thenApply(response -> {
                     Type gameListType = new TypeToken<Collection<Game>>(){}.getType();
                     ArrayList<Game> games = gson.fromJson(response.getResponseBody(), gameListType);
-                    completableFuture.complete(games);
-                }).join();
+                    return games;
+                });
         return completableFuture;
+    }
+
+    public Iterable<Game> findGamesWithIds(Iterable<Long> ids) {
+        return gameRepository.findAll();
     }
 }

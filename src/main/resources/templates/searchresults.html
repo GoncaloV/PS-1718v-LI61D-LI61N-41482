@@ -5,6 +5,7 @@
     <title>Gamelog</title>
 </head>
 <body>
+<div th:replace="fragments/header :: header"/>
 <h1>Search results:</h1>
 <table>
     <tr th:each="game : ${games}">

@@ -18,9 +18,12 @@ public class Game {
     @Formula("(SELECT AVG(e.rating) FROM entry e WHERE e.game_id = id)")
     private Float averageRatings;
 
+    @Formula("(SELECT COUNT(*) FROM entry e WHERE e.game_id = id)")
+    private int plays;
+
     // Obtained from API
     private String name;
-    @Lob // Summaries tend to be very long.
+    @Column(columnDefinition = "TEXT")// Summaries tend to be very long.
     private String summary;
     private String coverUrl;
 
@@ -69,4 +72,8 @@ public class Game {
     }
 
     public void setCoverUrl(String coverUrl) { this.coverUrl = coverUrl; }
+
+    public int getPlays() {
+        return plays;
+    }
 }

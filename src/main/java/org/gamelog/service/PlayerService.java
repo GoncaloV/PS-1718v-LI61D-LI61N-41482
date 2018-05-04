@@ -13,12 +13,8 @@ public class PlayerService implements UserDetailsService {
     @Autowired
     private PlayerRepository playerRepository;
 
-    //private InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager();
-
     public void save(Player p) {
         playerRepository.save(p);
-        /*if(inMemoryUserDetailsManager.userExists(p.getName())) return;
-        inMemoryUserDetailsManager.createUser(User.withUsername(p.getName()).password(p.getPassword()).roles("USER").build()); */
     }
 
     public Iterable<Player> findAll() {
@@ -40,17 +36,6 @@ public class PlayerService implements UserDetailsService {
     public void delete(Player p){
         playerRepository.delete(p);
     }
-
-  /*  public InMemoryUserDetailsManager getInMemoryUserDetailsManager() {
-        return inMemoryUserDetailsManager;
-    }*/
-
-    /*public void loadAll() {
-        for (Player p : findAll()) {
-            inMemoryUserDetailsManager.createUser(User.withUsername(p.getName()).password(p.getPassword()).roles("USER").build());
-        }
-    }*/
-
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

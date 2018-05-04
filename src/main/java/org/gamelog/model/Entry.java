@@ -1,8 +1,11 @@
 package org.gamelog.model;
 
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,6 +26,17 @@ public class Entry implements Serializable{
 
     @Column(nullable = false)
     private boolean isFavorite = false;
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private LocalDate date;
 
     public Entry(Player playerId, Game gameId) {
         this.id = new EntryId(playerId, gameId);
@@ -47,6 +61,7 @@ public class Entry implements Serializable{
     }
 
     public void setRating(Integer rating) {
+        if(rating == null) return;
         if(rating >= 0 && rating <= 10)
             this.rating = rating;
     }

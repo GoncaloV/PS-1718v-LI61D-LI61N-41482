@@ -33,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/player", "/game/*", "/search*").permitAll()
+                .antMatchers("/", "/register", "/game/*", "/search*", "/favicon.ico", "/bootstrap.min.css").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -43,13 +43,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .logout()
                 .permitAll();
     }
-
-    /*
-    @Bean
-    @Override
-    public UserDetailsService userDetailsService() {
-        return playerService;
-        //playerService.loadAll();
-        //return playerService.getInMemoryUserDetailsManager();
-    }*/
 }

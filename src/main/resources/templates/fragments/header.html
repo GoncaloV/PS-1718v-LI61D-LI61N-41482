@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="header">
+    <a class="navbar-brand" href="/">Home</a>
+    <form action="/search" method="get">
+        <input type="text" name="query"/>
+        <input type="submit" value="Search for games"/>
+    </form>
+</div>
+</body>
+</html>

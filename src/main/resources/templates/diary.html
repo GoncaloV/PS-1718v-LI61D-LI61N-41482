@@ -1,11 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <title>Diário de Jogos</title>
 </head>
 <body>
+<div th:replace="fragments/header :: header"/>
 <h1>Your entries:</h1>
-
+<table>
+    <tr>
+        <th>Game</th>
+        <th>Cover Art</th>
+        <th>Private</th>
+        <th>Favorite</th>
+        <th>Date</th>
+        <th>Review</th>
+        <th>Rating</th>
+    </tr>
+<tr th:each="entry : ${entries}">
+    <td><a th:href="'/game/' + ${entry.id.game.id}" th:text="${entry.id.game.name}"></a></td>
+    <td><img th:src="${entry.id.game.coverUrl}"/></td>
+    <td th:text="${entry.private} ? 'Private' : 'Public'"></td>
+    <td th:text="${entry.favorite} ? 'Favorite' : ' '"></td>
+    <td th:text="${entry.date}"></td>
+    <td th:text="${entry.review}"/>
+    <td th:text="${entry.rating}"></td>
+</tr>
+</table>
 </body>
 </html>

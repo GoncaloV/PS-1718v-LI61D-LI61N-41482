@@ -9,6 +9,5 @@ import org.springframework.data.repository.query.Param;
 // CRUD refers Create, Read, Update, Delete
 
 public interface PlayerRepository extends CrudRepository<Player, Long> {
-    @Query("select p from Player p where p.name = :name")
     Player findPlayerByName(@Param("name") String name);
 }
