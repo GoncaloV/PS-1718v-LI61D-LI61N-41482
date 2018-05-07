@@ -1,0 +1,7 @@
+<h2>Your Entry</h2>
+<div th:text="'Rating: ' + ${entry.rating}"/>
+<div th:text="'Review: ' + ${entry.review}"/>
+<div th:text="${entry.favorite} ? 'Favorite'"/>
+<div th:text="${entry.private} ? 'Private'"/>
+<div th:text="${entry.date}"/>
+

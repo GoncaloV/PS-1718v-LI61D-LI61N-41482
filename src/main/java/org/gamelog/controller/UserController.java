@@ -7,6 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.context.support.HttpRequestHandlerServlet;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class UserController {
@@ -14,8 +18,15 @@ public class UserController {
     PlayerService playerService;
 
     @PostMapping(path="/register")
-    public String registerPlayer(@ModelAttribute Player player){
-        playerService.save(player);
+    public String registerPlayer(HttpServletRequest request, @ModelAttribute Player player){
+        Player p = playerService.save(player);
+        if(p != null) {
+            try {
+                request.login(p.getName(), p.getPassword());
+            } catch (ServletException e) {
+                e.printStackTrace();
+            }
+        }
         return "index";
     }
 

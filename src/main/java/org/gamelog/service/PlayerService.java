@@ -13,8 +13,8 @@ public class PlayerService implements UserDetailsService {
     @Autowired
     private PlayerRepository playerRepository;
 
-    public void save(Player p) {
-        playerRepository.save(p);
+    public Player save(Player p) {
+        return playerRepository.save(p);
     }
 
     public Iterable<Player> findAll() {

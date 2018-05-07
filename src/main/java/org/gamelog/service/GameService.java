@@ -25,9 +25,6 @@ public class GameService {
     @Autowired
     private GameRepository gameRepository;
 
-    private final String DEFAULT_SIZE = "thumb";
-    private final String DESIRED_SIZE = "cover_big";
-
     private final String API_KEY = "71aeb38d5afbf91d50825fc9c24e86ff";
     private AsyncHttpClient asyncHttpClient = asyncHttpClient();
 
@@ -51,7 +48,6 @@ public class GameService {
                         Type gameListType = new TypeToken<Collection<Game>>(){}.getType();
                         List<Game> games = gson.fromJson(response.getResponseBody(), gameListType);
                         Game game = games.get(0);
-                        game.setCoverUrl(game.getCoverUrl().replace(DEFAULT_SIZE, DESIRED_SIZE));
                         gameRepository.save(games.get(0));
                         return games.get(0);
                     });

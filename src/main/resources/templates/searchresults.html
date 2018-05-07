@@ -10,8 +10,8 @@
 <h1>Search results:</h1>
 <table class="table">
     <tr th:each="game : ${games}">
-        <td> <a th:href="'/game/' + ${game.id}" th:text="${game.name}"></a></td>
-        <td><img th:src="${game.coverUrl} ? ${game.coverUrl} : 'nocover.png'" width="90" height="90"/></td>
+        <td><a th:href="'/game/' + ${game.id}" th:text="${game.name}"/></td>
+        <td><img th:src="${game.coverUrl} ? ${game.coverUrl} : 'nocover.png'" height="100"/></td>
     </tr>
 </table>
 <a th:if="${page} > 0" th:href="@{/search(query=${query}, page=${page}-1)}">Previous</a>

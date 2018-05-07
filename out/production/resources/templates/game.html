@@ -7,34 +7,23 @@
 </head>
 <body>
 <div th:replace="fragments/navbar :: navbar"/>
-    <h1 th:text="${game.name}"></h1>
-    <img th:src="${game.coverUrl}"/>
-    <p th:text="${game.summary}"></p>
-    <p>Favorites:<div th:text="${game.favorites}"/></p>
-    <p>Average Rating: <div th:text="${game.averageRatings != null} ? ${game.averageRatings} : 'No ratings yet!'"/></p>
-    <p>Plays: <div th:text="${game.plays}+ ' players have made an entry of this game.'"/></p>
+<h1 th:text="${game.name}"></h1>
+<img th:src="${game.coverUrl}"/>
+<p th:text="${game.summary}"></p>
+<h6>Favorites:</h6>
+<p th:text="${game.favorites}"/>
+<h6>Average Rating:</h6>
+<p th:text="${game.averageRatings} ? ${game.averageRatings} : 'No ratings yet!'"/>
+<h6>Plays:</h6>
+<p th:text="${game.plays}+ ' users have played this game.'"/>
 
-    <div th:if="${#httpServletRequest.remoteUser}">
-        <div th:if="${entry}">
-            <h2>Your Entry</h2>
-
-        </div>
-        <div th:unless="${entry}">
-        <h2>Add to Diary</h2>
-        <form th:action="@{/entry}" method="post">
-            <div>Rating:</div>
-            <th:block th:each="i: ${#numbers.sequence(1, 10)}">
-                <input type="radio" name="rating" th:value="${i}" th:text="${i}"/>
-            </th:block>
-            <div>Review:</div>
-            <textarea rows="5" cols="100" name="review"/>
-            <input type="checkbox" name="favorite">Favorite</input>
-            <input type="checkbox" name="secret" th:checked="true">Private</input>
-            <input id="datepicker" type="date" name="date"/>
-            <input type="hidden" name="gameid" th:value="${game.id}"/>
-            <input type="submit" value="Create an Entry"/>
-        </form>
-        </div>
+<div th:if="${#httpServletRequest.remoteUser}">
+    <div th:if="${entry}">
+        <div th:replace="fragments/editEntry"/>
     </div>
+    <div th:unless="${entry}">
+        <div th:replace="fragments/addEntry"/>
+    </div>
+</div>
 </body>
 </html>
