@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8"/>
     <title th:text="${game.name}"></title>
+    <link rel="stylesheet" href="/bootstrap.min.css"/>
 </head>
 <body>
-<div th:replace="fragments/header :: header"/>
+<div th:replace="fragments/navbar :: navbar"/>
     <h1 th:text="${game.name}"></h1>
     <img th:src="${game.coverUrl}"/>
     <p th:text="${game.summary}"></p>
@@ -14,6 +15,11 @@
     <p>Plays: <div th:text="${game.plays}+ ' players have made an entry of this game.'"/></p>
 
     <div th:if="${#httpServletRequest.remoteUser}">
+        <div th:if="${entry}">
+            <h2>Your Entry</h2>
+
+        </div>
+        <div th:unless="${entry}">
         <h2>Add to Diary</h2>
         <form th:action="@{/entry}" method="post">
             <div>Rating:</div>
@@ -28,6 +34,7 @@
             <input type="hidden" name="gameid" th:value="${game.id}"/>
             <input type="submit" value="Create an Entry"/>
         </form>
+        </div>
     </div>
 </body>
 </html>

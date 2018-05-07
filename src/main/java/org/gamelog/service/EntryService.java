@@ -1,6 +1,7 @@
 package org.gamelog.service;
 
 import org.gamelog.model.Entry;
+import org.gamelog.model.EntryId;
 import org.gamelog.model.Game;
 import org.gamelog.model.Player;
 import org.gamelog.repos.EntryRepository;
@@ -39,5 +40,9 @@ public class EntryService {
 
     public Iterable<Entry> findAll() {
         return entryRepository.findAll();
+    }
+
+    public Entry findByPlayerAndGame(Player player, Game game) {
+        return entryRepository.findOne(new EntryId(player, game));
     }
 }

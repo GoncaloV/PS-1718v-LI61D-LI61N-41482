@@ -1,4 +1,4 @@
-package org.gamelog;
+package org.gamelog.config;
 
 import org.gamelog.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,14 +33,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/register", "/game/*", "/search*", "/favicon.ico", "/bootstrap.min.css").permitAll()
-                .anyRequest().authenticated()
-                .and()
+                    .antMatchers("/", "/register", "/game/*", "/search*", "/favicon.ico", "/favicon.png", "/nocover.png", "/bootstrap.min.css").permitAll()
+                    .anyRequest().authenticated()
+                    .and()
                 .formLogin()
-                .loginPage("/login")
-                .permitAll()
-                .and()
+                    .loginPage("/login")
+                    .permitAll()
+                    .and()
                 .logout()
-                .permitAll();
+                    .permitAll();
     }
 }

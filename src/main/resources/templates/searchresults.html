@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Gamelog</title>
+    <link rel="stylesheet" href="/bootstrap.min.css"/>
 </head>
 <body>
-<div th:replace="fragments/header :: header"/>
+<div th:replace="fragments/navbar :: navbar"/>
 <h1>Search results:</h1>
-<table>
+<table class="table">
     <tr th:each="game : ${games}">
         <td> <a th:href="'/game/' + ${game.id}" th:text="${game.name}"></a></td>
-        <td><img th:src="${game.coverUrl}"/></td>
+        <td><img th:src="${game.coverUrl} ? ${game.coverUrl} : 'nocover.png'" width="90" height="90"/></td>
     </tr>
 </table>
 <a th:if="${page} > 0" th:href="@{/search(query=${query}, page=${page}-1)}">Previous</a>

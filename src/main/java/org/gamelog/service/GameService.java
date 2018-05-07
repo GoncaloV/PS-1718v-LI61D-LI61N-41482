@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.Request;
-import org.gamelog.GameDeserializer;
+import org.gamelog.config.GameDeserializer;
 import org.gamelog.model.Game;
 import org.gamelog.repos.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;

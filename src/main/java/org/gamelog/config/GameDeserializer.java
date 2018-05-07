@@ -1,4 +1,4 @@
-package org.gamelog;
+package org.gamelog.config;
 
 import com.google.gson.*;
 import org.gamelog.model.Game;
@@ -16,7 +16,7 @@ public class GameDeserializer implements JsonDeserializer<Game> {
         String summary = aux != null ? aux.getAsString() : null;
 
         aux = jsonObject.get("cover");
-        String coverUrl = aux != null ? aux.getAsJsonObject().get("url").getAsString() : null;
+        String coverUrl = aux == null ? "/nocover.png" : aux.getAsJsonObject().get("url").getAsString();
 
         Game game = new Game(id);
         game.setName(name);
