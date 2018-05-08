@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"/>
     <title>Diário de Jogos</title>
-    <link rel="stylesheet" href="/bootstrap.min.css"/>
+    <div th:replace="fragments/header"/>
 </head>
 <body>
 <div th:replace="fragments/navbar :: navbar"/>
+<div class="container">
+    <h2>Recently released games</h2>
+<span th:each="game : ${games}">
+    <a th:href="'/game/' + ${game.id}"> <img th:src="${game.coverUrl} ? ${game.coverUrl} : '/images/nocover.png'" width="200" th:title="${game.name}"/></a>
+</span>
+</div>
 </body>
 </html>

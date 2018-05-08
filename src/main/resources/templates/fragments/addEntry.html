@@ -1,3 +1,4 @@
+<html xmlns:th="http://www.thymeleaf.org">
 <h2>Add to Diary</h2>
 <form th:action="@{/entry}" method="post">
     <div>Rating:</div>
@@ -8,7 +9,8 @@
     <textarea rows="5" cols="100" name="review"/>
     <input type="checkbox" name="favorite">Favorite</input>
     <input type="checkbox" name="secret" th:checked="true">Private</input>
-    <input id="datepicker" type="date" name="date"/>
+    <input type="date" name="date"/>
     <input type="hidden" name="gameid" th:value="${game.id}"/>
     <input type="submit" value="Create an Entry"/>
 </form>
+</html>

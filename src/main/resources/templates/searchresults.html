@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"/>
-    <title>Gamelog</title>
-    <link rel="stylesheet" href="/bootstrap.min.css"/>
+    <title>Search results</title>
+    <div th:replace="fragments/header"/>
 </head>
 <body>
 <div th:replace="fragments/navbar :: navbar"/>
@@ -11,7 +10,7 @@
 <table class="table">
     <tr th:each="game : ${games}">
         <td><a th:href="'/game/' + ${game.id}" th:text="${game.name}"/></td>
-        <td><img th:src="${game.coverUrl} ? ${game.coverUrl} : 'nocover.png'" height="100"/></td>
+        <td><img th:src="${game.coverUrl} ? ${game.coverUrl} : '/images/nocover.png'" height="100"/></td>
     </tr>
 </table>
 <a th:if="${page} > 0" th:href="@{/search(query=${query}, page=${page}-1)}">Previous</a>

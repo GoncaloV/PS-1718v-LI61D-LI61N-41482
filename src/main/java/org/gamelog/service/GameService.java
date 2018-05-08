@@ -11,6 +11,7 @@ import org.gamelog.repos.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,7 +31,7 @@ public class GameService {
 
     private Gson gson = new GsonBuilder().registerTypeAdapter(Game.class, new GameDeserializer()).create();
 
-    public CompletableFuture<Game> getGameInfoById(Long id){
+    public CompletableFuture<Game> findGameInfoById(Long id){
         CompletableFuture<Game> gameCompletableFuture = new CompletableFuture<>();
 
         if(gameRepository.exists(id)) {
@@ -56,11 +57,10 @@ public class GameService {
     }
 
     public CompletableFuture<ArrayList<Game>> search(String query, int page){
-        CompletableFuture<ArrayList<Game>> completableFuture = new CompletableFuture<>();
-        String uri = "https://api-endpoint.igdb.com/games/?search=" + query + "&fields=name,summary,cover&offset=" + page*10;
+        String uri = "https://api-endpoint.igdb.com/games/?search=" + query + "&fields=name,cover&offset=" + page*10;
         Request request = get(uri).addHeader("user-key", API_KEY).addHeader("Accept", "application/json").build();
 
-        completableFuture = asyncHttpClient
+        CompletableFuture<ArrayList<Game>> completableFuture = asyncHttpClient
                 .executeRequest(request)
                 .toCompletableFuture()
                 .thenApply(response -> {
@@ -71,7 +71,18 @@ public class GameService {
         return completableFuture;
     }
 
-    public Iterable<Game> findGamesWithIds(Iterable<Long> ids) {
-        return gameRepository.findAll();
+    public CompletableFuture<ArrayList<Game>> findRecentGames() {
+        String uri = "https://api-endpoint.igdb.com/games/?fields=name,cover&order=release_dates.date:desc&limit=5";
+        Request request = get(uri).addHeader("user-key", API_KEY).addHeader("Accept", "application/json").build();
+
+        CompletableFuture<ArrayList<Game>> completableFuture = asyncHttpClient
+                .executeRequest(request)
+                .toCompletableFuture()
+                .thenApply(response -> {
+                    Type gameListType = new TypeToken<Collection<Game>>(){}.getType();
+                    ArrayList<Game> games = gson.fromJson(response.getResponseBody(), gameListType);
+                    return games;
+                });
+        return completableFuture;
     }
 }

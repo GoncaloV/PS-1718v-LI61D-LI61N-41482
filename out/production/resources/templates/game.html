@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"/>
     <title th:text="${game.name}"></title>
-    <link rel="stylesheet" href="/bootstrap.min.css"/>
+    <div th:replace="fragments/header"/>
 </head>
 <body>
 <div th:replace="fragments/navbar :: navbar"/>
@@ -25,5 +24,23 @@
         <div th:replace="fragments/addEntry"/>
     </div>
 </div>
+
+<h2>User Entries</h2>
+<table class="table">
+    <tr>
+        <th>User</th>
+        <th>Favorite</th>
+        <th>Date</th>
+        <th>Review</th>
+        <th>Rating</th>
+    </tr>
+    <tr th:each="entry : ${entries}">
+        <td th:text="${entry.id.player.name}"></td>
+        <td> <i th:if="${entry.favorite} == false" class="material-icons">favorite</i></td>
+        <td th:text="${entry.date}"/>
+        <td th:text="${entry.review}"/>
+        <td th:text="${entry.rating}"/>
+    </tr>
+</table>
 </body>
 </html>

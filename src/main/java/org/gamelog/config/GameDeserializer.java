@@ -19,7 +19,7 @@ public class GameDeserializer implements JsonDeserializer<Game> {
         String summary = aux != null ? aux.getAsString() : null;
 
         aux = jsonObject.get("cover");
-        String coverUrl = aux == null ? "/nocover.png" : aux.getAsJsonObject().get("url").getAsString().replace(DEFAULT_SIZE, DESIRED_SIZE);
+        String coverUrl = aux == null ? null : aux.getAsJsonObject().get("url").getAsString().replace(DEFAULT_SIZE, DESIRED_SIZE);
         Game game = new Game(id);
         game.setName(name);
         game.setSummary(summary);

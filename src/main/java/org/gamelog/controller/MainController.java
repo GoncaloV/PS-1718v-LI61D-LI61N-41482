@@ -22,8 +22,13 @@ public class MainController {
     EntryService entryService;
 
     @GetMapping(path = "/")
-    public String getIndex() {
-        return "index";
+    public Future<String> getIndex(Model model) {
+        CompletableFuture<String> future = new CompletableFuture<>();
+        gameService.findRecentGames().thenAccept(games -> {
+            model.addAttribute("games", games);
+            future.complete("index");
+        });
+        return future;
     }
 
     @GetMapping(path="search")
@@ -41,13 +46,14 @@ public class MainController {
     @GetMapping(path="/game/{gameid}")
     public Future<String> getGamePage(@PathVariable("gameid") Long gameid, Model model, Authentication authentication){
         CompletableFuture<String> future = new CompletableFuture();
-        gameService.getGameInfoById(gameid).thenAccept(game -> {
+        gameService.findGameInfoById(gameid).thenAccept(game -> {
             model.addAttribute("game", game);
             if(authentication != null) {
                 Player player = (Player) authentication.getPrincipal();
                 Entry entry = entryService.findByPlayerAndGame(player, game);
                 model.addAttribute("entry", entry);
             }
+            model.addAttribute("entries", entryService.findPublicEntriesForGameById(game));
             future.complete("game");
         });
         return future;
