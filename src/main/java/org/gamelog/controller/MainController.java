@@ -4,6 +4,7 @@ import org.gamelog.model.Entry;
 import org.gamelog.model.Player;
 import org.gamelog.service.EntryService;
 import org.gamelog.service.GameService;
+import org.gamelog.service.GamelistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,9 @@ public class MainController {
 
     @Autowired
     EntryService entryService;
+
+    @Autowired
+    GamelistService gamelistService;
 
     @GetMapping(path = "/")
     public Future<String> getIndex(Model model) {
@@ -52,8 +56,10 @@ public class MainController {
                 Player player = (Player) authentication.getPrincipal();
                 Entry entry = entryService.findByPlayerAndGame(player, game);
                 model.addAttribute("entry", entry);
+                model.addAttribute("mylists", gamelistService.findAllByPlayerId(player));
             }
             model.addAttribute("entries", entryService.findPublicEntriesForGameById(game));
+            model.addAttribute("lists", gamelistService.findAllByGameId(game));
             future.complete("game");
         });
         return future;

@@ -23,6 +23,9 @@
     <div th:unless="${entry}">
         <div th:replace="fragments/addEntry"/>
     </div>
+    <div th:if="${mylists}">
+        <div th:replace="fragments/addToList"/>
+    </div>
 </div>
 
 <h2>User Entries</h2>

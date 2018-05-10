@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Diário de Jogos</title>
+    <div th:replace="fragments/header"/>
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"/>
+<h1>New list</h1>
+<form th:action="@{/lists}" method="post">
+    <div class="form-group">
+        <label for="newlist">Name:</label>
+        <input type="text" class="form-control" name="listname" id="newlist"/>
+        <input type="submit" class="btn btn-default"/>
+    </div>
+</form>
+<h1>Your lists:</h1>
+<div th:each="list : ${lists}">
+        <form th:action="'/list/' + ${list.id.id} + '/delete'" class="form-inline" method="post">
+            <a th:href="'/list/' + ${list.id.id}" th:text="${list.name}"/>
+            <input type="hidden" name="listid" th:value="${list.id.id}"/>
+            <input type="submit" class="btn" value="Delete"/>
+        </form>
+    <span th:each="game : ${list.games}">
+        <img th:src="${game.coverUrl}" height="100" width="100"/>
+    </span>
+</div>
+</body>
+</html>

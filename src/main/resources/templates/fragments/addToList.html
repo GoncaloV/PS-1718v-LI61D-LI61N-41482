@@ -1,0 +1,12 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<h2>Add to List</h2>
+<form th:action="@{/list}" method="post">
+<div class="form-group">
+    <select class="form-control" name="listid">
+        <option th:each="list : ${mylists}" th:value="${list.id.id}" th:text="${list.name}"></option>
+    </select>
+    <input type="hidden" name="gameid" th:value="${game.id}"/>
+    <input type="submit" value="Add"/>
+</div>
+</form>
+</html>

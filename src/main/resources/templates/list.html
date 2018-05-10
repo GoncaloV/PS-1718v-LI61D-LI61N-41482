@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${list.name}"></title>
+    <div th:replace="fragments/header"/>
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"/>
+<h1 th:text="${list.name}"></h1>
+<table class="table">
+    <tr>
+        <th>Game</th>
+        <th>Cover</th>
+        <th>Delete</th>
+    </tr>
+    <tr th:each="game : ${list.games}">
+        <td> <a th:href="'/game/' + ${game.id}" th:text="${game.name}"/></td>
+        <td>
+            <a th:href="'/game/' + ${game.id}"><img th:src="${game.coverUrl}" height="200"/></a>
+        </td>
+        <td>
+            <form th:action="'/list/' + ${list.id.id} + '/deletegame'" method="post">
+                    <input type="hidden" name="gameid" th:value="${game.id}"/>
+                    <input type="submit" class="btn" value="Delete"/>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

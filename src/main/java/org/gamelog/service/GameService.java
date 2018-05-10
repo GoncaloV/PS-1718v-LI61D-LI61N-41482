@@ -85,4 +85,8 @@ public class GameService {
                 });
         return completableFuture;
     }
+
+    public Game findGameById(Long gameid) {
+        return gameRepository.findOne(gameid);
+    }
 }

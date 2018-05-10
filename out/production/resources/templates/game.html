@@ -23,6 +23,9 @@
     <div th:unless="${entry}">
         <div th:replace="fragments/addEntry"/>
     </div>
+    <div th:if="${mylists}">
+        <div th:replace="fragments/addToList"/>
+    </div>
 </div>
 
 <h2>User Entries</h2>
@@ -36,7 +39,7 @@
     </tr>
     <tr th:each="entry : ${entries}">
         <td th:text="${entry.id.player.name}"></td>
-        <td> <i th:if="${entry.favorite} == false" class="material-icons">favorite</i></td>
+        <td> <i th:if="${entry.favorite}" class="material-icons">favorite</i></td>
         <td th:text="${entry.date}"/>
         <td th:text="${entry.review}"/>
         <td th:text="${entry.rating}"/>
