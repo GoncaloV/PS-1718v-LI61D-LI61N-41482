@@ -18,7 +18,7 @@ public class UserController {
     PlayerService playerService;
 
     @PostMapping(path="/register")
-    public RedirectView registerPlayer(HttpServletRequest request, @ModelAttribute Player player){
+    private RedirectView registerPlayer(HttpServletRequest request, @ModelAttribute Player player){
         Player p = playerService.save(player);
         if(p != null) {
             try {
@@ -31,12 +31,12 @@ public class UserController {
     }
 
     @GetMapping(path="/register")
-    public String getRegisterPage(){
+    private String getRegisterPage(){
         return "register";
     }
 
     @GetMapping(path="/login")
-    public String getLoginPage(){
+    private String getLoginPage(){
         return "login";
     }
 }

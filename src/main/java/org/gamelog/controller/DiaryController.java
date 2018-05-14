@@ -21,7 +21,7 @@ public class DiaryController {
     EntryService entryService;
 
     @GetMapping(path="/diary")
-    public String  getDiaryPage(Authentication authentication, Model model){
+    private String  getDiaryPage(Authentication authentication, Model model){
         Player player = (Player) authentication.getPrincipal();
         Iterable<Entry> entries = entryService.findAllEntriesForPlayerById(player);
         model.addAttribute("entries", entries);
@@ -29,7 +29,7 @@ public class DiaryController {
     }
 
     @PostMapping(path="entry")
-    public RedirectView postEntry(@RequestParam(value = "rating", required = false) Integer rating,
+    private RedirectView postEntry(@RequestParam(value = "rating", required = false) Integer rating,
                                   @RequestParam(value = "review", required = false) String review,
                                   @RequestParam(value = "favorite", required = false) boolean favorite,
                                   @RequestParam(value = "secret", required = false) boolean secret,

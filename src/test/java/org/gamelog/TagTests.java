@@ -5,6 +5,8 @@ import org.gamelog.model.Game;
 import org.gamelog.model.Tag;
 import org.gamelog.repos.PlayerRepository;
 import org.gamelog.repos.TagRepository;
+import org.gamelog.service.PlayerService;
+import org.gamelog.service.TagService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.gamelog.model.Player;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -21,6 +26,10 @@ public class TagTests {
     private PlayerRepository playerRepository;
     @Autowired
     private TagRepository tagRepository;
+    @Autowired
+    private TagService tagService;
+    @Autowired
+    private PlayerService playerService;
 
     @Test
     public void createTag(){
@@ -108,5 +117,28 @@ public class TagTests {
             tagRepository.deleteAll();
             playerRepository.deleteAll();
         }
+    }
+
+    @Test
+    public void findAllTagsByPlayer_Test(){
+        Player p1 = new Player("TESTNAME1", "TESTPASSWORD1");
+        Player p2 = new Player("TESTNAME2", "TESTPASSWORD2");
+        playerService.save(p1);
+        playerService.save(p2);
+
+        Tag t1 = new Tag(p1, "TESTTAG1");
+        Tag t2 = new Tag(p1, "TESTTAG2");
+        Tag t3 = new Tag(p2, "TESTTAG3");
+        tagService.save(t1);
+        tagService.save(t2);
+        tagService.save(t3);
+
+        ArrayList<Tag> tags = (ArrayList<Tag>) tagService.findAllTagsByPlayer(p1);
+        assert tags.size() == 2;
+        assert tags.get(0).getName().equals(t1.getName());
+        assert tags.get(1).getName().equals(t2.getName());
+
+        tagService.deleteAll();
+        playerService.deleteAll();
     }
 }

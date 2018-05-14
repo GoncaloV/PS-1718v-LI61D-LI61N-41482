@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="${list.name}"></title>
+    <title th:text="'Gamelog - ' + ${list.name}"></title>
     <div th:replace="fragments/header"/>
 </head>
 <body>

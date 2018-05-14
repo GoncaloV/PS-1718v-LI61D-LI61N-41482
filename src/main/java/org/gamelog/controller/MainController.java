@@ -26,7 +26,7 @@ public class MainController {
     GamelistService gamelistService;
 
     @GetMapping(path = "/")
-    public Future<String> getIndex(Model model) {
+    private Future<String> getIndex(Model model) {
         CompletableFuture<String> future = new CompletableFuture<>();
         gameService.findRecentGames().thenAccept(games -> {
             model.addAttribute("games", games);
@@ -36,7 +36,7 @@ public class MainController {
     }
 
     @GetMapping(path="search")
-    public Future<String> search(@RequestParam("query") String query, @RequestParam(value = "page", defaultValue = "0") int page, Model model){
+    private Future<String> search(@RequestParam("query") String query, @RequestParam(value = "page", defaultValue = "0") int page, Model model){
         CompletableFuture<String> future = new CompletableFuture<>();
         gameService.search(query, page).thenAccept(games -> {
             model.addAttribute("games", games);
@@ -48,7 +48,7 @@ public class MainController {
     }
 
     @GetMapping(path="/game/{gameid}")
-    public Future<String> getGamePage(@PathVariable("gameid") Long gameid, Model model, Authentication authentication){
+    private Future<String> getGamePage(@PathVariable("gameid") Long gameid, Model model, Authentication authentication){
         CompletableFuture<String> future = new CompletableFuture();
         gameService.findGameInfoById(gameid).thenAccept(game -> {
             model.addAttribute("game", game);

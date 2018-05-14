@@ -2,6 +2,7 @@ package org.gamelog.controller;
 
 import org.gamelog.model.Player;
 import org.gamelog.service.GamelistService;
+import org.gamelog.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -17,43 +18,47 @@ public class GamelistController {
     @Autowired
     GamelistService gamelistService;
 
+    @Autowired
+    TagService tagService;
+
     @GetMapping(path = "/lists")
-    public String getUserLists(Authentication authentication, Model model) {
+    private String getUserLists(Authentication authentication, Model model) {
         Player player = (Player) authentication.getPrincipal();
         model.addAttribute("lists", gamelistService.findAllByPlayerId(player));
+        model.addAttribute("tags", tagService.findAllTagsByPlayer(player));
         return "lists";
     }
 
     @PostMapping(path = "/lists")
-    public RedirectView postNewList(Authentication authentication, @RequestParam("listname") String listname) {
+    private RedirectView postNewList(Authentication authentication, @RequestParam("listname") String listname) {
         Player player = (Player) authentication.getPrincipal();
         gamelistService.addNewList(player, listname);
         return new RedirectView("/lists");
     }
 
     @GetMapping(path = "/list/{listid}")
-    public String getUserLists(@PathVariable("listid") Long listid, Authentication authentication, Model model) {
+    private String getUserLists(@PathVariable("listid") Long listid, Authentication authentication, Model model) {
         Player player = (Player) authentication.getPrincipal();
         model.addAttribute("list", gamelistService.findOneByPlayerAndListId(player, listid));
         return "list";
     }
 
     @PostMapping(path = "/list/{listid}/delete")
-    public RedirectView deleteList(@PathVariable("listid") Long listid, Authentication authentication) {
+    private RedirectView deleteList(@PathVariable("listid") Long listid, Authentication authentication) {
         Player player = (Player) authentication.getPrincipal();
         gamelistService.deleteList(player, listid);
         return new RedirectView("/lists/");
     }
 
     @PostMapping(path = "/list")
-    public RedirectView postToList(@RequestParam("listid") Long listid, @RequestParam("gameid") Long gameid, Authentication authentication) {
+    private RedirectView postToList(@RequestParam("listid") Long listid, @RequestParam("gameid") Long gameid, Authentication authentication) {
         Player player = (Player) authentication.getPrincipal();
         gamelistService.addToList(player, listid, gameid);
         return new RedirectView("/game/" + gameid);
     }
 
     @PostMapping(path = "/list/{listid}/deletegame")
-    public RedirectView deleteGameFromlist(@PathVariable("listid") Long listid, @RequestParam("gameid") Long gameid, Authentication authentication) {
+    private RedirectView deleteGameFromlist(@PathVariable("listid") Long listid, @RequestParam("gameid") Long gameid, Authentication authentication) {
         Player player = (Player) authentication.getPrincipal();
         gamelistService.deleteGameFromList(player, listid, gameid);
         return new RedirectView("/list/" + listid);

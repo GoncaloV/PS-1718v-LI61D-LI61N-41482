@@ -8,7 +8,7 @@ import java.util.Objects;
 public class TagId implements Serializable {
     @ManyToOne
     private Player player;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     protected TagId() {}
@@ -27,7 +27,6 @@ public class TagId implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-
         if (o == this)
             return true;
 

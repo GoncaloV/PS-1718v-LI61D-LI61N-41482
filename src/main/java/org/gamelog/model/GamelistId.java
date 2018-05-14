@@ -11,7 +11,7 @@ import java.util.Objects;
 public class GamelistId implements Serializable{
     @ManyToOne
     private Player player;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     protected GamelistId() { }

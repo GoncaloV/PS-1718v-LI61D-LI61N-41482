@@ -1,29 +1,43 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Diário de Jogos</title>
+    <title>Gamelog - Lists</title>
     <div th:replace="fragments/header"/>
 </head>
 <body>
 <div th:replace="fragments/navbar :: navbar"/>
-<h1>New list</h1>
-<form th:action="@{/lists}" method="post">
-    <div class="form-group">
-        <label for="newlist">Name:</label>
-        <input type="text" class="form-control" name="listname" id="newlist"/>
-        <input type="submit" class="btn btn-default"/>
-    </div>
-</form>
+<div th:if="${lists}">
 <h1>Your lists:</h1>
 <div th:each="list : ${lists}">
+    <br/>
         <form th:action="'/list/' + ${list.id.id} + '/delete'" class="form-inline" method="post">
-            <a th:href="'/list/' + ${list.id.id}" th:text="${list.name}"/>
+            <a class="btn btn-info" th:href="'/list/' + ${list.id.id}" th:text="${list.name}"/>
             <input type="hidden" name="listid" th:value="${list.id.id}"/>
-            <input type="submit" class="btn" value="Delete"/>
+            <input type="submit" class="btn btn-default" value="Delete"/>
         </form>
     <span th:each="game : ${list.games}">
         <img th:src="${game.coverUrl}" height="100" width="100"/>
     </span>
+    <div th:each="tag : ${list.tags}">
+        <span class="btn btn-info" th:text="${tag.name}"/>
+    </div>
+    <h6 th:text="'Add tag to ' + ${list.name}"/>
+    <form th:action="'/taglist'">
+        <select class="form-control" name="tagid">
+            <option th:each="tag : ${mytags}" th:value="${tag.id.id}" th:text="${tag.name}"></option>
+        </select>
+        <input type="hidden" name="list" th:value="${list.id.id}"/>
+        <input type="submit" value="Add"/>
+    </form>
+</div>
+    <br/>
+    <h6>Add new list</h6>
+    <form th:action="@{/lists}" method="post">
+        <div class="form-group">
+            <input type="text" class="form-control" name="listname"/>
+            <input type="submit" class="btn btn-default"/>
+        </div>
+    </form>
 </div>
 </body>
 </html>
