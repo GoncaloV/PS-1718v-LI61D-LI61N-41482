@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="'Gamelog - ' + ${list.name}"></title>
+    <title th:text="'Gamelog - ' + ${list.id.name}"></title>
     <div th:replace="fragments/header"/>
 </head>
 <body>
 <div th:replace="fragments/navbar :: navbar"/>
-<h1 th:text="${list.name}"></h1>
+<h1 th:text="${list.id.name}"></h1>
 <table class="table">
     <tr>
         <th>Game</th>
@@ -19,7 +19,7 @@
             <a th:href="'/game/' + ${game.id}"><img th:src="${game.coverUrl}" height="200"/></a>
         </td>
         <td>
-            <form th:action="'/list/' + ${list.id.id} + '/deletegame'" method="post">
+            <form th:action="'/list/' + ${list.id.name} + '/deletegame'" method="post">
                     <input type="hidden" name="gameid" th:value="${game.id}"/>
                     <input type="submit" class="btn" value="Delete"/>
             </form>

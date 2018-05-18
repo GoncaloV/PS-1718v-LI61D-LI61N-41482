@@ -7,6 +7,6 @@ import org.gamelog.model.Tag;
 
 public interface TagRepository extends CrudRepository<Tag, TagId> {
     Iterable<Tag> findAllByIdPlayer(Player p);
-    void deleteOneByIdPlayerAndIdId(Player p, Long tagid);
-    Tag findOneByIdPlayerAndIdId(Player p, Long tagid);
+    void deleteOneByIdPlayerAndIdName(Player p, String tagname);
+    Tag findOneByIdPlayerAndIdName(Player p, String tagname);
 }

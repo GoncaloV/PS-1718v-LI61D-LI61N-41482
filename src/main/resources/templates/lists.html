@@ -10,25 +10,35 @@
 <h1>Your lists:</h1>
 <div th:each="list : ${lists}">
     <br/>
-        <form th:action="'/list/' + ${list.id.id} + '/delete'" class="form-inline" method="post">
-            <a class="btn btn-info" th:href="'/list/' + ${list.id.id}" th:text="${list.name}"/>
-            <input type="hidden" name="listid" th:value="${list.id.id}"/>
+        <form th:action="'/list/' + ${list.id.name} + '/delete'" class="form-inline" method="post">
+            <a class="btn btn-info" th:href="'/list/' + ${list.id.name}" th:text="${list.id.name}"/>
+            <input type="hidden" name="listid" th:value="${list.id.name}"/>
             <input type="submit" class="btn btn-default" value="Delete"/>
         </form>
     <span th:each="game : ${list.games}">
         <img th:src="${game.coverUrl}" height="100" width="100"/>
     </span>
+    <div th:if="${!list.tags.empty}">
+        <h6 th:text="'Tags for ' + ${list.id.name}"></h6>
     <div th:each="tag : ${list.tags}">
-        <span class="btn btn-info" th:text="${tag.name}"/>
+        <form th:action="'/list/removeTag'" method="post">
+        <span  class="btn btn-info btn-sm" th:text="${tag.id.name}"/>
+            <input type="hidden" name="tagname" th:value="${tag.id.name}"/>
+            <input type="hidden" name="listname" th:value="${list.id.name}"/>
+            <input type="submit" value="Remove"/>
+        </form>
     </div>
-    <h6 th:text="'Add tag to ' + ${list.name}"/>
-    <form th:action="'/taglist'">
-        <select class="form-control" name="tagid">
-            <option th:each="tag : ${mytags}" th:value="${tag.id.id}" th:text="${tag.name}"></option>
+    </div>
+    <div th:if="${!tags.empty}">
+    <h6 th:text="'Add tag to ' + ${list.id.name}"/>
+    <form th:action="'/list/addTag'" method="post">
+        <select class="form-control" name="tagname">
+            <option th:each="tag : ${tags}" th:value="${tag.id.name}" th:text="${tag.id.name}"></option>
         </select>
-        <input type="hidden" name="list" th:value="${list.id.id}"/>
+        <input type="hidden" name="listname" th:value="${list.id.name}"/>
         <input type="submit" value="Add"/>
     </form>
+    </div>
 </div>
     <br/>
     <h6>Add new list</h6>

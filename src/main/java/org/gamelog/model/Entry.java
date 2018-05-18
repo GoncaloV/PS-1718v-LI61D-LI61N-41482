@@ -6,8 +6,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Entry implements Serializable{
@@ -22,7 +22,7 @@ public class Entry implements Serializable{
     private String review;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<Tag> tags = new LinkedList<>();
+    private Set<Tag> tags = new HashSet<>();
 
     @Column(nullable = false)
     private boolean isFavorite = false;
@@ -82,7 +82,7 @@ public class Entry implements Serializable{
         isFavorite = favorite;
     }
 
-    public List<Tag> getTags() { return tags; }
+    public Set<Tag> getTags() { return tags; }
     public void addTag(Tag t){ tags.add(t); }
     public void removeTag(Tag t){ tags.remove(t); }
 

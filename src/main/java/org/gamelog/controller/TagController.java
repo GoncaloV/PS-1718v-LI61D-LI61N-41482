@@ -28,10 +28,10 @@ public class TagController {
         return new RedirectView("/tags");
     }
 
-    @PostMapping("/tag/{tagid}/delete")
-    private RedirectView deleteTag(Authentication authentication, @PathVariable(name = "tagid") Long tagid){
+    @PostMapping("/tag/{tagname}/delete")
+    private RedirectView deleteTag(Authentication authentication, @PathVariable(name = "tagname") String tagname){
         Player p = (Player) authentication.getPrincipal();
-        tagService.delete(p, tagid);
+        tagService.delete(p, tagname);
         return new RedirectView("/tags");
     }
 }

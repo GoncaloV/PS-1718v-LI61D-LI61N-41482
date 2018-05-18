@@ -159,7 +159,7 @@ public class EntryTests {
 
             Entry e2 = entryRepository.findOne(e1.getId());
             //Assert
-            assert e2.getTags().get(0).getName().equals("TEST");
+            assert e2.getTags().get(0).getId().getName().equals("TEST");
 
         } finally {
             // Cleanup

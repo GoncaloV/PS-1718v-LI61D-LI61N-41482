@@ -9,5 +9,5 @@ import org.gamelog.model.Gamelist;
 public interface GamelistRepository extends CrudRepository<Gamelist, GamelistId> {
     Iterable<Gamelist> findTop5ByIdPlayer(Player player);
     Iterable<Gamelist> findTop5ByGames(Game game);
-    Gamelist findOneByIdPlayerAndIdId(Player player, Long listid);
+    Gamelist findOneByIdPlayerAndIdName(Player player, String gamelistname);
 }

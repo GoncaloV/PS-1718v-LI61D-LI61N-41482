@@ -1,20 +1,20 @@
 package org.gamelog.model;
 
 import javax.persistence.*;
+import java.util.*;
 
 @Entity
 public class Tag {
     @EmbeddedId
     private TagId id;
 
-    @Column(unique=true, nullable = false)
-    private String name;
+    @ManyToMany(mappedBy = "tags")
+    private Set<Gamelist> gamelists = new HashSet<>();
 
     protected Tag() {}
 
     public Tag(Player player, String name) {
-        this.id = new TagId(player);
-        this.name = name;
+        this.id = new TagId(player, name);
     }
 
     @Override
@@ -30,10 +30,7 @@ public class Tag {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
+    public Set<Gamelist> getGamelists() {
+        return gamelists;
     }
 }

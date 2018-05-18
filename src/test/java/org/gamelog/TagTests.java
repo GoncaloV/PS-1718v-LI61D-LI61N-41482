@@ -78,17 +78,17 @@ public class TagTests {
             Tag t2 = tagRepository.findOne(t1.getId());
 
             assert t1.equals(t2);
-            assert t1.getName().equals(t2.getName());
+            assert t1.getId().equals(t2.getId());
 
             // Set new values
-            t1.setName("UPDATETAG");
+            t1.getId().setName("UPDATETAG");
             tagRepository.save(t1);
 
             t2 = tagRepository.findOne(t1.getId());
 
             // Assert
             assert t1.equals(t2);
-            assert t1.getName().equals(t2.getName());
+            assert t1.getId().equals(t2.getId());
         } finally {
             // Cleanup
             tagRepository.deleteAll();
@@ -135,8 +135,8 @@ public class TagTests {
 
         ArrayList<Tag> tags = (ArrayList<Tag>) tagService.findAllTagsByPlayer(p1);
         assert tags.size() == 2;
-        assert tags.get(0).getName().equals(t1.getName());
-        assert tags.get(1).getName().equals(t2.getName());
+        assert tags.get(0).getId().equals(t1.getId());
+        assert tags.get(1).getId().equals(t2.getId());
 
         tagService.deleteAll();
         playerService.deleteAll();

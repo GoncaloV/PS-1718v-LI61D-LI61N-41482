@@ -7,7 +7,7 @@
 <body>
 <div th:replace="fragments/navbar :: navbar"/>
 <h1 th:text="${game.name}"></h1>
-<img th:src="${game.coverUrl}"/>
+<img th:src="${game.coverUrl} ? ${game.coverUrl} : '/images/nocover.png'" th:title="${game.name}"/>
 <p th:text="${game.summary}"></p>
 <h6>Favorites:</h6>
 <p th:text="${game.favorites}"/>

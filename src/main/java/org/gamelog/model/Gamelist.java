@@ -1,41 +1,28 @@
 package org.gamelog.model;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
-import java.util.LinkedList;
-import java.util.List;
+import javax.persistence.*;
+import java.util.*;
 
 @Entity
 public class Gamelist {
     @EmbeddedId
     private GamelistId id;
-    private String name;
     @ManyToMany
-    private List<Game> games = new LinkedList<>();
+    private Set<Game> games = new HashSet<>();
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<Tag> tags = new LinkedList<>();
+    private Set<Tag> tags = new HashSet<>();
 
     protected Gamelist() { }
 
     public Gamelist(Player id, String name) {
-        this.id = new GamelistId(id);
-        this.name = name;
+        this.id = new GamelistId(id, name);
     }
 
     public GamelistId getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Game> getGames() {
+    public Set<Game> getGames() {
         return games;
     }
     public void removeGame(Game game) { games.remove(game); }
@@ -43,7 +30,7 @@ public class Gamelist {
         games.add(game);
     }
 
-    public List<Tag> getTags() { return tags; }
+    public Set<Tag> getTags() { return tags; }
     public void addTag(Tag t){ tags.add(t); }
     public void removeTag(Tag t){ tags.remove(t); }
 }

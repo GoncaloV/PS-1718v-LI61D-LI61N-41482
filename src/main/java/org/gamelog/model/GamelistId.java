@@ -1,9 +1,6 @@
 package org.gamelog.model;
 
-import javax.persistence.Embeddable;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -11,21 +8,21 @@ import java.util.Objects;
 public class GamelistId implements Serializable{
     @ManyToOne
     private Player player;
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private String name;
 
     protected GamelistId() { }
 
-    public GamelistId(Player player) {
+    public GamelistId(Player player, String name) {
         this.player = player;
+        this.name = name;
     }
 
     public Player getPlayer() {
         return player;
     }
 
-    public long getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -38,11 +35,11 @@ public class GamelistId implements Serializable{
             return false;
 
         GamelistId gli = o instanceof Gamelist ? ((Gamelist) o).getId() : (GamelistId) o;
-        return player.getId() == gli.player.getId() && id == gli.getId();
+        return player.getId() == gli.player.getId() && name.equals(gli.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, player);
+        return Objects.hash(name, player);
     }
 }
