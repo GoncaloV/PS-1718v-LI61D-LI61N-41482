@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Entry implements Serializable{
+public class Entry {
     @EmbeddedId
     private EntryId id;
 
@@ -62,7 +62,7 @@ public class Entry implements Serializable{
 
     public void setRating(Integer rating) {
         if(rating == null) return;
-        if(rating >= 0 && rating <= 10)
+        if(rating >= 1 && rating <= 10)
             this.rating = rating;
     }
 
@@ -85,13 +85,4 @@ public class Entry implements Serializable{
     public Set<Tag> getTags() { return tags; }
     public void addTag(Tag t){ tags.add(t); }
     public void removeTag(Tag t){ tags.remove(t); }
-
-    @Override
-    public boolean equals(Object o){
-        if(o == this)
-            return true;
-        if(!(o instanceof Entry))
-            return false;
-        return getId().equals(((Entry) o).getId());
-    }
 }

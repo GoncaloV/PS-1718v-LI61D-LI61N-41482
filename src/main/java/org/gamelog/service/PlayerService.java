@@ -6,19 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class PlayerService implements UserDetailsService {
     @Autowired
     private PlayerRepository playerRepository;
 
     public Player save(Player p) {
         return playerRepository.save(p);
-    }
-
-    public Iterable<Player> findAll() {
-        return playerRepository.findAll();
     }
 
     public Player findById(long id){

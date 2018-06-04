@@ -9,7 +9,7 @@ public class Gamelist {
     private GamelistId id;
     @ManyToMany
     private Set<Game> games = new HashSet<>();
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany//(fetch = FetchType.EAGER)
     private Set<Tag> tags = new HashSet<>();
 
     protected Gamelist() { }

@@ -10,7 +10,7 @@ import java.util.Collections;
 @Entity
 public class Player implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private long id;
 
     @Column(unique = true, nullable = false)

@@ -49,7 +49,7 @@ public class GameService {
                         List<Game> games = gson.fromJson(response.getResponseBody(), gameListType);
                         Game game = games.get(0);
                         gameRepository.save(games.get(0));
-                        return games.get(0);
+                        return games.get(0)
                     });
         }
         return gameCompletableFuture;
