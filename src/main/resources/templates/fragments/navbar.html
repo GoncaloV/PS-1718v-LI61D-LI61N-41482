@@ -10,7 +10,6 @@
             <strong th:inline="text" class="text-light">[[${#httpServletRequest.remoteUser}]]</strong>
             <a href="/diary" class="btn btn-primary">Diary</a>
             <a href="/lists" class="btn btn-primary">Lists</a>
-            <a href="/tags" class="btn btn-primary">Tags</a>
         </li>
         <li>
         <form th:if="${#httpServletRequest.remoteUser}" class="navbar-form" th:action="@{/logout}" method="post">

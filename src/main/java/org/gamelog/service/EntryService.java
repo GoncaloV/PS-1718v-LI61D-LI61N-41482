@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -48,10 +49,11 @@ public class EntryService {
 
     public Iterable<Entry> findPublicEntriesForGameById(Game game) {
         ArrayList<Entry> entries = (ArrayList<Entry>) entryRepository.findAllByIdGame(game);
+        ArrayList<Entry> publicEntries = new ArrayList<>();
         entries.forEach(entry -> {
-            if(entry.isPrivate())
-                entries.remove(entry);
+            if(!entry.isPrivate())
+                publicEntries.add(entry);
         });
-        return entries;
+        return publicEntries;
     }
 }

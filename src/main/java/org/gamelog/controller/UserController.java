@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.ServletException;
@@ -18,8 +19,8 @@ public class UserController {
     PlayerService playerService;
 
     @PostMapping(path="/register")
-    private RedirectView registerPlayer(HttpServletRequest request, @ModelAttribute Player player){
-        Player p = playerService.save(player);
+    private RedirectView registerPlayer(HttpServletRequest request, @RequestParam("name") String name, @RequestParam("password") String password){
+        Player p = playerService.createPlayer(name, password);
         if(p != null) {
             try {
                 request.login(p.getName(), p.getPassword());

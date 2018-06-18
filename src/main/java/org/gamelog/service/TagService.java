@@ -14,29 +14,39 @@ import java.util.LinkedList;
 public class TagService {
     @Autowired
     TagRepository tagRepository;
-    @Autowired
-    GamelistService gamelistService;
 
-    public Iterable<Tag> findAllTagsByPlayer(Player p){
-        return tagRepository.findAllByIdPlayer(p);
-    }
-
-    public Tag save(Tag tag) {
-        return tagRepository.save(tag);
-    }
-
-    public void deleteAll() {
-        tagRepository.deleteAll();
-    }
-
-    public Tag addTagToPlayer(Player p, String tagname) {
-        Tag t = new Tag(p, tagname);
+    /**
+     * Creates a tag and stores it in the database.
+     * @param tagname The name of the tag to be created.
+     * @return The tag created.
+     */
+    public Tag createTag(String tagname) {
+        Tag t = new Tag(tagname);
         return tagRepository.save(t);
     }
 
-    public void delete(Player p, String tagname) {
-        Tag tag = tagRepository.findOneByIdPlayerAndIdName(p, tagname);
-        gamelistService.removeTagFromLists(tag.getGamelists(), tag);
-        tagRepository.delete(tag);
+    /**
+     * Finds a tag in the database.
+     * @param tagname Name of tag to be found.
+     * @return The tag found.
+     */
+    public Tag findTag(String tagname){
+        return tagRepository.findOne(tagname);
+    }
+
+    /**
+     * Deletes a tag from the database.
+     * @param tagname Name of tag to be deleted.
+     */
+    public void delete(String tagname) {
+        tagRepository.delete(tagname);
+    }
+
+    /**
+     * Finds all tags in the database.
+     * @return An Iterable containing all the tags in the database.
+     */
+    public Iterable<Tag> getAllTags() {
+        return tagRepository.findAll();
     }
 }

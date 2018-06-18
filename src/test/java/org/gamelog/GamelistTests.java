@@ -1,46 +1,66 @@
 package org.gamelog;
 
-import org.gamelog.model.Game;
 import org.gamelog.model.Gamelist;
 import org.gamelog.model.Player;
-import org.gamelog.repos.GameRepository;
-import org.gamelog.repos.GamelistRepository;
-import org.gamelog.repos.PlayerRepository;
+import org.gamelog.model.Tag;
+import org.gamelog.service.GamelistService;
+import org.gamelog.service.PlayerService;
+import org.gamelog.service.TagService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource("classpath:application-test.properties")
 public class GamelistTests {
     @Autowired
-    private GamelistRepository gamelistRepository;
-    @Autowired
-    private PlayerRepository playerRepository;
-    @Autowired
-    private GameRepository gameRepository;
+    private GamelistService gamelistService;
 
-    private final long GAME_ID = 1;
+    @Autowired
+    private TagService tagService;
 
+    @Autowired
+    private PlayerService playerService;
+
+    final String TAG_NAME = "TEST_TAG_NAME";
+    final String PLAYER_NAME = "TEST_PLAYER_NAME";
+    final String PLAYER_PASSWORD = "TEST_PASSWORD";
+    final String GAMELIST_NAME = "TEST_GAMELIST_NAME";
+
+    /**
+     * This test covers the addition of a new tag to a list. The tag should be created and added to the list.
+     */
     @Test
-    public void createGamelist(){
-        try {
-            // Setup
-            Player p1 = new Player("P1", "PASS1");
-            playerRepository.save(p1);
-            Gamelist gl1 = new Gamelist(p1, "LIST1");
-            gamelistRepository.save(gl1);
-            
-            // Assert
-            assert gamelistRepository.findOne(gl1.getId()) != null;
-        } finally {
-            // Cleanup
-            gamelistRepository.deleteAll();
-            playerRepository.deleteAll();
-        }
+    @Transactional
+    public void testAddNewTagToList(){
+        final Player PLAYER = playerService.createPlayer(PLAYER_NAME, PLAYER_PASSWORD);
+        final Gamelist GAMELIST = gamelistService.addNewList(PLAYER, GAMELIST_NAME);
+        gamelistService.addTagToList(GAMELIST, TAG_NAME);
+
+        final Gamelist GAMELIST_FOUND = gamelistService.findOneByPlayerAndListName(PLAYER, GAMELIST_NAME);
+        final Tag TAG_CREATED = tagService.findTag(TAG_NAME);
+        assert GAMELIST_FOUND.getTags().contains(TAG_CREATED);
+    }
+
+    /**
+     * This test covers the addition of an existing tag to a list. The tag should be added to the list.
+     */
+    @Test
+    @Transactional
+    public void testAddExistingTagToList(){
+        final Player PLAYER = playerService.createPlayer(PLAYER_NAME, PLAYER_PASSWORD);
+        final Gamelist GAMELIST = gamelistService.addNewList(PLAYER, GAMELIST_NAME);
+        final Tag TAG_CREATED = tagService.createTag(TAG_NAME);
+        gamelistService.addTagToList(GAMELIST, TAG_NAME);
+
+        final Gamelist GAMELIST_FOUND = gamelistService.findOneByPlayerAndListName(PLAYER, GAMELIST_NAME);
+        assert GAMELIST_FOUND.getTags().contains(TAG_CREATED);
     }
 }

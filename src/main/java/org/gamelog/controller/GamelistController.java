@@ -25,7 +25,6 @@ public class GamelistController {
     private String getUserLists(Authentication authentication, Model model) {
         Player player = (Player) authentication.getPrincipal();
         model.addAttribute("lists", gamelistService.findAllByPlayerId(player));
-        model.addAttribute("tags", tagService.findAllTagsByPlayer(player));
         return "lists";
     }
 
@@ -36,17 +35,16 @@ public class GamelistController {
         return new RedirectView("/lists");
     }
 
-    @PostMapping(path = "/list/addTag")
-    private RedirectView tagList(@RequestParam("tagname") String tagname, @RequestParam("listname") String listname, Authentication authentication){
-        Player player = (Player) authentication.getPrincipal();
-        gamelistService.addTagToList(player, listname, tagname);
-        return new RedirectView("/lists");
-    }
+//    @PostMapping(path = "/list/addTag")
+//    private RedirectView tagList(@RequestParam("tagname") String tagname, @RequestParam("listname") String listname, Authentication authentication){
+//        Player player = (Player) authentication.getPrincipal();
+//        gamelistService.addTagToList(player, listname, tagname);
+//        return new RedirectView("/lists");
+//    }
 
     @PostMapping(path = "/list/removeTag")
     private RedirectView untagList(@RequestParam("tagname") String tagname, @RequestParam("listname") String listname, Authentication authentication){
         Player player = (Player) authentication.getPrincipal();
-        gamelistService.removeTagFromList(player, listname, tagname);
         return new RedirectView("/lists");
     }
 

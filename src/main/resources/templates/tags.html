@@ -1,23 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Gamelog - Tags</title>
+    <title>Gamelog - All Tags</title>
     <div th:replace="fragments/header"/>
 </head>
 <body>
 <div th:replace="fragments/navbar :: navbar"/>
 <div th:if="${tags}">
-<div th:each="tag : ${tags}">
-    <form th:action="'tag/'+ ${tag.id.name} +'/delete'" method="post">
+    <div th:each="tag : ${tags}">
         <span class="btn btn-info" th:text="${tag.id.name}"/>
-        <input type="submit" class="btn btn-default" value="Delete"/>
-    </form>
+    </div>
 </div>
-</div>
-<h6>Add new tag</h6>
-<form th:action="tags" method="post">
-    <input type="text" name="tagname"/>
-    <input type="submit" value="Add"/>
-</form>
 </body>
 </html>

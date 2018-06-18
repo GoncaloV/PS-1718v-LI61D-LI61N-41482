@@ -1,5 +1,6 @@
 package org.gamelog.model;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,9 +15,11 @@ public class Player implements UserDetails {
     private long id;
 
     @Column(unique = true, nullable = false)
+    @NotBlank
     private String name;
 
     @Column(nullable = false)
+    @NotBlank
     private String password;
 
     public Player(String name, String password) {

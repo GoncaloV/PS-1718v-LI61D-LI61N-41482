@@ -13,7 +13,8 @@ public class PlayerService implements UserDetailsService {
     @Autowired
     private PlayerRepository playerRepository;
 
-    public Player save(Player p) {
+    public Player createPlayer(String name, String password) {
+        Player p = new Player(name, password);
         return playerRepository.save(p);
     }
 

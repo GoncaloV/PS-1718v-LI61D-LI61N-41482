@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
 @Controller
-public class MainController {
+public class GameController {
     @Autowired
     GameService gameService;
 

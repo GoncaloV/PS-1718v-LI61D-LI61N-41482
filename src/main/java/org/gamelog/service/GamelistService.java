@@ -5,17 +5,18 @@ import org.gamelog.repos.GamelistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 @Service
 public class GamelistService {
     @Autowired
-    GamelistRepository gamelistRepository;
+    private GamelistRepository gamelistRepository;
 
     @Autowired
-    GameService gameService;
+    private GameService gameService;
+
+    @Autowired
+    private TagService tagService;
 
     public Iterable<Gamelist> findAllByPlayerId(Player player){
         return gamelistRepository.findTop5ByIdPlayer(player);
@@ -53,10 +54,10 @@ public class GamelistService {
         gamelistRepository.delete(gamelist.getId());
     }
 
-    public Gamelist addTagToList(Player player, String listname, String tagname) {
-        Gamelist gamelist = gamelistRepository.findOneByIdPlayerAndIdName(player, listname);
-        Tag tag = new Tag(player, tagname);
-        gamelist.addTag(tag);
+    public Gamelist addTagToList(Gamelist gamelist, String tagname) {
+        Tag t = tagService.findTag(tagname);
+        t = t == null ? tagService.createTag(tagname) : t;
+        gamelist.addTag(t);
         return gamelistRepository.save(gamelist);
     }
 
@@ -65,14 +66,5 @@ public class GamelistService {
             gamelist.removeTag(tag);
         });
         return gamelistRepository.save(gamelists);
-    }
-
-    public Gamelist removeTagFromList(Player player, String listname, String tagname) {
-        Gamelist gamelist = gamelistRepository.findOneByIdPlayerAndIdName(player, listname);
-        gamelist.getTags().forEach(tag -> {
-            if(tag.getId().getName().equals(tagname))
-                gamelist.removeTag(tag);
-        });
-        return gamelistRepository.save(gamelist);
     }
 }

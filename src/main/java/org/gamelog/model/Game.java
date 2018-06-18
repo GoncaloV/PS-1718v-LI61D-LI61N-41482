@@ -21,7 +21,7 @@ public class Game {
     @Formula("(SELECT COUNT(*) FROM entry e WHERE e.game_id = id)")
     private int plays;
 
-    // Obtained from API
+    // Static data obtained from API
     private String name;
     @Column(columnDefinition = "TEXT")// Summaries tend to be very long.
     private String summary;
