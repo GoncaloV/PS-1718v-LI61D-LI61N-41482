@@ -54,10 +54,24 @@ public class GamelistService {
         gamelistRepository.delete(gamelist.getId());
     }
 
-    public Gamelist addTagToList(Gamelist gamelist, String tagname) {
+    public Gamelist addTagToList(Player player, String listname, String tagname) {
         Tag t = tagService.findTag(tagname);
         t = t == null ? tagService.createTag(tagname) : t;
+        Gamelist gamelist = gamelistRepository.findOneByIdPlayerAndIdName(player, listname);
         gamelist.addTag(t);
+        return gamelistRepository.save(gamelist);
+    }
+
+    public Gamelist addTagToList(Player player, Gamelist gamelist, Tag tag) {
+        gamelist.addTag(tag);
+        return gamelistRepository.save(gamelist);
+    }
+
+    public Gamelist addTagsToList(Player player, Gamelist gamelist, Iterable<Tag> tags) {
+        for (Tag t :
+                tags) {
+            gamelist.addTag(t);
+        }
         return gamelistRepository.save(gamelist);
     }
 
@@ -66,5 +80,16 @@ public class GamelistService {
             gamelist.removeTag(tag);
         });
         return gamelistRepository.save(gamelists);
+    }
+
+    public Gamelist removeTagFromlist(Player player, String listname, String tagname) {
+        Tag t = tagService.findTag(tagname);
+        Gamelist gamelist = gamelistRepository.findOneByIdPlayerAndIdName(player, listname);
+        gamelist.removeTag(t);
+        return gamelistRepository.save(gamelist);
+    }
+
+    public Gamelist findOne(Gamelist gamelist) {
+        return gamelistRepository.findOne(gamelist.getId());
     }
 }

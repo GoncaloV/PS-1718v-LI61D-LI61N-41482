@@ -11,11 +11,18 @@ public class Tag {
     @NotBlank
     private String name;
 
+    @ManyToMany(mappedBy = "tags")
+    private Set<Gamelist> gamelists = new HashSet();
+
     protected Tag() {}
 
     public Tag(String name) { this.name = name; }
 
     public String getName() {
         return name;
+    }
+
+    public Set<Gamelist> getGamelists() {
+        return gamelists;
     }
 }

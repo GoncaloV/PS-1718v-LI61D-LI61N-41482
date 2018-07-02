@@ -1,5 +1,6 @@
 package org.gamelog.controller;
 
+import org.gamelog.model.Gamelist;
 import org.gamelog.model.Player;
 import org.gamelog.service.GamelistService;
 import org.gamelog.service.TagService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
@@ -35,27 +37,31 @@ public class GamelistController {
         return new RedirectView("/lists");
     }
 
-//    @PostMapping(path = "/list/addTag")
-//    private RedirectView tagList(@RequestParam("tagname") String tagname, @RequestParam("listname") String listname, Authentication authentication){
-//        Player player = (Player) authentication.getPrincipal();
-//        gamelistService.addTagToList(player, listname, tagname);
-//        return new RedirectView("/lists");
-//    }
-
-    @PostMapping(path = "/list/removeTag")
-    private RedirectView untagList(@RequestParam("tagname") String tagname, @RequestParam("listname") String listname, Authentication authentication){
+    @PostMapping(path = "/list/{listname}/addTag")
+    private RedirectView tagList(@RequestParam("tagname") String tagname, @PathVariable("listname") String listname, Authentication authentication){
         Player player = (Player) authentication.getPrincipal();
-        return new RedirectView("/lists");
+        gamelistService.addTagToList(player, listname, tagname);
+        return new RedirectView("/list/" + listname);
+    }
+
+    @PostMapping(path = "/list/{listname}/removeTag")
+    private RedirectView untagList(@RequestParam("tagname") String tagname, @PathVariable("listname") String listname, Authentication authentication){
+        Player player = (Player) authentication.getPrincipal();
+        gamelistService.removeTagFromlist(player, listname, tagname);
+        return new RedirectView("/list/" + listname);
     }
 
     @GetMapping(path = "/list/{listname}")
-    private String getList(@PathVariable("listname") String listname, Authentication authentication, Model model) {
+    private ModelAndView getList(@PathVariable("listname") String listname, Authentication authentication) {
+        ModelAndView modelAndView = new ModelAndView("list");
         Player player = (Player) authentication.getPrincipal();
-        model.addAttribute("list", gamelistService.findOneByPlayerAndListName(player, listname));
-        return "list";
+        Gamelist gamelist = gamelistService.findOneByPlayerAndListName(player, listname);
+        modelAndView.addObject("list", gamelist);
+        modelAndView.addObject("tags", tagService.findAllTagsForGamelist(gamelist));
+        return modelAndView;
     }
 
-    @PostMapping(path = "/list/{listname}/delete")
+    @PostMapping(path = "/list/{listname}/deleteTag")
     private RedirectView deleteList(@PathVariable("listname") String listname, Authentication authentication) {
         Player player = (Player) authentication.getPrincipal();
         gamelistService.deleteList(player, listname);

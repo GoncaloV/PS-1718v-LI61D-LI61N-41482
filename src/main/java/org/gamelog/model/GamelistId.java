@@ -1,5 +1,8 @@
 package org.gamelog.model;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.jetbrains.annotations.NotNull;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -7,7 +10,11 @@ import java.util.Objects;
 @Embeddable
 public class GamelistId implements Serializable{
     @ManyToOne
+    @NotNull
     private Player player;
+
+    @NotBlank
+    @NotNull
     private String name;
 
     protected GamelistId() { }

@@ -38,7 +38,7 @@ public class TagService {
      * Deletes a tag from the database.
      * @param tagname Name of tag to be deleted.
      */
-    public void delete(String tagname) {
+    public void deleteTag(String tagname) {
         tagRepository.delete(tagname);
     }
 
@@ -48,5 +48,9 @@ public class TagService {
      */
     public Iterable<Tag> getAllTags() {
         return tagRepository.findAll();
+    }
+
+    public Iterable<Tag> findAllTagsForGamelist(Gamelist gamelist){
+        return tagRepository.findAllByGamelists(gamelist);
     }
 }

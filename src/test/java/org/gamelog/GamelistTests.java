@@ -14,6 +14,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Set;
 
 @RunWith(SpringRunner.class)
@@ -42,7 +44,7 @@ public class GamelistTests {
     public void testAddNewTagToList(){
         final Player PLAYER = playerService.createPlayer(PLAYER_NAME, PLAYER_PASSWORD);
         final Gamelist GAMELIST = gamelistService.addNewList(PLAYER, GAMELIST_NAME);
-        gamelistService.addTagToList(GAMELIST, TAG_NAME);
+        gamelistService.addTagToList(PLAYER, GAMELIST_NAME, TAG_NAME);
 
         final Gamelist GAMELIST_FOUND = gamelistService.findOneByPlayerAndListName(PLAYER, GAMELIST_NAME);
         final Tag TAG_CREATED = tagService.findTag(TAG_NAME);
@@ -58,7 +60,7 @@ public class GamelistTests {
         final Player PLAYER = playerService.createPlayer(PLAYER_NAME, PLAYER_PASSWORD);
         final Gamelist GAMELIST = gamelistService.addNewList(PLAYER, GAMELIST_NAME);
         final Tag TAG_CREATED = tagService.createTag(TAG_NAME);
-        gamelistService.addTagToList(GAMELIST, TAG_NAME);
+        gamelistService.addTagToList(PLAYER, GAMELIST_NAME, TAG_NAME);
 
         final Gamelist GAMELIST_FOUND = gamelistService.findOneByPlayerAndListName(PLAYER, GAMELIST_NAME);
         assert GAMELIST_FOUND.getTags().contains(TAG_CREATED);

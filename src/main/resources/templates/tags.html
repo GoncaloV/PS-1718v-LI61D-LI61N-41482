@@ -7,9 +7,9 @@
 <body>
 <div th:replace="fragments/navbar :: navbar"/>
 <div th:if="${tags}">
-    <div th:each="tag : ${tags}">
-        <span class="btn btn-info" th:text="${tag.id.name}"/>
-    </div>
+    <span th:each="tag : ${tags}">
+        <span class="btn btn-info" th:text="${tag.name}"/>
+    </span>
 </div>
 </body>
 </html>
