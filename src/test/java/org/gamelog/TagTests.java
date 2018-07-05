@@ -51,9 +51,9 @@ public class TagTests {
         assert DELETED_TAG == null;
     }
 
-    /**
+/*    *//**
      * This test covers finding all tags for a certain gamelist. The tags must be in the same order.
-     */
+     *//*
     @Test
     @Transactional
     public void testFindAllTagsForGamelist() {
@@ -71,5 +71,5 @@ public class TagTests {
         for (int i = 0; i < tags.size(); i++) {
             assertEquals(tags.get(i), tags2.get(i));
         }
-    }
+    }*/
 }

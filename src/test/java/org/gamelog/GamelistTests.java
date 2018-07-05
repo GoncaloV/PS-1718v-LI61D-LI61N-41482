@@ -42,7 +42,7 @@ public class GamelistTests {
     @Test
     @Transactional
     public void testAddNewTagToList(){
-        final Player PLAYER = playerService.createPlayer(PLAYER_NAME, PLAYER_PASSWORD);
+        final Player PLAYER = playerService.createPlayer(PLAYER_NAME, PLAYER_PASSWORD).join();
         final Gamelist GAMELIST = gamelistService.addNewList(PLAYER, GAMELIST_NAME);
         gamelistService.addTagToList(PLAYER, GAMELIST_NAME, TAG_NAME);
 
@@ -57,7 +57,7 @@ public class GamelistTests {
     @Test
     @Transactional
     public void testAddExistingTagToList(){
-        final Player PLAYER = playerService.createPlayer(PLAYER_NAME, PLAYER_PASSWORD);
+        final Player PLAYER = playerService.createPlayer(PLAYER_NAME, PLAYER_PASSWORD).join();
         final Gamelist GAMELIST = gamelistService.addNewList(PLAYER, GAMELIST_NAME);
         final Tag TAG_CREATED = tagService.createTag(TAG_NAME);
         gamelistService.addTagToList(PLAYER, GAMELIST_NAME, TAG_NAME);
