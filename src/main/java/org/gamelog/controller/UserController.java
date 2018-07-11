@@ -5,10 +5,7 @@ import org.gamelog.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -22,22 +19,29 @@ public class UserController {
     @Autowired
     PlayerService playerService;
 
-    @PostMapping(path="/register")
+/*    @PostMapping(path="/register")
     private Future<RedirectView> registerPlayer(HttpServletRequest request, @RequestParam("name") String name, @RequestParam("password") String password){
-        if (name.length() > 20 || name.length() <= 0) {
-            RedirectView redirectView = new RedirectView("register");
-            ModelAndView modelAndView = new ModelAndView("register");
-            modelAndView.addObject("error", "Invalid username length. Username length must be between 1 and 20 characters long.");
-        }
-        return playerService.createPlayer(name, password).thenApply(p -> {
-            if(p != null) {
-                try {
-                    request.login(p.getName(), p.getPassword());
-                } catch (ServletException e) {
-                    e.printStackTrace();
+            return playerService.createPlayer(name, password).thenApply(p -> {
+                if(p != null) {
+                    try {
+                        request.login(p.getName(), p.getPassword());
+                    } catch (ServletException e) {
+                        e.printStackTrace();
+                    }
                 }
+                return new RedirectView("/");
+            });
+    }*/
+
+    @PostMapping(path="/register")
+    @ResponseBody
+    public CompletableFuture<?> register(HttpServletRequest request, @RequestParam("name") String name, @RequestParam("password") String password){
+        return playerService.findByName(name).thenApply(player -> {
+            if (player != null)
+                return player; // Player with this name already exists. Returning it signals the AJAX that registration failed.
+            else {
+               return  playerService.createPlayer(name, password).thenApply(player1 -> null);
             }
-            return new RedirectView("/");
         });
     }
 
@@ -52,5 +56,15 @@ public class UserController {
     private Object getLoginPage(Authentication authentication){
         if(authentication != null)
             return new RedirectView("/");
-        return new ModelAndView("login");    }
+        return new ModelAndView("login");
+    }
+
+/*    *//**
+     * TODO: REMOVE ONCE DONE TESTING AJAX
+     * @return
+     *//*
+    @GetMapping("/testAjax")
+    public @ResponseBody Player testAjax() {
+        return playerService.findByName("ABC").join();
+    }*/
 }

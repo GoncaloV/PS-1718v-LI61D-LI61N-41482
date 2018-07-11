@@ -3,6 +3,7 @@ package org.gamelog.service;
 import org.gamelog.model.Player;
 import org.gamelog.repos.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,8 +46,8 @@ public class PlayerService implements UserDetailsService {
 
     @Async
     public CompletableFuture<Player> createPlayer(String name, String password) {
-        Player p = new Player(name, password);
-        return playerRepository.save(p);
+            Player p = new Player(name, password);
+            return playerRepository.save(p);
     }
 
     @Async
