@@ -3,9 +3,11 @@
 <head>
     <title>Gamelog - Diary</title>
     <div th:replace="fragments/header"/>
+    <script type='text/javascript' src='/js/diary.js'></script>
 </head>
 <body>
-<div th:replace="fragments/navbar :: navbar"/>
+<div th:replace="fragments/navbar"/>
+<div class="container">
 <h1>Your entries:</h1>
 <table class="table">
     <tr>
@@ -25,7 +27,9 @@
     <td th:text="${entry.date}"/>
     <td th:text="${entry.review}"/>
     <td th:text="${entry.rating}"/>
+    <button th:id="'edit-btn-' + ${entry.id.game.id}" class="btn">Edit</button>
 </tr>
 </table>
+</div>
 </body>
 </html>

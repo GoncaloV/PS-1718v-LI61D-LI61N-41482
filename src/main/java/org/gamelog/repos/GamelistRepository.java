@@ -1,13 +1,44 @@
 package org.gamelog.repos;
 
+import org.springframework.data.repository.Repository;
 import org.gamelog.model.Game;
 import org.gamelog.model.GamelistId;
 import org.gamelog.model.Player;
-import org.springframework.data.repository.CrudRepository;
 import org.gamelog.model.Gamelist;
+import org.springframework.scheduling.annotation.Async;
 
-public interface GamelistRepository extends CrudRepository<Gamelist, GamelistId> {
-    Iterable<Gamelist> findTop5ByIdPlayer(Player player);
-    Iterable<Gamelist> findTop5ByGames(Game game);
-    Gamelist findOneByIdPlayerAndIdName(Player player, String gamelistname);
+import java.util.concurrent.CompletableFuture;
+
+public interface GamelistRepository extends Repository<Gamelist, GamelistId> {
+    // Copied from CrudRepository
+    @Async
+    CompletableFuture<Gamelist> save(Gamelist gamelist);
+
+    @Async
+    CompletableFuture<Iterable<Gamelist>> save(Iterable<Gamelist> gamelists);
+
+    @Async
+    CompletableFuture<Gamelist> findOne(GamelistId gamelistId);
+
+    @Async
+    CompletableFuture<Iterable<Gamelist>> findAll();
+
+    @Async
+    CompletableFuture<Void> delete(GamelistId gamelistId);
+
+    @Async
+    CompletableFuture<Void> delete(Gamelist gamelist);
+
+    @Async
+    CompletableFuture<Void> deleteAll();
+
+    // Custom queries
+    @Async
+    CompletableFuture<Iterable<Gamelist>> findTop5ByIdPlayer(Player player);
+
+    @Async
+    CompletableFuture<Iterable<Gamelist>> findTop5ByGames(Game game);
+
+    @Async
+    CompletableFuture<Gamelist> findOneByIdPlayerAndIdName(Player player, String gamelistname);
 }

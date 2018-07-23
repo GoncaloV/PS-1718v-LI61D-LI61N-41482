@@ -3,9 +3,7 @@ package org.gamelog.service;
 import org.gamelog.model.Player;
 import org.gamelog.repos.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,7 +23,7 @@ public class PlayerService implements UserDetailsService {
 
     @Async
     public CompletableFuture<Player> findByName(String name){
-        return playerRepository.findPlayerByName(name);
+        return playerRepository.findPlayerByNameIgnoreCase(name);
     }
 
     @Async
@@ -39,17 +37,34 @@ public class PlayerService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Player player = findByName(username).join();
+        String usernameUpperCase = username.toUpperCase();
+        Player player = findByName(usernameUpperCase).join();
         if (player != null) return player;
         else throw new UsernameNotFoundException(username);
     }
 
+    /**
+     * Registers a new player in the database. First checks if a player under the desired name is already in the database.
+     * @param name The desired player name.
+     * @param password The desired player password.
+     * @return A completable future containing: Null, if a player under that name already exists. The player created, if it was created successfully.
+     */
     @Async
     public CompletableFuture<Player> createPlayer(String name, String password) {
-            Player p = new Player(name, password);
-            return playerRepository.save(p);
+        return playerRepository.findPlayerByNameIgnoreCase(name)
+                .thenCompose(player -> {
+            if (player != null)
+                return null;
+            else {
+                return playerRepository.save(new Player(name, password));
+            }
+        });
     }
 
+    /**
+     * Finds all players in the database.
+     * @return A completable future containing an iterable with all the players found.
+     */
     @Async
     public CompletableFuture<Iterable<Player>> findAll() {
         return playerRepository.findAll();

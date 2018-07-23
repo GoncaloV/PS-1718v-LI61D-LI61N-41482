@@ -8,63 +8,46 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 
 @Controller
 public class UserController {
     @Autowired
     PlayerService playerService;
 
-/*    @PostMapping(path="/register")
-    private Future<RedirectView> registerPlayer(HttpServletRequest request, @RequestParam("name") String name, @RequestParam("password") String password){
-            return playerService.createPlayer(name, password).thenApply(p -> {
-                if(p != null) {
-                    try {
-                        request.login(p.getName(), p.getPassword());
-                    } catch (ServletException e) {
-                        e.printStackTrace();
-                    }
-                }
-                return new RedirectView("/");
-            });
-    }*/
-
-    @PostMapping(path="/register")
-    @ResponseBody
-    public CompletableFuture<?> register(HttpServletRequest request, @RequestParam("name") String name, @RequestParam("password") String password){
-        return playerService.findByName(name).thenApply(player -> {
-            if (player != null)
-                return player; // Player with this name already exists. Returning it signals the AJAX that registration failed.
-            else {
-               return  playerService.createPlayer(name, password).thenApply(player1 -> null);
-            }
-        });
-    }
-
+    /**
+     * Gets the page for registration.
+     * @param authentication Current authenticated user.
+     * @return A redirect to the home page if the user is authenticated, or the register page otherwise.
+     */
     @GetMapping(path="/register")
-    private Object getRegisterPage(Authentication authentication){
+    private Object getRegister(Authentication authentication){
         if(authentication != null)
             return new RedirectView("/");
         return new ModelAndView("register");
     }
 
+    /**
+     * Gets the page for logging in.
+     * @param authentication Current authenticated user.
+     * @return A redirect to the home page if the user is authenticated, or the login page otherwise.
+     */
     @GetMapping(path="/login")
-    private Object getLoginPage(Authentication authentication){
+    private Object getLogin(Authentication authentication){
         if(authentication != null)
             return new RedirectView("/");
         return new ModelAndView("login");
     }
 
-/*    *//**
-     * TODO: REMOVE ONCE DONE TESTING AJAX
-     * @return
-     *//*
-    @GetMapping("/testAjax")
-    public @ResponseBody Player testAjax() {
-        return playerService.findByName("ABC").join();
-    }*/
+    /**
+     * Check if a username already exists and creates a user under that username if it's not taken.
+     * @param name The username to register a new user with.
+     * @param password The password to register a new user with.
+     * @return True if the user was created successfully, false if the username is taken.
+     */
+    @PostMapping(path="/register")
+    @ResponseBody
+    public CompletableFuture<Player> postRegister(@RequestParam("name") String name, @RequestParam("password") String password){
+        return playerService.createPlayer(name, password); // TODO: What to do about errors?
+    }
 }

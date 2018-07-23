@@ -1,31 +1,31 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark" th:fragment="navbar">
-    <a class="navbar-brand" href="/">
-        <img src="/images/favicon.png" width="30" height="30"/>
-        <span>Gamelog</span>
+<nav>
+  <div class="nav-wrapper purple darken-4">
+    <a href="/">
+      <img src="/images/favicon.png" width="50" class="gamelog-icon" />
+      <span class="brand-logo">Gamelog</span>
     </a>
-    <ul class="navbar-nav mr-auto">
-        <li th:if="${#httpServletRequest.remoteUser}">
-            <span class="text-light">Signed in as </span>
-            <strong th:inline="text" class="text-light">[[${#httpServletRequest.remoteUser}]]</strong>
-            <a href="/diary" class="btn btn-primary">Diary</a>
-            <a href="/lists" class="btn btn-primary">Lists</a>
+    <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <li th:if="${#httpServletRequest.remoteUser}">
+        <span>Signed in as </span>
+        <strong th:inline="text">[[${#httpServletRequest.remoteUser}]]</strong>
+      </li>
+      <li th:if="${#httpServletRequest.remoteUser}"><a href="/diary">Diary</a></li>
+      <li th:if="${#httpServletRequest.remoteUser}"><a href="/lists">Lists</a></li>
+      <li th:if="${#httpServletRequest.remoteUser}">
+        <form th:action="@{/logout}" method="post">
+          <li><a><button class="btn-flat white-text" type="submit">Logout</button></a></li></form>
         </li>
+        <li th:unless="${#httpServletRequest.remoteUser}"><a href="@{/register}">Sign up</a></li>
+        <li th:unless="${#httpServletRequest.remoteUser}"><a href="@{/login}">Login</a></li>
         <li>
-        <form th:if="${#httpServletRequest.remoteUser}" class="navbar-form" th:action="@{/logout}" method="post">
-            <input type="submit" class="btn btn-primary" value="Logout"/>
-        </form>
-        </li>
-    <div th:unless="${#httpServletRequest.remoteUser}">
-        <a href="/register" class="btn btn-primary">Register</a>
-        <a href="/login" class="btn btn-primary">Login</a>
-    </div>
-    </ul>
-        <form class="form-inline" action="/search" method="get">
-            <div class="form-group">
-            <input class="form-control" placeholder="Search for games" type="text" name="query"/>
-            <button class="btn" type="submit">Search</button>
+          <form method="get" style="height: 64px; width: 100%;" th:action="@{/search}">
+            <div class="input-field">
+              <input name="query" type="search" placeholder="Search" required="true"/>
             </div>
-        </form>
-</nav>
-</html>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  </html>

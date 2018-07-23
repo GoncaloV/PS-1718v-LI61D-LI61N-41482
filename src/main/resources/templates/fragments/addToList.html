@@ -1,12 +1,24 @@
-<html xmlns:th="http://www.thymeleaf.org">
-<h2>Add to List</h2>
-<form th:action="@{/list}" method="post">
-<div class="form-group">
-    <select class="form-control" name="listname">
-        <option th:each="list : ${mylists}" th:value="${list.id.name}" th:text="${list.id.name}"></option>
-    </select>
-    <input type="hidden" name="gameid" th:value="${game.id}"/>
-    <input type="submit" value="Add"/>
+<div id="modal1" class="modal" style="overflow-y: visible;" >
+  <div class="modal-content">
+    <h4>Add to List</h4>
+    <!-- This div only shows up if the user has lists created-->
+    <div th:if="${not #lists.isEmpty(mylists)}">
+      <form th:action="@{/list}" method="post">
+        <div class="input-field">
+          <select name="listname">
+            <option th:each="list : ${mylists}" th:value="${list.id.name}" th:text="${list.id.name}"></option>
+          </select>
+          <label>Select a list</label>
+          <input type="hidden" name="gameid" th:value="${game.id}"/>
+          <input class="btn purple darken-4 right" type="submit" value="Add"/>
+        </div>
+      </form>
+    </div>
+        <!-- This div only shows up if the user does not have any lists-->
+          <div th:if="${#lists.isEmpty(mylists)}">
+            <h5>You do not have any lists!</h5>
+              <p>You can create a list in your lists page.</p>
+              <a href="/lists" class="btn purple darken-4 align-right">Go to my lists</a>
+          </div>
+  </div>
 </div>
-</form>
-</html>

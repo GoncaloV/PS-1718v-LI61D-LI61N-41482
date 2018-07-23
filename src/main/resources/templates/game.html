@@ -3,9 +3,25 @@
 <head>
     <title th:text="'Gamelog - ' + ${game.name}"></title>
     <div th:replace="fragments/header"/>
+    <script src="/js/game.js"></script>
 </head>
 <body>
-<div th:replace="fragments/navbar :: navbar"/>
+<div th:replace="fragments/navbar"/>
+<div th:if="${#httpServletRequest.remoteUser}" class="fixed-action-btn">
+  <a class="btn-floating btn-large purple darken-4">
+    <i class="large material-icons">add</i>
+  </a>
+  <ul>
+    <li><a href="#modal1" id="add_to_list" class="btn-floating purple darken-3 tooltipped modal-trigger" data-position="left" data-tooltip="Add to list"><i class="material-icons">playlist_add</i></a></li>
+    <li><a href="#new_entry" id="new_entry" class="btn-floating purple darken-3 tooltipped modal-trigger" data-position="left" data-tooltip="New entry"><i class="material-icons">mode_edit</i></a></li>
+  </ul>
+</div>
+
+<!-- Add game to list modal -->
+<div th:replace="fragments/addToList" />
+
+<div class="container">
+  <div class="center-align" id="game-info">
 <h1 th:text="${game.name}"></h1>
 <img th:src="${game.coverUrl} ? ${game.coverUrl} : '/images/nocover.png'" th:title="${game.name}"/>
 <p th:text="${game.summary}"></p>
@@ -15,19 +31,19 @@
 <p th:text="${game.averageRatings} ? ${game.averageRatings} : 'No ratings yet!'"/>
 <h6>Plays:</h6>
 <p th:text="${game.plays}+ ' users have played this game.'"/>
+</div>
 
 <div th:if="${#httpServletRequest.remoteUser}">
+  <hr/>
     <div th:if="${entry}">
         <div th:replace="fragments/editEntry"/>
     </div>
     <div th:unless="${entry}">
         <div th:replace="fragments/addEntry"/>
     </div>
-    <div th:if="${mylists}">
-        <div th:replace="fragments/addToList"/>
-    </div>
+    <hr/>
 </div>
-
+<hr/>
 <h2>User Entries</h2>
 <table class="table">
     <tr>
@@ -38,12 +54,9 @@
         <th>Rating</th>
     </tr>
     <tr th:each="entry : ${entries}">
-        <td th:text="${entry.id.player.name}"></td>
-        <td> <i th:if="${entry.favorite}" class="material-icons">favorite</i></td>
-        <td th:text="${entry.date}"/>
-        <td th:text="${entry.review}"/>
-        <td th:text="${entry.rating}"/>
+        <div th:replace="fragments/entry"/>
     </tr>
 </table>
+</div>
 </body>
 </html>

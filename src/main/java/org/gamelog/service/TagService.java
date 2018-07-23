@@ -1,14 +1,12 @@
 package org.gamelog.service;
 
 import org.gamelog.model.Gamelist;
-import org.gamelog.model.Player;
 import org.gamelog.model.Tag;
-import org.gamelog.repos.GamelistRepository;
 import org.gamelog.repos.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class TagService {
@@ -20,9 +18,8 @@ public class TagService {
      * @param tagname The name of the tag to be created.
      * @return The tag created.
      */
-    public Tag createTag(String tagname) {
-        Tag t = new Tag(tagname);
-        return tagRepository.save(t);
+    public CompletableFuture<Tag> createTag(String tagname) {
+        return findTag(tagname).thenCompose(tag -> tag == null ? tagRepository.save(new Tag(tagname)) : null);
     }
 
     /**
@@ -30,7 +27,7 @@ public class TagService {
      * @param tagname Name of tag to be found.
      * @return The tag found.
      */
-    public Tag findTag(String tagname){
+    public CompletableFuture<Tag> findTag(String tagname){
         return tagRepository.findOne(tagname);
     }
 
@@ -38,19 +35,19 @@ public class TagService {
      * Deletes a tag from the database.
      * @param tagname Name of tag to be deleted.
      */
-    public void deleteTag(String tagname) {
-        tagRepository.delete(tagname);
-    }
+    public CompletableFuture<Void> deleteTag(String tagname) {
+        return tagRepository.delete(tagname);
+    } // TODO: Completable future void?
 
     /**
      * Finds all tags in the database.
      * @return An Iterable containing all the tags in the database.
      */
-    public Iterable<Tag> getAllTags() {
+    public CompletableFuture<Iterable<Tag>> getAllTags() {
         return tagRepository.findAll();
     }
 
-    public Iterable<Tag> findAllTagsForGamelist(Gamelist gamelist){
+    public CompletableFuture<Iterable<Tag>> findAllTagsForGamelist(Gamelist gamelist){
         return tagRepository.findAllByGamelists(gamelist);
     }
 }

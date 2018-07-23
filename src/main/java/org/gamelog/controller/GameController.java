@@ -6,17 +6,15 @@ import org.gamelog.service.EntryService;
 import org.gamelog.service.GameService;
 import org.gamelog.service.GamelistService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
-import java.util.stream.Collectors;
 
 @Controller
 public class GameController {
@@ -29,43 +27,62 @@ public class GameController {
     @Autowired
     GamelistService gamelistService;
 
+    /**
+     * Fetches the home page.
+     * @return A ModelAndView instance containing the "index" template.
+     */
     @GetMapping(path = "/")
-    private Future<String> getIndex(Model model) {
-        CompletableFuture<String> future = new CompletableFuture<>();
-        gameService.findRecentGames().thenAccept(games -> {
-            model.addAttribute("games", games);
-            future.complete("index");
-        });
-        return future;
+    private ModelAndView getIndex() {
+        return new ModelAndView("index");
     }
 
+    /**
+     * Performs a search for games.
+     * @param query The string to search for.
+     * @param page An integer defining the page to obtain.
+     * @return A Future containing a ModelAndView, whose view is the "searchresults.html" template and the model
+     * contains a list of 10 games, the current page and the query, for possible future searches.
+     */
     @GetMapping(path="search")
-    private Future<String> search(@RequestParam("query") String query, @RequestParam(value = "page", defaultValue = "0") int page, Model model){
-        CompletableFuture<String> future = new CompletableFuture<>();
-        gameService.search(query, page).thenAccept(games -> {
-            model.addAttribute("games", games);
-            future.complete("searchresults");
+    private Future<ModelAndView> getSearch(@RequestParam("query") String query, @RequestParam(value = "page", defaultValue = "0") int page){
+        ModelAndView modelAndView = new ModelAndView("searchresults");
+        CompletableFuture<ModelAndView> future = gameService.search(query, page).thenApply(games -> {
+            modelAndView.addObject("games", games);
+            return modelAndView;
         });
-        model.addAttribute("query", query);
-        model.addAttribute("page", page);
-        return future;
+        modelAndView.addObject("query", query);
+        modelAndView.addObject("page", page);
+        return future; // TODO: Show this to teacher. Is "initiating" the async call as soon as possible like this a good idea? Compare to alternative below. Maybe not thread safe?
+
+/*        return gameService.search(query, page).thenApply(games -> {
+            ModelAndView modelAndView = new ModelAndView("searchresults");
+            modelAndView.addObject("games", games);
+            modelAndView.addObject("query", query);
+            modelAndView.addObject("page", page);
+            return modelAndView;
+        });*/
     }
 
+    /**
+     * TODO: Another parallel async question.
+     * @param gameid
+     * @param authentication
+     * @return
+     */
     @GetMapping(path="/game/{gameid}")
-    private Future<String> getGamePage(@PathVariable("gameid") Long gameid, Model model, Authentication authentication){
-        CompletableFuture<String> future = new CompletableFuture();
-        gameService.findGameInfoById(gameid).thenAccept(game -> {
-            model.addAttribute("game", game);
+    private Future<ModelAndView> getGamePage(@PathVariable("gameid") Long gameid, Authentication authentication){
+        ModelAndView modelAndView = new ModelAndView("game");
+        return gameService.findGameInfoById(gameid).thenApply(game -> {
+            modelAndView.addObject("game", game);
             if(authentication != null) {
                 Player player = (Player) authentication.getPrincipal();
-                Entry entry = entryService.findByPlayerAndGame(player, game);
-                model.addAttribute("entry", entry);
-                model.addAttribute("mylists", gamelistService.findAllByPlayerId(player));
+                Entry entry = entryService.findByPlayerAndGame(player, game).join(); // TODO: Fix join.
+                modelAndView.addObject("entry", entry);
+                modelAndView.addObject("mylists", gamelistService.findAllByPlayerId(player).join());
             }
-            model.addAttribute("entries", entryService.findPublicEntriesForGameById(game));
-            model.addAttribute("lists", gamelistService.findAllByGameId(game));
-            future.complete("game");
+            modelAndView.addObject("entries", entryService.findPublicEntriesForGameById(game).join());
+            modelAndView.addObject("lists", gamelistService.findAllByGameId(game).join());
+            return modelAndView;
         });
-        return future;
     }
 }

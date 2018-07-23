@@ -5,7 +5,7 @@
     <div th:replace="fragments/header"/>
 </head>
 <body>
-<div th:replace="fragments/navbar :: navbar"/>
+<div th:replace="fragments/navbar"/>
 <div th:if="${tags}">
     <span th:each="tag : ${tags}">
         <span class="btn btn-info" th:text="${tag.name}"/>

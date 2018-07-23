@@ -42,12 +42,12 @@ public class GamelistTests {
     @Test
     @Transactional
     public void testAddNewTagToList(){
-        final Player PLAYER = playerService.createPlayer(PLAYER_NAME, PLAYER_PASSWORD).join();
-        final Gamelist GAMELIST = gamelistService.addNewList(PLAYER, GAMELIST_NAME);
+        final Player PLAYER = playerService.createPlayer(PLAYER_NAME, PLAYER_PASSWORD).join(); //TODO: Fix tests? Remove all joins.
+        final Gamelist GAMELIST = gamelistService.addNewList(PLAYER, GAMELIST_NAME).join();
         gamelistService.addTagToList(PLAYER, GAMELIST_NAME, TAG_NAME);
 
-        final Gamelist GAMELIST_FOUND = gamelistService.findOneByPlayerAndListName(PLAYER, GAMELIST_NAME);
-        final Tag TAG_CREATED = tagService.findTag(TAG_NAME);
+        final Gamelist GAMELIST_FOUND = gamelistService.findOneByPlayerAndListName(PLAYER, GAMELIST_NAME).join();
+        final Tag TAG_CREATED = tagService.findTag(TAG_NAME).join();
         assert GAMELIST_FOUND.getTags().contains(TAG_CREATED);
     }
 
@@ -58,11 +58,11 @@ public class GamelistTests {
     @Transactional
     public void testAddExistingTagToList(){
         final Player PLAYER = playerService.createPlayer(PLAYER_NAME, PLAYER_PASSWORD).join();
-        final Gamelist GAMELIST = gamelistService.addNewList(PLAYER, GAMELIST_NAME);
-        final Tag TAG_CREATED = tagService.createTag(TAG_NAME);
+        final Gamelist GAMELIST = gamelistService.addNewList(PLAYER, GAMELIST_NAME).join();
+        final Tag TAG_CREATED = tagService.createTag(TAG_NAME).join();
         gamelistService.addTagToList(PLAYER, GAMELIST_NAME, TAG_NAME);
 
-        final Gamelist GAMELIST_FOUND = gamelistService.findOneByPlayerAndListName(PLAYER, GAMELIST_NAME);
+        final Gamelist GAMELIST_FOUND = gamelistService.findOneByPlayerAndListName(PLAYER, GAMELIST_NAME).join();
         assert GAMELIST_FOUND.getTags().contains(TAG_CREATED);
     }
 }

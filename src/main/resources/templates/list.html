@@ -5,7 +5,7 @@
     <div th:replace="fragments/header"/>
 </head>
 <body>
-<div th:replace="fragments/navbar :: navbar"/>
+<div th:replace="fragments/navbar"/>
 <h1 th:text="${list.id.name}"></h1>
 <h2 th:text="'Tags for ' + ${list.id.name} + ':'"/>
 <div th:each="tag : ${tags}">

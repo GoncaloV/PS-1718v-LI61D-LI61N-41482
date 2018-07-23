@@ -89,7 +89,7 @@ public class GameTests {
             Entry e1 = new Entry(player, game);
             e1.setFavorite(true);
             entryRepository.save(e1);
-            game = gameRepository.findOne(game.getId());
+            game = gameRepository.findOne(game.getId()).join();
 
             // Assert
             assert game.getFavorites() == 1;
@@ -118,7 +118,7 @@ public class GameTests {
                 entries.getFirst().setRating(i);
             }
             entryRepository.save(entries);
-            game = gameRepository.findOne(game.getId());
+            game = gameRepository.findOne(game.getId()).join();
 
             // Assert
             assert game.getAverageRatings() == (5+4+3+2+1)/6.0;

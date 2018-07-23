@@ -2,9 +2,16 @@
 <h2>Add to Diary</h2>
 <form th:action="@{/entry}" method="post">
     <div>Rating:</div>
-    <th:block th:each="i: ${#numbers.sequence(1, 10)}">
-        <input type="radio" name="rating" th:value="${i}" th:text="${i}"/>
-    </th:block>
+    <label><input name="rating" value="1" type="radio" /><span>1</span></label>
+    <label><input name="rating" value="2" type="radio" /><span>2</span></label>
+    <label><input name="rating" value="3" type="radio" /><span>3</span></label>
+    <label><input name="rating" value="4" type="radio" /><span>4</span></label>
+    <label><input name="rating" value="5" type="radio" /><span>5</span></label>
+    <label><input name="rating" value="6" type="radio" /><span>6</span></label>
+    <label><input name="rating" value="7" type="radio" /><span>7</span></label>
+    <label><input name="rating" value="8" type="radio" /><span>8</span></label>
+    <label><input name="rating" value="9" type="radio" /><span>9</span></label>
+    <label><input name="rating" value="10" type="radio" /><span>10</span></label>
     <div>Review:</div>
     <textarea rows="5" cols="100" name="review"/>
     <input type="checkbox" name="favorite">Favorite</input>

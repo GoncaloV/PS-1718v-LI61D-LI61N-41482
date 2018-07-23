@@ -42,12 +42,12 @@ public class TagTests {
     @Test
     @Transactional
     public void testCreateFindDelete(){
-        final Tag CREATED_TAG = tagService.createTag(TAG_NAME);
-        final Tag FOUND_TAG = tagService.findTag(TAG_NAME);
+        final Tag CREATED_TAG = tagService.createTag(TAG_NAME).join();
+        final Tag FOUND_TAG = tagService.findTag(TAG_NAME).join();
         assert CREATED_TAG == FOUND_TAG;
 
         tagService.deleteTag(TAG_NAME);
-        final Tag DELETED_TAG = tagService.findTag(TAG_NAME);
+        final Tag DELETED_TAG = tagService.findTag(TAG_NAME).join();
         assert DELETED_TAG == null;
     }
 

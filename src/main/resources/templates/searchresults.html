@@ -5,7 +5,8 @@
     <div th:replace="fragments/header"/>
 </head>
 <body>
-<div th:replace="fragments/navbar :: navbar"/>
+<div th:replace="fragments/navbar"/>
+<div class="container">
 <h1>Search results:</h1>
 <table class="table">
     <tr th:each="game : ${games}">
@@ -15,5 +16,6 @@
 </table>
 <a th:if="${page} > 0" th:href="@{/search(query=${query}, page=${page}-1)}">Previous</a>
 <a th:href="@{/search(query=${query}, page=${page}+1)}">Next</a>
+</div>
 </body>
 </html>
