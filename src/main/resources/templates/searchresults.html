@@ -7,15 +7,36 @@
 <body>
 <div th:replace="fragments/navbar"/>
 <div class="container">
-<h1>Search results:</h1>
-<table class="table">
-    <tr th:each="game : ${games}">
-        <td><a th:href="'/game/' + ${game.id}" th:text="${game.name}"/></td>
-        <td><img th:src="${game.coverUrl} ? ${game.coverUrl} : '/images/nocover.png'" height="100"/></td>
-    </tr>
-</table>
-<a th:if="${page} > 0" th:href="@{/search(query=${query}, page=${page}-1)}">Previous</a>
-<a th:href="@{/search(query=${query}, page=${page}+1)}">Next</a>
+  <p th:text="'Showing results for &quot;' + ${query} + '&quot;'"/>
+    <ul th:replace="searchresults :: Pagination"/>
+    <p th:each="game : ${games}">
+      <a th:href="'/game/' + ${game.id}">
+      <img th:if="${game.coverUrl}" th:src="${game.coverUrl}"/>
+      <span th:text="${game.name}"/>
+    </a>
+      <i th:unless="${game.coverUrl}" class="material-icons">broken_image</i>
+    </p>
+<!-- Pagination -->
+<ul class="pagination center" th:fragment="Pagination">
+  <!-- Previous -->
+  <li class="waves-effect disabled" th:if="${page} == 0"><a th:href="@{/search(query=${query}, page=${page}-1)}"><i class="material-icons">chevron_left</i></a></li>
+  <li class="waves-effect" th:if="${page} > 0"><a th:href="@{/search(query=${query}, page=${page}-1)}"><i class="material-icons">chevron_left</i></a></li>
+
+  <!-- Previous two numbered pages (ex: 1 and 2 if on page 3) -->
+  <li th:if="${page > 1}"><a th:href="@{/search(query=${query}, page=${page}-2)}" th:text="${page-2}"></a></li>
+  <li th:if="${page > 0}"><a th:href="@{/search(query=${query}, page=${page}-1)}" th:text="${page-1}"></a></li>
+
+  <!-- Current, active page -->
+  <li class="active purple darken-4"><a th:text="${page}"></a></li>
+
+  <!-- Next two numbered pages -->
+  <li><a th:href="@{/search(query=${query}, page=${page}+1)}" th:text="${page+1}"></a></li>
+  <li><a th:href="@{/search(query=${query}, page=${page}+2)}" th:text="${page+2}"></a></li>
+
+  <!-- Next -->
+  <li class="waves-effect"><a th:href="@{/search(query=${query}, page=${page}+1)}"><i class="material-icons">chevron_right</i></a></li>
+
+</ul>
 </div>
 </body>
 </html>

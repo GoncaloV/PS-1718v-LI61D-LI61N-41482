@@ -1,62 +1,68 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="'Gamelog - ' + ${game.name}"></title>
-    <div th:replace="fragments/header"/>
-    <script src="/js/game.js"></script>
+  <title th:text="'Gamelog - ' + ${game.name}"></title>
+  <div th:replace="fragments/header"/>
+  <script src="/js/game.js"></script>
 </head>
 <body>
-<div th:replace="fragments/navbar"/>
-<div th:if="${#httpServletRequest.remoteUser}" class="fixed-action-btn">
-  <a class="btn-floating btn-large purple darken-4">
-    <i class="large material-icons">add</i>
-  </a>
-  <ul>
-    <li><a href="#modal1" id="add_to_list" class="btn-floating purple darken-3 tooltipped modal-trigger" data-position="left" data-tooltip="Add to list"><i class="material-icons">playlist_add</i></a></li>
-    <li><a href="#new_entry" id="new_entry" class="btn-floating purple darken-3 tooltipped modal-trigger" data-position="left" data-tooltip="New entry"><i class="material-icons">mode_edit</i></a></li>
-  </ul>
-</div>
+  <div th:replace="fragments/navbar"/>
 
-<!-- Add game to list modal -->
-<div th:replace="fragments/addToList" />
-
-<div class="container">
-  <div class="center-align" id="game-info">
-<h1 th:text="${game.name}"></h1>
-<img th:src="${game.coverUrl} ? ${game.coverUrl} : '/images/nocover.png'" th:title="${game.name}"/>
-<p th:text="${game.summary}"></p>
-<h6>Favorites:</h6>
-<p th:text="${game.favorites}"/>
-<h6>Average Rating:</h6>
-<p th:text="${game.averageRatings} ? ${game.averageRatings} : 'No ratings yet!'"/>
-<h6>Plays:</h6>
-<p th:text="${game.plays}+ ' users have played this game.'"/>
-</div>
-
-<div th:if="${#httpServletRequest.remoteUser}">
-  <hr/>
-    <div th:if="${entry}">
-        <div th:replace="fragments/editEntry"/>
-    </div>
-    <div th:unless="${entry}">
-        <div th:replace="fragments/addEntry"/>
-    </div>
+  <div class="container center-align">
+    <img class="cover-image left" th:src="${game.coverUrl} ? ${game.coverUrl} : '/images/nocover.png'" th:title="${game.name}"/>
+    <h1 th:text="${game.name}"></h1>
+    <p align="justify" th:text="${game.summary}"/>
+    <div class="clearfix"/>
     <hr/>
-</div>
-<hr/>
-<h2>User Entries</h2>
-<table class="table">
-    <tr>
-        <th>User</th>
-        <th>Favorite</th>
-        <th>Date</th>
-        <th>Review</th>
-        <th>Rating</th>
-    </tr>
-    <tr th:each="entry : ${entries}">
-        <div th:replace="fragments/entry"/>
-    </tr>
-</table>
-</div>
+    <span class="left tooltipped" data-position="top" data-tooltip="Plays"><i class="inline-icon material-icons">person</i><span th:text="${game.plays}"/></span>
+    <span class="center tooltipped" data-position="top" data-tooltip="Rating"><i class="inline-icon material-icons">star</i><span class="star-rating" th:text="${game.averageRatings} ? ${game.averageRatings} : 'No users have rated this game yet'"/></span>
+    <span class="right tooltipped" data-position="top" data-tooltip="Favorites"><i class="inline-icon material-icons">favorite</i><span th:text="${game.favorites}"/></span>
+    <hr/>
+
+    <!-- User Reviews -->
+          <div th:each="entry : ${entries}">
+            <div class="card deep-purple darken-4">
+              <div class="card-content white-text">
+                <span class="left" th:text="${entry.id.player.name}"/>
+                <div class="clearfix"/>
+              <hr/>
+              <div th:if="${entry.review}">
+                <p th:text="${entry.review}"/>
+                <hr/>
+                </div>
+                <span th:if="${entry.favorite}" class="left tooltipped" data-position="top" data-tooltip="Favorite"><i class="inline-icon material-icons">favorite</i></span>
+                <span th:if="${entry.rating}" class="right tooltipped" data-position="top" data-tooltip="Rating"><i class="inline-icon material-icons">star</i><span class="star-rating" th:text="${entry.rating}"/></span>
+
+              </div>
+            </div>
+          </div>
+  </div>
+
+<!-- Fixed Action Button-->
+  <div th:if="${#httpServletRequest.remoteUser}" class="fixed-action-btn">
+    <a class="btn-floating btn-large deep-purple darken-4">
+      <i class="large material-icons">add</i>
+    </a>
+    <ul>
+      <li><a href="#addToListModal" id="add_to_list" class="btn-floating purple darken-3 tooltipped modal-trigger" data-position="left" data-tooltip="Add to list"><i class="material-icons">playlist_add</i></a></li>
+      <li th:if="${entry} == null"><a href="#addEntryModal" id="new_entry" class="btn-floating purple darken-3 tooltipped modal-trigger" data-position="left" data-tooltip="New entry"><i class="material-icons">mode_edit</i></a></li>
+      <li th:if="${entry} != null"><a href="#editEntryModal" id="edit_entry" class="btn-floating purple darken-3 tooltipped modal-trigger" data-position="left" data-tooltip="Edit entry"><i class="material-icons">mode_edit</i></a></li>
+
+    </ul>
+  </div>
+  <div th:unless="${#httpServletRequest.remoteUser}" class="fixed-action-btn tooltipped" data-position="left" data-tooltip="Sign in to write about this game">
+    <a th:href="@{/login}" class="btn-floating btn-large deep-purple darken-4">
+      <i class="large material-icons">add</i>
+    </a>
+  </div>
+
+  <!-- Add game to list modal -->
+  <div th:replace="fragments/addToList" />
+  <!-- Add entry modal -->
+  <div th:replace="fragments/addEntry" />
+  <!-- Edit entry modal -->
+  <div th:if="${entry}">
+    <div th:replace="fragments/editEntry"/>
+    </div>
 </body>
 </html>

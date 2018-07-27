@@ -3,13 +3,8 @@
 
 <head>
     <title>Gamelog</title>
-    <meta charset="UTF-8"/>
-    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css" media="screen,projection"/>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-    <link rel="stylesheet" href="css/custom.css"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <script type='text/javascript' src='/js/index.js'></script>
+    <div th:replace="fragments/header" />
+    <script type='text/javascript' src='/js/index.js' />
 </head>
 <nav th:replace="fragments/navbar" />
 <body>

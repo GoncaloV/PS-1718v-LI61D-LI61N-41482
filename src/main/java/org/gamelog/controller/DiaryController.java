@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.time.LocalDate;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 @Controller
 public class DiaryController {
@@ -26,7 +28,7 @@ public class DiaryController {
      * @return A model and view for diary.html.
      */
     @GetMapping(path="/diary")
-    private CompletableFuture<ModelAndView> getDiary(Authentication authentication){
+    private Future<ModelAndView> getDiary(Authentication authentication){
         Player player = (Player) authentication.getPrincipal();
         ModelAndView modelAndView = new ModelAndView("diary");
         return entryService.findAllEntriesForPlayerById(player).thenApply(entries -> {
@@ -35,33 +37,28 @@ public class DiaryController {
         });
     }
 
-    // TODO: MAKE IT AJAX
-//    @PostMapping(path="entry")
-//    private RedirectView postEntry(@RequestParam(value = "rating", required = false) Integer rating,
-//                                  @RequestParam(value = "review", required = false) String review,
-//                                  @RequestParam(value = "favorite", required = false) boolean favorite,
-//                                  @RequestParam(value = "secret", required = false) boolean secret,
-//                                  @RequestParam(value = "date", required = false) @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date,
-//                                  @RequestParam("gameid") long gameid,
-//                                  Authentication authentication){
-//        Player player = (Player) authentication.getPrincipal();
-//        if (entryService.saveEntry(rating, review, favorite, secret, date, gameid, player) != null);
-//        return new RedirectView("/game/" + gameid);
-//    }
-
+    /**
+     * Posts a new entry or updates an existing one. TODO: Make it AJAX
+     * @param rating A rating from 1 to 10 for the game being written about.
+     * @param review A string describing the player's experience with the game.
+     * @param favorite Whether or not the game is marked as favorite.
+     * @param secret Whether or not the game is marked as private.
+     * @param date The date when the entry was written.
+     * @param gameid The id for the game being written about.
+     * @param authentication Request parameter to identify current user.
+     * @return A future containing a model and view with the entry.html template, containing data from the entry.
+     */
     @PostMapping(path="entry")
-    private CompletableFuture<ModelAndView> postEntry_AJAX(@RequestParam(value = "rating", required = false) Integer rating,
-                                   @RequestParam(value = "review", required = false) String review,
-                                   @RequestParam(value = "favorite", required = false) boolean favorite,
-                                   @RequestParam(value = "secret", required = false) boolean secret,
-                                   @RequestParam(value = "date", required = false) @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date,
-                                   @RequestParam("gameid") long gameid,
-                                   Authentication authentication){
+    private Future<RedirectView> postEntry(@RequestParam(value = "rating", required = false) Integer rating,
+                                                @RequestParam(value = "review", required = false) String review,
+                                                @RequestParam(value = "favorite", required = false) boolean favorite,
+                                                @RequestParam(value = "secret", required = false) boolean secret,
+                                                @RequestParam(value = "date", required = false) @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date,
+                                                @RequestParam("gameid") long gameid,
+                                                Authentication authentication){
         Player player = (Player) authentication.getPrincipal();
         return entryService.saveEntry(rating, review, favorite, secret, date, gameid, player).thenApply(entry -> {
-            ModelAndView modelAndView = new ModelAndView("entry");
-            modelAndView.addObject("entry", entry);
-            return modelAndView;
+            return new RedirectView("/game/" + gameid);
         });
     }
 }

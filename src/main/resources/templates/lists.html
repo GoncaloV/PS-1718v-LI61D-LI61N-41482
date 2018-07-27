@@ -12,9 +12,9 @@
     <div th:each="list : ${lists}">
         <br/>
         <form th:action="'/list/' + ${list.id.name} + '/delete'" method="post">
-            <a class="btn btn-info" th:href="'/list/' + ${list.id.name}" th:text="${list.id.name}"/>
+            <a class="btn" th:href="'/list/' + ${list.id.name}" th:text="${list.id.name}"/>
             <input type="hidden" name="listid" th:value="${list.id.name}"/>
-            <input type="submit" class="btn btn-default" value="Delete"/>
+            <input type="submit" class="btn" value="Delete"/>
         </form>
         <p th:text="'Tags for ' + ${list.id.name} + ':'"/>
         <span th:each="tag : ${list.tags}" th:text="${tag.name}"/>
@@ -29,7 +29,7 @@
 <form th:action="@{/lists}" method="post">
     <div class="form-group">
         <input type="text" class="form-control" name="listname"/>
-        <input type="submit" class="btn btn-default"/>
+        <input type="submit" class="btn"/>
     </div>
 </form>
 </div>
