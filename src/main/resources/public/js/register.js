@@ -73,8 +73,9 @@ $(document).ready(function () {
                 url: 'register',
                 data: $("#register").serialize(),
                 timeout: 10000
-            }).done(function (data) {
-                if (!data) {
+            }).done(function (exists) {
+              console.log(exists);
+                if (exists) {
                     $("#alert_existing_name").text(`User "${name.val()}" already exists!`).show();
                     $("#loading").hide();
                     $("#signup").show();

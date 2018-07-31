@@ -1,5 +1,6 @@
 package org.gamelog.repos;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.data.repository.Repository;
 import org.gamelog.model.Game;
 import org.gamelog.model.GamelistId;
@@ -31,6 +32,9 @@ public interface GamelistRepository extends Repository<Gamelist, GamelistId> {
 
     @Async
     CompletableFuture<Void> deleteAll();
+
+    @Async
+    CompletableFuture<Boolean> exists(GamelistId gamelistId);
 
     // Custom queries
     @Async

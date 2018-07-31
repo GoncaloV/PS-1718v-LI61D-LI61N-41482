@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +32,7 @@ public class EntryTests {
 
     @Test
     @Transactional
+    @Async
     public void createEntryTest(){
         // TODO: Ask teacher: Async testing?
         Player p = playerService.createPlayer("TESTPLAYER", "TESTPASSWORD").join();
@@ -52,8 +53,8 @@ public class EntryTests {
 
     @Test
     @Transactional
+    @Async
     public void editEntryTest(){
-        // TODO: Make async if possible.
         Player p = playerService.createPlayer("TESTPLAYER", "TESTPASSWORD").join();
         Game g = new Game(1);
         LocalDate now = LocalDate.now();
@@ -65,14 +66,13 @@ public class EntryTests {
         e.setFavorite(false);
         e.setPrivate(false);
         e.setDate(now.plusDays(1));
-/*        TODO: Fix test. Or Don't.
-Entry e2 = entryService.updateEntry(e).join();
+        Entry e2 = entryService.saveEntry(e.getRating(), e.getReview(), e.isFavorite(), e.isPrivate(), now, g.getId(), p).join();
 
         assertNotNull(e2);
         assertEquals(e2.getRating().intValue(), 5);
         assertEquals(e2.getReview(), "test-review");
         assertEquals(e2.isFavorite(), false);
         assertEquals(e2.isPrivate(), false);
-        assertEquals(e2.getDate(), now.plusDays(1));*/
+        assertEquals(e2.getDate(), now.plusDays(1));
     }
 }

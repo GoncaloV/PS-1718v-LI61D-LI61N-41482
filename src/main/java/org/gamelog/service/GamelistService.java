@@ -58,46 +58,86 @@ public class GamelistService {
      * @return A completable future containing the created gamelist, if created successfully, or null otherwise.
      */
     public CompletableFuture<Gamelist> addNewList(Player player, String name) {
-        Gamelist gamelist = new Gamelist(player, name);
-        return gamelistRepository.save(gamelist);
+        return gamelistRepository.findOneByIdPlayerAndIdName(player, name).thenCompose(gamelist -> {
+            if (gamelist == null)
+                return gamelistRepository.save(new Gamelist(player, name));
+            else {
+                return CompletableFuture.completedFuture(null);
+            }
+        });
     }
 
     /**
-     * TODO: Parallel async? Fix join.
-     * @param player
-     * @param listname
-     * @param gameid
-     * @return
+     * Adds a new game to an existing gamelist.
+     * @param player The player to whom the list belongs to.
+     * @param listname The name of the list being edited.
+     * @param gameid The game being added.
+     * @return The gamelist with the new game.
      */
     public CompletableFuture<Gamelist> addGameToList(Player player, String listname, Long gameid) {
         CompletableFuture<Gamelist> gamelistCompletableFuture = gamelistRepository.findOneByIdPlayerAndIdName(player, listname);
         CompletableFuture<Game> gameCompletableFuture = gameService.findGameById(gameid);
-        return gamelistCompletableFuture.thenCombine(gameCompletableFuture, (gamelist, game) -> {
-            gamelist.addGame(game);
-            return gamelistRepository.save(gamelist).join();
+        CompletableFuture[] completableFutures = {gamelistCompletableFuture, gameCompletableFuture};
+        return CompletableFuture.allOf(completableFutures).thenCompose(x -> {
+            Gamelist gamelist = gamelistCompletableFuture.join();
+            gamelist.addGame(gameCompletableFuture.join());
+            return gamelistRepository.save(gamelist);
         });
     }
 
+    /**
+     * Deletes a game from a gamelist.
+     * @param player The player to whom the list belongs to.
+     * @param listname The name of the list being modified.
+     * @param gameid The game being removed.
+     * @return The modified gamelist.
+     */
     public CompletableFuture<Gamelist> deleteGameFromList(Player player, String listname, Long gameid) {
-        Gamelist gamelist = gamelistRepository.findOneByIdPlayerAndIdName(player, listname).join(); // TODO: fix join
-        Game game = gameService.findGameById(gameid).join(); // TODO: fix join
-        gamelist.removeGame(game);
-        return gamelistRepository.save(gamelist);
+        CompletableFuture<Gamelist> gamelistCompletableFuture = gamelistRepository.findOneByIdPlayerAndIdName(player, listname);
+        CompletableFuture<Game> gameCompletableFuture = gameService.findGameById(gameid);
+        CompletableFuture[] completableFutures = {gamelistCompletableFuture, gameCompletableFuture};
+        return CompletableFuture.allOf(completableFutures).thenCompose(x -> {
+            Gamelist gamelist = gamelistCompletableFuture.join();
+            gamelist.removeGame(gameCompletableFuture.join());
+            return gamelistRepository.save(gamelist);
+        });
     }
 
-    public void deleteList(Player player, String listname) {
-        Gamelist gamelist = gamelistRepository.findOneByIdPlayerAndIdName(player, listname).join(); // TODO: fix join
-        gamelistRepository.delete(gamelist.getId());
+    /**
+     * Deletes an existing gamelist.
+     * @param player The player to whom the list belongs.
+     * @param listname The name of the list being deleted.
+     */
+    public CompletableFuture<Void> deleteList(Player player, String listname) {
+        return gamelistRepository.findOneByIdPlayerAndIdName(player, listname).thenCompose(gamelist -> gamelistRepository.delete(gamelist.getId()));
     }
 
+    /**
+     * Adds a tag to a gamelist.
+     * @param player The player to whom the gamelist belongs to.
+     * @param listname The name of the list being modified.
+     * @param tagname The name of the tag being added.
+     * @return The modified gamelist.
+     */
     public CompletableFuture<Gamelist> addTagToList(Player player, String listname, String tagname) {
-        Tag t = tagService.findTag(tagname).join(); // TODO: fix join
-        t = t == null ? tagService.createTag(tagname).join() : t; // TODO: fix join
-        Gamelist gamelist = gamelistRepository.findOneByIdPlayerAndIdName(player, listname).join(); // TODO: fix join
-        gamelist.addTag(t);
-        return gamelistRepository.save(gamelist);
+        CompletableFuture<Tag> tagCompletableFuture = tagService.findTag(tagname).
+                thenCompose(tag -> tag == null ? tagService.createTag(tagname) : CompletableFuture.completedFuture(tag));
+        CompletableFuture<Gamelist> gamelistCompletableFuture = gamelistRepository.findOneByIdPlayerAndIdName(player, listname);
+        CompletableFuture[] completableFutures = {tagCompletableFuture, gamelistCompletableFuture};
+        return CompletableFuture.allOf(completableFutures).thenCompose(x -> {
+            Gamelist gamelist = gamelistCompletableFuture.join();
+            gamelist.addTag(tagCompletableFuture.join());
+            return gamelistRepository.save(gamelist);
+        });
     }
 
+    /**
+     *
+     * @param player
+     * @param gamelist
+     * @param tag
+     * @return
+     */
     public CompletableFuture<Gamelist> addTagToList(Player player, Gamelist gamelist, Tag tag) {
         gamelist.addTag(tag);
         return gamelistRepository.save(gamelist);
@@ -119,10 +159,14 @@ public class GamelistService {
     }
 
     public CompletableFuture<Gamelist> removeTagFromlist(Player player, String listname, String tagname) {
-        Tag t = tagService.findTag(tagname).join(); // TODO: fix join
-        Gamelist gamelist = gamelistRepository.findOneByIdPlayerAndIdName(player, listname).join(); // TODO: fix join
-        gamelist.removeTag(t);
-        return gamelistRepository.save(gamelist);
+        CompletableFuture<Tag> tagCompletableFuture = tagService.findTag(tagname);
+        CompletableFuture<Gamelist> gamelistCompletableFuture = gamelistRepository.findOneByIdPlayerAndIdName(player, listname);
+        CompletableFuture[] completableFutures = {tagCompletableFuture, gamelistCompletableFuture};
+        return CompletableFuture.allOf(completableFutures).thenCompose(x -> {
+           Gamelist gamelist = gamelistCompletableFuture.join();
+           gamelist.removeTag(tagCompletableFuture.join());
+           return gamelistRepository.save(gamelist);
+        });
     }
 
     public CompletableFuture<Gamelist> findOne(Gamelist gamelist) {

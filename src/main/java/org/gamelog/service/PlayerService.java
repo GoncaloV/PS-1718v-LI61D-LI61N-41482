@@ -27,12 +27,12 @@ public class PlayerService implements UserDetailsService {
     }
 
     @Async
-    public void deleteAll() {
-        playerRepository.deleteAll();
+    public CompletableFuture<Void> deleteAll() {
+        return playerRepository.deleteAll();
     }
 
-    public void delete(Player p){
-        playerRepository.delete(p);
+    public CompletableFuture<Void> delete(Player p){
+        return playerRepository.delete(p);
     }
 
     @Override
@@ -41,20 +41,20 @@ public class PlayerService implements UserDetailsService {
         Player player = findByName(usernameUpperCase).join();
         if (player != null) return player;
         else throw new UsernameNotFoundException(username);
-    }
+    } // TODO: Ask teacher: Could I do this asynchronously?
 
     /**
      * Registers a new player in the database. First checks if a player under the desired name is already in the database.
      * @param name The desired player name.
      * @param password The desired player password.
-     * @return A completable future containing: Null, if a player under that name already exists. The player created, if it was created successfully.
+     * @return A completable future containing: Null, if a player under that name already exists; Another completable future containing the player created, if it was created successfully.
      */
     @Async
     public CompletableFuture<Player> createPlayer(String name, String password) {
         return playerRepository.findPlayerByNameIgnoreCase(name)
                 .thenCompose(player -> {
             if (player != null)
-                return null;
+                return CompletableFuture.completedFuture(null);
             else {
                 return playerRepository.save(new Player(name, password));
             }

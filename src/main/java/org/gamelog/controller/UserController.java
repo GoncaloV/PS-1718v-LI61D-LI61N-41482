@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 @Controller
 public class UserController {
@@ -47,7 +48,7 @@ public class UserController {
      */
     @PostMapping(path="/register")
     @ResponseBody
-    public CompletableFuture<Player> postRegister(@RequestParam("name") String name, @RequestParam("password") String password){
-        return playerService.createPlayer(name, password); // TODO: What to do about errors?
+    public CompletableFuture<Boolean> postRegister(@RequestParam("name") String name, @RequestParam("password") String password){
+        return playerService.createPlayer(name, password).thenApply(player -> player != null);
     }
 }

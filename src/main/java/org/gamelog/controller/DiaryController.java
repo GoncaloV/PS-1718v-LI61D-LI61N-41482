@@ -57,8 +57,6 @@ public class DiaryController {
                                                 @RequestParam("gameid") long gameid,
                                                 Authentication authentication){
         Player player = (Player) authentication.getPrincipal();
-        return entryService.saveEntry(rating, review, favorite, secret, date, gameid, player).thenApply(entry -> {
-            return new RedirectView("/game/" + gameid);
-        });
+        return entryService.saveEntry(rating, review, favorite, secret, date, gameid, player).thenApply(entry -> new RedirectView("/game/" + gameid));
     }
 }

@@ -1,9 +1,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <nav>
-  <div class="nav-wrapper deep-purple darken-4">
+  <script src="/js/navbar.js"></script>
+  <div class="nav-wrapper purple darken-4">
     <a href="/">
-      <img src="/images/favicon.png" width="50" class="gamelog-icon" />
-      <span class="brand-logo">Gamelog</span>
+            <img src="/images/Gamelog-logo.png" height="40" class="gamelog-logo"/>
+      <!-- <img src="/images/favicon.png" width="50" class="gamelog-icon" />
+      <span class="brand-logo">Gamelog</span> -->
     </a>
     <ul class="right">
       <li th:if="${#httpServletRequest.remoteUser}">
@@ -14,7 +16,7 @@
       <li th:if="${#httpServletRequest.remoteUser}"><a href="/lists">Lists</a></li>
       <li th:if="${#httpServletRequest.remoteUser}">
         <form th:action="@{/logout}" method="post">
-          <li><a><button class="btn-flat white-text" type="submit">Logout</button></a></li>
+          <li><a>Logout</a></li>
         </form>
         </li>
         <li th:unless="${#httpServletRequest.remoteUser}"><a th:href="@{/register}">Sign up</a></li>

@@ -42,7 +42,7 @@ public class GamelistTests {
     @Test
     @Transactional
     public void testAddNewTagToList(){
-        final Player PLAYER = playerService.createPlayer(PLAYER_NAME, PLAYER_PASSWORD).join(); //TODO: Fix tests? Remove all joins.
+        final Player PLAYER = playerService.createPlayer(PLAYER_NAME, PLAYER_PASSWORD).join(); //TODO: Fix tests?
         final Gamelist GAMELIST = gamelistService.addNewList(PLAYER, GAMELIST_NAME).join();
         gamelistService.addTagToList(PLAYER, GAMELIST_NAME, TAG_NAME);
 

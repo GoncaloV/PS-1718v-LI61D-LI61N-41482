@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.concurrent.CompletableFuture;
+
 @Controller
 public class TagController {
     @Autowired
@@ -19,9 +21,11 @@ public class TagController {
      * @TODO Determine if pagination is necessary and implement it if it is.
      */
     @GetMapping("/tags")
-    private ModelAndView getAllTags(){
-        ModelAndView modelAndView = new ModelAndView("tags");
-        modelAndView.addObject("tags", tagService.getAllTags());
-        return modelAndView;
+    private CompletableFuture<ModelAndView> getAllTags(){
+        return tagService.getAllTags().thenApply(tags -> {
+            ModelAndView modelAndView = new ModelAndView("tags");
+            modelAndView.addObject("tags", tags);
+            return modelAndView;
+        });
     }
 }
