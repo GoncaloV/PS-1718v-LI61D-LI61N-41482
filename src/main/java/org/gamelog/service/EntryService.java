@@ -46,7 +46,7 @@ public class EntryService {
      */
     @Async
     public CompletableFuture<Entry> saveEntry(Integer rating, String review, boolean favorite, boolean secret, LocalDate date, long gameId, Player player){
-        return gameService.findGameInfoById(gameId).thenCompose(game -> { // TODO: Is thenCompose correct here? The desirable outcome is to return a completable future that's dependent on another completable future.
+        return gameService.findGameInfoById(gameId).thenCompose(game -> {
             return entryRepository.findOneByIdPlayerAndIdGame(player, game).thenCompose(entry -> {
                 Entry e = entry == null ? new Entry(player, game) : entry;
                     e.setRating(rating);

@@ -15,8 +15,8 @@
       <li th:if="${#httpServletRequest.remoteUser}"><a href="/diary">Diary</a></li>
       <li th:if="${#httpServletRequest.remoteUser}"><a href="/lists">Lists</a></li>
       <li th:if="${#httpServletRequest.remoteUser}">
-        <form th:action="@{/logout}" method="post">
-          <li><a>Logout</a></li>
+        <form id="logout-form" th:action="@{/logout}" method="post">
+          <li id="logout-btn"><a>Logout</a></li>
         </form>
         </li>
         <li th:unless="${#httpServletRequest.remoteUser}"><a th:href="@{/register}">Sign up</a></li>

@@ -3,11 +3,16 @@ package org.gamelog.controller;
 import org.gamelog.model.Player;
 import org.gamelog.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
@@ -49,6 +54,30 @@ public class UserController {
     @PostMapping(path="/register")
     @ResponseBody
     public CompletableFuture<Boolean> postRegister(@RequestParam("name") String name, @RequestParam("password") String password){
-        return playerService.createPlayer(name, password).thenApply(player -> player != null);
+        return playerService.createPlayer(name, password).thenApply(player -> player == null);
+    }
+
+    /**
+     * Custom substitute for a POST to /login.
+     * @param request Request object used to log the user in.
+     * @param username Username credentials.
+     * @param password Password credentials.
+     * @return 404 if invalid credentials, 200 if valid credentials.
+     */
+    @PostMapping(path = "/attemptlogin")
+    @ResponseBody
+    public CompletableFuture<ResponseEntity<String>> attemptLogin(HttpServletRequest request, @RequestParam("username") String username, @RequestParam("password") String password){
+        return playerService.findByName(username).thenApply(player -> {
+            if (player == null || !player.getPassword().equals(password))
+                return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+            else {
+                try {
+                    request.login(username, password);
+                } catch (ServletException e) {
+                    e.printStackTrace();
+                }
+                return new ResponseEntity<String>(HttpStatus.OK);
+            }
+        });
     }
 }

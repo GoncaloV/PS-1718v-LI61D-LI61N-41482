@@ -14,13 +14,18 @@ $(document).ready(function () {
     name.change(function () {
         if (name.val() && name.val().length < 6 || name.val().length > 20) {
             name.valid = false;
-            alert_name.text("Username must be between 6 and 20 characters long.").show();
+            $('#login_btn').prop('disabled', true);
+            alert_name.find('span').text("Username must be between 6 and 20 characters long.");
+            alert_name.show();
         } else if (!name.val().match(regExp)) {
             name.valid = false;
-            alert_name.text("Username must be alphanumeric (can only contain numbers and/or letters).").show();
+            $('#login_btn').prop('disabled', true);
+            alert_name.find('span').text("Username must be alphanumeric (can only contain numbers and/or letters).");
+            alert_name.show();
         }
         else {
             name.valid = true;
+            if(password.valid) $('#login_btn').prop('disabled', false);
             alert_name.hide();
         }
     });
@@ -30,10 +35,12 @@ $(document).ready(function () {
     password.change(function () {
         if (password.val().length < 8 || password.val().length > 128) {
             password.valid = false;
+            $('#login_btn').prop('disabled', true);
             alert_password.show();
         }
         else {
             password.valid = true;
+            if(name.valid) $('#login_btn').prop('disabled', false);
             alert_password.hide();
         }
     });
@@ -44,13 +51,17 @@ $(document).ready(function () {
             $("#login_btn").hide();
             $("#loading").show();
             $.post({
-                url: 'login',
+                url: '/attemptlogin',
                 data: $("#login_form").serialize(),
-                timeout: 10000
-            }).done(function(){
-                window.location.replace("/");
+                timeout: 5000
+            }).done(data => {
+              window.location.replace("/");
             }
-            );
+          ).fail(_ => {
+            $('#alert_bad_credentials').show();
+            $("#loading").hide();
+            $("#login_btn").show();
+          });
         }
     });
 });

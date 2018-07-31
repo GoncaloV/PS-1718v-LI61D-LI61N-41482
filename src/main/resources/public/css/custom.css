@@ -22,3 +22,9 @@
 .cover-image {
   margin-right: 10px;
 }
+
+/* label underline focus color */
+.input-field input:focus {
+  border-bottom: 1px solid #6a1b9a !important;
+  box-shadow: 0 1px 0 0 #4a148c !important;
+}

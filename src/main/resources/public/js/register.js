@@ -21,11 +21,13 @@ $(document).ready(function () {
         if (name.val() && name.val().length < 6 || name.val().length > 20) {
             name.valid = false;
             signup_btn.prop("disabled", true);
-            alert_name.text("Username must be between 6 and 20 characters long.").show();
+            alert_name.find('span').text("Username must be between 6 and 20 characters long.");
+            alert_name.show();
         } else if(!name.val().match(regExp)){
             name.valid = false;
             signup_btn.prop("disabled", true);
-            alert_name.text("Username must be alphanumeric (can only contain numbers and/or letters).").show();
+            alert_name.find('span').text("Username must be alphanumeric (can only contain numbers and/or letters).");
+            alert_name.show();
         }
         else {
             name.valid = true;
@@ -74,9 +76,9 @@ $(document).ready(function () {
                 data: $("#register").serialize(),
                 timeout: 10000
             }).done(function (exists) {
-              console.log(exists);
                 if (exists) {
-                    $("#alert_existing_name").text(`User "${name.val()}" already exists!`).show();
+                    $("#alert_existing_name").find('span').text(`User "${name.val()}" already exists!`);
+                    $("#alert_existing_name").show();
                     $("#loading").hide();
                     $("#signup").show();
                 }

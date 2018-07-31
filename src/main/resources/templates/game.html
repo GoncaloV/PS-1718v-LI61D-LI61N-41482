@@ -14,7 +14,7 @@
     <p align="justify" th:text="${game.summary}"/>
     <div class="clearfix"/>
     <hr/>
-    <span class="left tooltipped" data-position="top" data-tooltip="Plays"><i class="inline-icon material-icons">person</i><span th:text="${game.plays}"/></span>
+    <span class="left tooltipped" data-position="top" data-tooltip="Plays"><i class="inline-icon material-icons">gamepad</i><span th:text="${game.plays}"/></span>
     <span class="center tooltipped" data-position="top" data-tooltip="Rating"><i class="inline-icon material-icons">star</i><span class="star-rating" th:text="${game.averageRatings} ? ${game.averageRatings} : 'No users have rated this game yet'"/></span>
     <span class="right tooltipped" data-position="top" data-tooltip="Favorites"><i class="inline-icon material-icons">favorite</i><span th:text="${game.favorites}"/></span>
     <hr/>
@@ -52,7 +52,7 @@
   </div>
   <div th:unless="${#httpServletRequest.remoteUser}" class="fixed-action-btn tooltipped" data-position="left" data-tooltip="Sign in to write about this game">
     <a th:href="@{/login}" class="btn-floating btn-large deep-purple darken-4">
-      <i class="large material-icons">add</i>
+      <i class="large material-icons">more_horiz</i>
     </a>
   </div>
 

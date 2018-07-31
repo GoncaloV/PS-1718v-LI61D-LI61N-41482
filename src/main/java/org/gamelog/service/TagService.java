@@ -37,7 +37,7 @@ public class TagService {
      */
     public CompletableFuture<Void> deleteTag(String tagname) {
         return tagRepository.delete(tagname);
-    } // TODO: Completable future void?
+    }
 
     /**
      * Finds all tags in the database.
