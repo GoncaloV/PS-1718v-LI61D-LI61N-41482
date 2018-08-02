@@ -53,7 +53,8 @@ public class GameService {
                             // API always returns a collection, even if there's only one element.
                             List<Game> games = gson.fromJson(response.getResponseBody(), gameListType);
                             Game game = games.get(0);
-                            game.setCoverUrl(game.getCoverUrl().replace("thumb", "cover_big"));
+                            if (game.getCoverUrl() != null)
+                                game.setCoverUrl(game.getCoverUrl().replace("thumb", "cover_big"));
                             return gameRepository.save(game);
                         });
             }

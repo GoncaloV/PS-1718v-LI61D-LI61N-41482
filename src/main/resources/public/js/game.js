@@ -3,9 +3,13 @@ $(document).ready(function(){
   $('.tooltipped').tooltip();
   $('.modal').modal();
   $('select').formSelect();
+  let today = new Date();
   $('.datepicker').datepicker({
     format: 'yyyy-mm-dd',
-          container: 'body'
+    container: 'body',
+    defaultDate: today,
+    autoClose: true,
+    showClearBtn: true
   });
   $('.textarea').characterCounter();
   // Messy way of translating the numeric rating to stars.
@@ -33,5 +37,7 @@ $(document).ready(function(){
       rating_parent.html(html_to_set); // Set new html
       rating_parent.attr("data-tooltip", rating + '/10');
   }
+
+  $('input[name=Choose]').attr('checked',false);
 });
 });

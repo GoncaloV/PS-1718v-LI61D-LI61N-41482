@@ -1,8 +1,6 @@
-<div id="editEntryModal" class="modal" style="overflow: visible;" >
   <div class="modal-content">
-    <h4 th:text="'Edit entry for ' + ${game.name}"/>
+    <h4 th:text="'Edit entry for ' + ${entry.id.game.name}"/>
     <form th:action="@{/entry}" class="col s12" method="post">
-
       <h6>Rating</h6>
       <th:block th:each="i: ${#numbers.sequence(1, 10)}">
       <span><label>
@@ -10,13 +8,11 @@
         <input th:if="${entry.rating} != ${i}" name="rating" type="radio" th:value="${i}" />
         <span th:text="${i}"/>
       </label>  </span>
-      <button class="btn deep-purple darken-4" name="clear">Clear</button>
     </th:block>
 
-          <div class="input-field">
     <h6>Review</h6>
-    <textarea  data-length="255" cols="20" rows="5" maxlength="255" class="materialize-textarea" name="review" th:text="${entry.review}"/>
-  </div>
+    <textarea  data-length="512" cols="20" maxlength="512" class="materialize-textarea" name="review" th:text="${entry.review}"/>
+
       <div class="left">
         <span><label>
           <input th:if="${entry.favorite}" type="checkbox" name="favorite" th:checked="true"/>
@@ -34,8 +30,7 @@
             <i class="material-icons prefix">date_range</i>
             <input type="text" name="date" th:value="${entry.date}" class="datepicker"/>
           </div>
-        <input type="hidden" name="gameid" th:value="${game.id}"/>
+        <input type="hidden" name="gameid" th:value="${entry.id.game.id}"/>
         <input class="btn deep-purple darken-4 right" type="submit" value="Apply"/>
       </form>
     </div>
-  </div>

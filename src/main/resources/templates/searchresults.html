@@ -3,6 +3,7 @@
 <head>
     <title>Gamelog - Search results</title>
     <div th:replace="fragments/header"/>
+    <script src="/js/searchresults.js"></script>
 </head>
 <body>
 <div th:replace="fragments/navbar"/>
@@ -11,10 +12,9 @@
     <ul th:replace="searchresults :: Pagination"/>
     <p th:each="game : ${games}">
       <a th:href="'/game/' + ${game.id}">
-      <img th:if="${game.coverUrl}" th:src="${game.coverUrl}"/>
+      <img th:src="${game.coverUrl} ? ${game.coverUrl} : '/images/nocover.png'" width="90"/>
       <span th:text="${game.name}"/>
     </a>
-      <i th:unless="${game.coverUrl}" class="material-icons">broken_image</i>
     </p>
 <!-- Pagination -->
 <ul class="pagination center" th:fragment="Pagination">
@@ -33,10 +33,30 @@
   <li><a th:href="@{/search(query=${query}, page=${page}+1)}" th:text="${page+1}"></a></li>
   <li><a th:href="@{/search(query=${query}, page=${page}+2)}" th:text="${page+2}"></a></li>
 
+  <!-- Ellipsis (go to any page) -->
+  <li class="waves-effect"><a class="modal-trigger" href="#pageSelect"><i class="material-icons">more_horiz</i></a></li>
+
   <!-- Next -->
   <li class="waves-effect"><a th:href="@{/search(query=${query}, page=${page}+1)}"><i class="material-icons">chevron_right</i></a></li>
-
 </ul>
+<!-- Page select modal -->
+<div id="pageSelect" class="modal" style="overflow: visible; width:15% !important; min-height:20% !important; max-height:20% !important;" >
+  <div class="modal-content">
+    <h4>Go to page</h4>
+    <form th:action="@{/search}" method="get">
+      <input type="hidden" name="query" th:value="${query}"/>
+      <div class="row">
+      <div class="input-field col s8">
+        <input type="text" name="page" pattern="[0-9]" title="Only numbers are allowed" th:value="${page}" required="required"/>
+      </div>
+      <div class="input-field col s2">
+        <button class="btn purple darken-4" type="submit">Go</button>
+      </div>
+    </div>
+    </form>
+  </div>
 </div>
+</div>
+
 </body>
 </html>

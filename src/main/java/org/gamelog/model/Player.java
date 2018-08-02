@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -16,10 +17,12 @@ public class Player implements UserDetails {
 
     @Column(unique = true, nullable = false)
     @NotBlank
+    @Size(min=6, max=20)
     private String name;
 
     @Column(nullable = false)
     @NotBlank
+    @Size(min=8, max=128)
     private String password;
 
     public Player(String name, String password) {
