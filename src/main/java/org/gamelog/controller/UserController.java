@@ -66,7 +66,7 @@ public class UserController {
      */
     @PostMapping(path = "/attemptlogin")
     @ResponseBody
-    public CompletableFuture<ResponseEntity<String>> attemptLogin(HttpServletRequest request, @RequestParam("username") String username, @RequestParam("password") String password){
+    public Future<ResponseEntity<String>> attemptLogin(HttpServletRequest request, @RequestParam("username") String username, @RequestParam("password") String password){
         return playerService.findByName(username).thenApply(player -> {
             if (player == null || !player.getPassword().equals(password))
                 return new ResponseEntity<String>(HttpStatus.NOT_FOUND);

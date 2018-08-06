@@ -57,3 +57,12 @@ input:not([type]):focus:not([readonly]), input[type=text]:not(.browser-default):
 .input-field .prefix.active {
   color: #6a1b9a !important;
 }
+
+.game-result
+{
+    cursor: pointer;
+}
+
+.review {
+word-break: break-all}
+}

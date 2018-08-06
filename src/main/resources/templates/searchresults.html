@@ -10,12 +10,14 @@
 <div class="container">
   <p th:text="'Showing results for &quot;' + ${query} + '&quot;'"/>
     <ul th:replace="searchresults :: Pagination"/>
-    <p th:each="game : ${games}">
-      <a th:href="'/game/' + ${game.id}">
-      <img th:src="${game.coverUrl} ? ${game.coverUrl} : '/images/nocover.png'" width="90"/>
-      <span th:text="${game.name}"/>
-    </a>
-    </p>
+    <table class="highlight responsive-table">
+      <tbody>
+    <tr class="game-result" th:each="game : ${games}">
+      <td><a th:href="'/game/' + ${game.id}"><img th:src="${game.coverUrl} ? ${game.coverUrl} : '/images/nocover.png'" width="90"/></a></td>
+      <td><a th:href="'/game/' + ${game.id}"><span th:text="${game.name}"/></a></td>
+  </tr>
+    </tbody>
+    </table>
 <!-- Pagination -->
 <ul class="pagination center" th:fragment="Pagination">
   <!-- Previous -->

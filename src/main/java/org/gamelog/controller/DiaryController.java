@@ -4,6 +4,8 @@ import org.gamelog.model.Player;
 import org.gamelog.service.EntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +15,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.xml.ws.RespectBindingFeature;
 import java.time.LocalDate;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Future;
 
 @Controller
@@ -58,5 +62,13 @@ public class DiaryController {
                                                 Authentication authentication){
         Player player = (Player) authentication.getPrincipal();
         return entryService.saveEntry(rating, review, favorite, secret, date, gameid, player).thenApply(entry -> new RedirectView("/game/" + gameid));
+    }
+
+    @PostMapping(path="delete_entry")
+    private CompletionStage<ResponseEntity> deleteEntry(@RequestParam("gameid") long gameid, Authentication authentication){
+        Player player = (Player) authentication.getPrincipal();
+        return entryService.deleteEntry(player, gameid)
+                .thenApply(x -> new ResponseEntity(HttpStatus.OK))
+                .exceptionally(y -> new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 }

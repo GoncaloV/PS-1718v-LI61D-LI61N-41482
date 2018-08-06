@@ -38,6 +38,20 @@ $(document).ready(function(){
       rating_parent.attr("data-tooltip", rating + '/10');
   }
 
-  $('input[name=Choose]').attr('checked',false);
+});
+
+$('#delete-entry-btn').click(() => {
+  $.post({
+      url: 'deleteEntry',
+      data: $("#delete-entry-form").serialize(),
+      timeout: 10000
+    }).done(data => {
+      location.reload(true);
+    }
+  ).fail(e {
+    alert(e);
+  } => {
+
+  });
 });
 });

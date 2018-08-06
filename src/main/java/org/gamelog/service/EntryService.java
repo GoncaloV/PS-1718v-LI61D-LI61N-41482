@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 @Service
 public class EntryService {
@@ -49,12 +50,12 @@ public class EntryService {
         return gameService.findGameInfoById(gameId).thenCompose(game -> {
             return entryRepository.findOneByIdPlayerAndIdGame(player, game).thenCompose(entry -> {
                 Entry e = entry == null ? new Entry(player, game) : entry;
-                    e.setRating(rating);
-                    e.setReview(review);
-                    e.setFavorite(favorite);
-                    e.setPrivate(secret);
-                    e.setDate(date);
-                    return entryRepository.save(e);
+                e.setRating(rating);
+                e.setReview(review);
+                e.setFavorite(favorite);
+                e.setPrivate(secret);
+                e.setDate(date);
+                return entryRepository.save(e);
             });
         });
     }
@@ -106,4 +107,10 @@ public class EntryService {
         return entryRepository.findOne(e.getId());
     }
 
+    @Async
+    public CompletionStage<Void> deleteEntry(Player player, long gameid) {
+        return gameService.findGameById(gameid)
+                .thenCompose(game -> findByPlayerAndGame(player, game)
+                        .thenCompose(entry -> entryRepository.delete(entry.getId())));
+    }
 }

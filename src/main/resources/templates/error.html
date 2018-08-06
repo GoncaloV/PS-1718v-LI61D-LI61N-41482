@@ -1,0 +1,18 @@
+<html>
+<head>
+    <title th:text="'Gamelog - ' + ${status}"/>
+    <div th:replace="fragments/header"/>
+</head>
+<body>
+  <div th:replace="fragments/navbar"/>
+  <div class="container">
+  <div class="card deep-purple lighten-5">
+    <div class="card-content">
+            <p class="card-title" th:text="${status} + ' - ' + ${error}"/>
+            <p th:text="${message}" />
+            <font size="2" th:text="${timestamp}"/>
+          </div>
+  </div>
+  </div>
+</body>
+</html>

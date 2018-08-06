@@ -25,14 +25,14 @@
 
     <!-- User Reviews -->
     <div th:each="entry : ${entries}">
-      <div class="card deep-purple darken-4">
-        <div class="card-content white-text">
+      <div class="card deep-purple lighten-5">
+        <div class="card-content">
           <b class="left" th:text="${entry.id.player.name}"/>
           <div class="clearfix"/>
           <hr/>
           <div th:if="${!#strings.isEmpty(entry.review)}">
             <font size="1">Review</font>
-            <p th:text="${entry.review}"/>
+            <p class="review" th:text="${entry.review}"/>
             <hr/>
           </div>
           <div class="row" style="margin-bottom: 0;">

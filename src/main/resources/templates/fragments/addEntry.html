@@ -6,7 +6,7 @@
       <th:block th:each="i: ${#numbers.sequence(1, 10)}">
       <span><label><input name="rating" type="radio" th:value="${i}"/><span th:text="${i}"/></label></span>
     </th:block>
-    <button class="btn deep-purple darken-4" name="clear">Clear</button>
+    <a id="clear-button">Clear</a>
     <div class="input-field">
         <h6>Review</h6>
         <textarea  data-length="255" cols="20" rows="5" maxlength="255" class="materialize-textarea" name="review"/>
