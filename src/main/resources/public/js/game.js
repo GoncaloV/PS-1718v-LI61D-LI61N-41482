@@ -36,22 +36,19 @@ $(document).ready(function(){
       }
       rating_parent.html(html_to_set); // Set new html
       rating_parent.attr("data-tooltip", rating + '/10');
-  }
+    }
 
-});
+  });
 
-$('#delete-entry-btn').click(() => {
-  $.post({
-      url: 'deleteEntry',
+  $('#delete-entry-btn').click(() => {
+    $.post({
+      url: '/delete_entry',
       data: $("#delete-entry-form").serialize(),
       timeout: 10000
     }).done(data => {
       location.reload(true);
-    }
-  ).fail(e {
-    alert(e);
-  } => {
-
+    }).fail(e => {
+      console.log(e);
+    });
   });
-});
 });

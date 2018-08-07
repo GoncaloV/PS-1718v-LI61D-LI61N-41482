@@ -1,54 +1,75 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <title>Gamelog - Diary</title>
-  <div th:replace="fragments/header"/>
-  <script type='text/javascript' src='/js/diary.js'></script>
+  <div th:replace="fragments/header" />
   <script type='text/javascript' src='/js/game.js'></script>
 </head>
+
 <body>
-  <div th:replace="fragments/navbar"/>
+  <div th:replace="fragments/navbar" />
   <div class="container center-align">
     <div th:each="entry : ${entries}">
       <div class="col s12 m7">
         <div class="card horizontal deep-purple lighten-5">
           <div class="card-image">
             <a th:href="'/game/' + ${entry.id.game.id}">
-              <img th:src="${entry.id.game.coverUrl} ? ${entry.id.game.coverUrl} : '/images/nocover.png'"/>
+              <img th:src="${entry.id.game.coverUrl} ? ${entry.id.game.coverUrl} : '/images/nocover.png'" />
             </a>
           </div>
           <div class="card-stacked">
             <div class="card-content">
-              <span class="card-title" th:text="${entry.id.game.name}"/>
-              <a th:href="'#editEntryModal' + ${entry.id.game.id}" class="btn-floating halfway-fab waves-effect waves-light deep-purple darken-4 modal-trigger"><i class="material-icons">edit</i></a>
+              <span class="card-title" th:text="${entry.id.game.name}" />
+              <a th:href="'#editEntryModal' + ${entry.id.game.id}" class="btn-floating halfway-fab waves-effect waves-light deep-purple darken-4 modal-trigger">
+                <i class="material-icons">edit</i>
+              </a>
               <div th:if="${!#strings.isEmpty(entry.review)}">
                 <font size="1">Review</font>
-                <p class="review" th:text="${entry.review}"/>
+                <p class="review" th:text="${entry.review}" />
               </div>
               <font size="1" th:if="${#strings.isEmpty(entry.review)}">No review.</font>
             </div>
             <div class="card-action row" style="margin-bottom: 0;">
-              <span th:if="${entry.date}" class="col s2 tooltipped" data-position="top" data-tooltip="Date"><i class="inline-icon material-icons">date_range</i><span th:text="${entry.date}"/></span>
-              <div th:unless="${entry.date}" class="col s2"/>
-              <div class="col s3"/>
-              <span th:if="${entry.rating}" class="col s2 tooltipped" data-position="top" data-tooltip="Rating"><i class="inline-icon material-icons">star</i><span class="star-rating" th:text="${entry.rating}"/></span>
-              <div th:unless="${entry.rating}" class="col s2"/>
-              <div class="col s3"/>
-              <span th:if="${entry.favorite}" class="col s2 tooltipped" data-position="top" data-tooltip="Favorite"><i class="inline-icon material-icons">favorite</i></span>
+              <span th:if="${entry.date}" class="col s2 tooltipped" data-position="top" data-tooltip="Date">
+                <i class="inline-icon material-icons">date_range</i>
+                <span th:text="${entry.date}" /></span>
+              <div th:unless="${entry.date}" class="col s2" />
+              <div class="col s3" />
+              <span th:if="${entry.rating}" class="col s2 tooltipped" data-position="top" data-tooltip="Rating">
+                <i class="inline-icon material-icons">star</i>
+                <span class="star-rating" th:text="${entry.rating}" /></span>
+              <div th:unless="${entry.rating}" class="col s2" />
+              <div class="col s3" />
+              <span th:if="${entry.favorite}" class="col s2 tooltipped" data-position="top" data-tooltip="Favorite">
+                <i class="inline-icon material-icons">favorite</i>
+              </span>
               <!-- Edit entry modal -->
-              <div th:id="'editEntryModal' + ${entry.id.game.id}" class="modal" style="overflow: visible;" >
-                <div th:replace="/fragments/editEntryDiary"/>
+              <div th:id="'editEntryModal' + ${entry.id.game.id}" class="modal" style="overflow: visible;">
+                <div th:replace="/fragments/editEntryDiary" />
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-<div class="card deep-purple lighten-5" th:if="${#lists.isEmpty(entries)}">
-  <div class="card-content">
-          <span class="card-title">You have not made any entries.</span>
+
+      <div id="deleteConfirm" class="modal modal-small">
+        <div class="modal-content">
+          <p>Are you sure you want to delete this entry? This action cannot be undone.</p>
+          <a id="delete-entry-btn" class="btn deep-purple darken-4 right">Delete entry</a>
+          <form id="delete-entry-form" th:action="@{/diary/delete}" method="post">
+            <input type="hidden" name="gameid" th:value="${entry.id.game.id}" />
+          </form>
         </div>
-</div>
+      </div>
+
+    </div>
+    <div class="card deep-purple lighten-5" th:if="${#lists.isEmpty(entries)}">
+      <div class="card-content">
+        <span class="card-title">You have not made any entries.</span>
+      </div>
+    </div>
   </div>
 </body>
+
 </html>

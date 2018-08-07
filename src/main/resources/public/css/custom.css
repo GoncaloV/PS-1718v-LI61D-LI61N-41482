@@ -64,5 +64,11 @@ input:not([type]):focus:not([readonly]), input[type=text]:not(.browser-default):
 }
 
 .review {
-word-break: break-all}
+word-break: break-all;
+}
+
+.modal-small {
+  overflow: visible;
+  width: 20% !important;
+  min-height:20% !important;
 }

@@ -9,7 +9,6 @@
 <div th:replace="fragments/navbar"/>
 <div class="container">
   <p th:text="'Showing results for &quot;' + ${query} + '&quot;'"/>
-    <ul th:replace="searchresults :: Pagination"/>
     <table class="highlight responsive-table">
       <tbody>
     <tr class="game-result" th:each="game : ${games}">
@@ -19,7 +18,7 @@
     </tbody>
     </table>
 <!-- Pagination -->
-<ul class="pagination center" th:fragment="Pagination">
+<ul class="pagination center">
   <!-- Previous -->
   <li class="waves-effect disabled" th:if="${page} == 0"><a th:href="@{/search(query=${query}, page=${page}-1)}"><i class="material-icons">chevron_left</i></a></li>
   <li class="waves-effect" th:if="${page} > 0"><a th:href="@{/search(query=${query}, page=${page}-1)}"><i class="material-icons">chevron_left</i></a></li>
@@ -42,7 +41,7 @@
   <li class="waves-effect"><a th:href="@{/search(query=${query}, page=${page}+1)}"><i class="material-icons">chevron_right</i></a></li>
 </ul>
 <!-- Page select modal -->
-<div id="pageSelect" class="modal" style="overflow: visible; width:15% !important; min-height:20% !important; max-height:20% !important;" >
+<div id="pageSelect" class="modal modal-small">
   <div class="modal-content">
     <h4>Go to page</h4>
     <form th:action="@{/search}" method="get">

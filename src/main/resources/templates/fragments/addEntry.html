@@ -1,7 +1,7 @@
 <div id="addEntryModal" class="modal" style="overflow: visible;" >
   <div class="modal-content">
     <h4>Add to Diary</h4>
-    <form th:action="@{/entry}" method="post">
+    <form th:action="@{/diary}" method="post">
       <h6>Rating</h6>
       <th:block th:each="i: ${#numbers.sequence(1, 10)}">
       <span><label><input name="rating" type="radio" th:value="${i}"/><span th:text="${i}"/></label></span>

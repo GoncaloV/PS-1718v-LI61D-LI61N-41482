@@ -9,13 +9,13 @@
 <h1 th:text="${list.id.name}"></h1>
 <h2 th:text="'Tags for ' + ${list.id.name} + ':'"/>
 <div th:each="tag : ${tags}">
-    <form th:action="'/list/' + ${list.id.name} + '/removeTag'" method="post">
+    <form th:action="'/lists/' + ${list.id.name} + '/removeTag'" method="post">
         <span th:text="${tag.name}"/>
         <input type="hidden" name="tagname" th:value="${tag.name}"/>
         <button type="submit" class="btn btn-sm">X</button>
     </form>
 </div>
-<form th:action="'/list/' + ${list.id.name} + '/addTag'" method="post">
+<form th:action="'/lists/' + ${list.id.name} + '/addTag'" method="post">
     <input type="text" name="tagname" placeholder="Tag name"/>
     <input type="submit" value="Add tag"/>
 </form>
@@ -31,7 +31,7 @@
             <a th:href="'/game/' + ${game.id}"><img th:src="${game.coverUrl}" height="200"/></a>
         </td>
         <td>
-            <form th:action="'/list/' + ${list.id.name} + '/deletegame'" method="post">
+            <form th:action="'/lists/' + ${list.id.name} + '/deletegame'" method="post">
                     <input type="hidden" name="gameid" th:value="${game.id}"/>
                     <input type="submit" class="btn" value="Delete"/>
             </form>

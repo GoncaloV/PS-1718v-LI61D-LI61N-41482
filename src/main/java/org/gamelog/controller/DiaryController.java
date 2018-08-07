@@ -8,10 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -22,6 +19,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Future;
 
 @Controller
+@RequestMapping("/diary")
 public class DiaryController {
     @Autowired
     EntryService entryService;
@@ -31,7 +29,7 @@ public class DiaryController {
      * @param authentication Currently authenticated user.
      * @return A model and view for diary.html.
      */
-    @GetMapping(path="/diary")
+    @GetMapping
     private Future<ModelAndView> getDiary(Authentication authentication){
         Player player = (Player) authentication.getPrincipal();
         ModelAndView modelAndView = new ModelAndView("diary");
@@ -52,7 +50,7 @@ public class DiaryController {
      * @param authentication Request parameter to identify current user.
      * @return A future containing a model and view with the entry.html template, containing data from the entry.
      */
-    @PostMapping(path="entry")
+    @PostMapping
     private Future<RedirectView> postEntry(@RequestParam(value = "rating", required = false) Integer rating,
                                                 @RequestParam(value = "review", required = false) String review,
                                                 @RequestParam(value = "favorite", required = false) boolean favorite,
@@ -64,8 +62,14 @@ public class DiaryController {
         return entryService.saveEntry(rating, review, favorite, secret, date, gameid, player).thenApply(entry -> new RedirectView("/game/" + gameid));
     }
 
-    @PostMapping(path="delete_entry")
-    private CompletionStage<ResponseEntity> deleteEntry(@RequestParam("gameid") long gameid, Authentication authentication){
+    /**
+     * Deletes an existing entry.
+     * @param gameid The game the entry is writing about.
+     * @param authentication Request parameter to identify current user.
+     * @return A completion stage containing a response entity that tells if the request was completed successfully or exceptionally.
+     */
+    @PostMapping(path="delete")
+    private CompletionStage<ResponseEntity> deleteEntry(@RequestParam("gameid") Long gameid, Authentication authentication){
         Player player = (Player) authentication.getPrincipal();
         return entryService.deleteEntry(player, gameid)
                 .thenApply(x -> new ResponseEntity(HttpStatus.OK))

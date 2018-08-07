@@ -1,37 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>Gamelog - Lists</title>
-    <div th:replace="fragments/header"/>
+    <div th:replace="fragments/header" />
 </head>
+
 <body>
-<div th:replace="fragments/navbar"/>
-<div class="container">
-<div th:if="${lists}">
-    <h1>Your lists:</h1>
-    <div th:each="list : ${lists}">
+    <div th:replace="fragments/navbar" />
+    <div class="container">
+        <div th:if="${lists}">
+            <div th:each="list : ${lists}">
+                <a th:href="'/lists/' + ${list.id.name}">
+                <div class="row">
+                        <div class="card deep-purple lighten-4">
+                            <div class="card-content">
+                                <span th:text="${list.id.name}" class="card-title black-text" />
+                                <span th:each="game : ${list.getFirst10Games()}">
+                                    <img th:src="${game.coverUrl} ? ${#strings.replace(game.coverUrl, 'cover_big', 'thumb')} : '/images/nocover.png'" width="90" />
+                                </span>
+                            </div>
+                        </div>
+                </div>
+            </a>
+            </div>
+        </div>
         <br/>
-        <form th:action="'/list/' + ${list.id.name} + '/delete'" method="post">
-            <a class="btn" th:href="'/list/' + ${list.id.name}" th:text="${list.id.name}"/>
-            <input type="hidden" name="listid" th:value="${list.id.name}"/>
-            <input type="submit" class="btn" value="Delete"/>
+        <h6>Add new list</h6>
+        <form th:action="@{/lists}" method="post">
+            <div class="form-group">
+                <input type="text" class="form-control" name="listname" />
+                <input type="submit" class="btn deep-purple darken-4" />
+            </div>
         </form>
-        <p th:text="'Tags for ' + ${list.id.name} + ':'"/>
-        <span th:each="tag : ${list.tags}" th:text="${tag.name}"/>
-        <br/>
-        <span th:each="game : ${list.games}">
-        <img th:src="${game.coverUrl}" height="100" width="100"/>
-    </span>
     </div>
-</div>
-<br/>
-<h6>Add new list</h6>
-<form th:action="@{/lists}" method="post">
-    <div class="form-group">
-        <input type="text" class="form-control" name="listname"/>
-        <input type="submit" class="btn"/>
-    </div>
-</form>
-</div>
 </body>
+
 </html>

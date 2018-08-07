@@ -7,7 +7,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,7 +26,7 @@ public class Entry {
     private String review;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Tag> tags = new HashSet<>();
+    private List<Tag> tags = new ArrayList<>();
 
     @Column(nullable = false)
     private boolean isFavorite = false;
@@ -84,7 +86,7 @@ public class Entry {
         isFavorite = favorite;
     }
 
-    public Set<Tag> getTags() { return tags; }
+    public List<Tag> getTags() { return tags; }
     public void addTag(Tag t){ tags.add(t); }
     public void removeTag(Tag t){ tags.remove(t); }
 }

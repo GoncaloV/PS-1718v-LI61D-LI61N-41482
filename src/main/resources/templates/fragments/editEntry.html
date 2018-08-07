@@ -1,7 +1,7 @@
 <div id="editEntryModal" class="modal" style="overflow: visible;" >
   <div class="modal-content">
     <h4 th:text="'Edit entry for ' + ${game.name}"/>
-    <form th:action="@{/entry}" class="col s12" method="post">
+    <form th:action="@{/diary}" class="col s12" method="post">
 
       <div class="input-field">
         <h6>Rating</h6>
@@ -36,10 +36,17 @@
           <input type="text" name="date" th:value="${entry.date}" class="datepicker"/>
         </div>
         <input type="hidden" name="gameid" th:value="${game.id}"/>
-        <a id="delete-entry-btn" class="btn deep-purple darlen-4 right"><i class="material-icons">delete</i></a>
+        <a href="#deleteConfirm" class="btn deep-purple darken-4 left modal-trigger"><i class="material-icons">delete</i></a>
         <input class="btn deep-purple darken-4 right" type="submit" value="Apply"/>
       </form>
-      <form id="delete-entry-form" action="deleteEntry" method="post">
+    </div>
+  </div>
+
+  <div id="deleteConfirm" class="modal modal-small">
+    <div class="modal-content">
+      <p>Are you sure you want to delete this entry? This action cannot be undone.</p>
+      <a id="delete-entry-btn" class="btn deep-purple darken-4 right">Delete entry</a>
+      <form id="delete-entry-form" th:action="@{/diary/delete}" method="post">
         <input type="hidden" name="gameid" th:value="${game.id}"/>
       </form>
     </div>
