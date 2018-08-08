@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
@@ -76,9 +75,14 @@ public class GameController {
                 CompletableFuture<Iterable<Gamelist>> futureGamelists = gamelistService.findAllByPlayerId(player);
                 CompletableFuture[] completableFutures = {futureEntry, futureGamelists};
                 CompletableFuture.allOf(completableFutures).thenAccept(x -> {
-                    modelAndView.addObject("entry", futureEntry.join());
-                    modelAndView.addObject("mylists", futureGamelists.join());
-                });
+                    Entry entry = futureEntry.join();
+                    Iterable<Gamelist> gamelists = futureGamelists.join();
+                    modelAndView.addObject("entry", entry);
+                    modelAndView.addObject("hasLists", gamelists != null);
+                    if(gamelists != null){
+                        modelAndView.addObject("myValidLists", gamelistService.validate(gamelists, game));
+                    }
+                }); // TODO: This code looks messy.
             }
             return entryService.findPublicEntriesForGameById(game).thenApply(entries -> {
                 modelAndView.addObject("entries", entries);

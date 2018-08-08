@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -15,6 +16,7 @@ public class GamelistId implements Serializable{
 
     @NotBlank
     @NotNull
+    @Size(max=64)
     private String name;
 
     protected GamelistId() { }

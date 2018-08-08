@@ -7,8 +7,11 @@ import org.gamelog.model.Tag;
 import org.gamelog.repos.GamelistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.awt.image.ImageWatched;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
@@ -120,14 +123,17 @@ public class GamelistService {
      * @return The modified gamelist.
      */
     public CompletableFuture<Gamelist> addTagToList(Player player, String listname, String tagname) {
-        CompletableFuture<Tag> tagCompletableFuture = tagService.findTag(tagname).
-                thenCompose(tag -> tag == null ? tagService.createTag(tagname) : CompletableFuture.completedFuture(tag));
+        CompletableFuture<Tag> tagCompletableFuture = tagService.findTag(tagname);
         CompletableFuture<Gamelist> gamelistCompletableFuture = gamelistRepository.findOneByIdPlayerAndIdName(player, listname);
         CompletableFuture[] completableFutures = {tagCompletableFuture, gamelistCompletableFuture};
         return CompletableFuture.allOf(completableFutures).thenCompose(x -> {
             Gamelist gamelist = gamelistCompletableFuture.join();
-            gamelist.addTag(tagCompletableFuture.join());
-            return gamelistRepository.save(gamelist);
+            Tag tag = tagCompletableFuture.join();
+            if (gamelist.hasTag(tag)) return CompletableFuture.completedFuture(null);
+            else {
+                gamelist.addTag(tagCompletableFuture.join());
+                return gamelistRepository.save(gamelist);
+            }
         });
     }
 
@@ -171,5 +177,13 @@ public class GamelistService {
 
     public CompletableFuture<Gamelist> findOne(Gamelist gamelist) {
         return gamelistRepository.findOne(gamelist.getId());
+    }
+
+    public Iterable<Gamelist> validate(Iterable<Gamelist> gamelists, Game game) {
+        LinkedList<Gamelist> valid = new LinkedList<>();
+        gamelists.forEach(gamelist -> {
+            if (!gamelist.hasGame(game)) valid.add(gamelist);
+        });
+        return valid;
     }
 }

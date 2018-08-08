@@ -9,8 +9,8 @@ public class Gamelist {
     @EmbeddedId
     private GamelistId id;
     @ManyToMany
-    private List<Game> games = new ArrayList<>();
-    @ManyToMany//(fetch = FetchType.EAGER)
+    private List<Game> games = new ArrayList<>(); //TODO: Change all collections to linked hash sets?
+    @ManyToMany
     private List<Tag> tags = new ArrayList<>();
 
     protected Gamelist() { }
@@ -44,5 +44,10 @@ public class Gamelist {
     @Transient
     public boolean hasGame(Game game){
         return games.contains(game);
+    }
+
+    @Transient
+    public boolean hasTag(Tag tag) {
+        return tags.contains(tag);
     }
 }

@@ -11,26 +11,42 @@
     <div class="container">
         <div th:if="${lists}">
             <div th:each="list : ${lists}">
-                <a th:href="'/lists/' + ${list.id.name}">
-                <div class="row">
+                    <div class="row">
                         <div class="card deep-purple lighten-4">
                             <div class="card-content">
-                                <span th:text="${list.id.name}" class="card-title black-text" />
-                                <span th:each="game : ${list.getFirst10Games()}">
-                                    <img th:src="${game.coverUrl} ? ${#strings.replace(game.coverUrl, 'cover_big', 'thumb')} : '/images/nocover.png'" width="90" />
-                                </span>
+                                <font size="1" class="white-text">Name</font>
+                                <a th:href="'/lists/' + ${list.id.name}" th:text="${list.id.name}" class="card-title black-text" />
+                                <font size="1" class="white-text">Games</font>
+                                <p th:if="${#lists.isEmpty(list.games)}" class="black-text">No games.</p>
+                                <p>
+                                    <a th:each="game : ${list.getFirst10Games()}" th:href="'/game/' + ${game.id}">
+                                        <img th:src="${game.coverUrl} ? ${#strings.replace(game.coverUrl, 'cover_big', 'thumb')} : '/images/nocover.png'" width="90" />
+                                    </a>
+                                </p>
+                                <font size="1" class="white-text">Tags</font>
+                                <p th:if="${#lists.isEmpty(list.tags)}" class="black-text">No tags.</p>
+                                <p>
+                                    <div th:each="tag : ${list.tags}" class="chip">
+                                        <span th:text="${tag.name}"/>
+                                        <i class="close material-icons">close</i>
+                                    </div>
+                                </p>
                             </div>
                         </div>
-                </div>
-            </a>
+                    </div>
             </div>
         </div>
         <br/>
-        <h6>Add new list</h6>
-        <form th:action="@{/lists}" method="post">
-            <div class="form-group">
-                <input type="text" class="form-control" name="listname" />
-                <input type="submit" class="btn deep-purple darken-4" />
+        <h5>Add new list</h5>
+        <form th:action="@{/lists}" class="col s6" method="post">
+            <div class="row">
+                <div class="input-field col s5">
+                    <i class="material-icons prefix">add</i>
+                    <input type="text" placeholder="List name" name="listname" />
+                </div>
+                <div class="input-field col s1">
+                    <input type="submit" class="btn deep-purple darken-4" />
+                </div>
             </div>
         </form>
     </div>
