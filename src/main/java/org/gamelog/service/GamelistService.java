@@ -28,15 +28,17 @@ public class GamelistService {
 
     /**
      * Gets all gamelists for one player.
+     *
      * @param player The player to whom the gamelists belong to.
      * @return An iterable of all gamelists that belong to a player.
      */
-    public CompletableFuture<Iterable<Gamelist>> findAllByPlayerId(Player player){
+    public CompletableFuture<Iterable<Gamelist>> findAllByPlayerId(Player player) {
         return gamelistRepository.findTop5ByIdPlayer(player);
     }
 
     /**
      * Finds the 5 first gamelists for one game.
+     *
      * @param game The game that the gamelists should contain.
      * @return An iterable of the 5 first gamelists for one game.
      */
@@ -46,7 +48,8 @@ public class GamelistService {
 
     /**
      * Finds a gamelist with a certain name, belonging to a certain player.
-     * @param player The player instance to which the gamelist should belong to.
+     *
+     * @param player   The player instance to which the gamelist should belong to.
      * @param listname The name of the list.
      * @return A completableFuture for the gamelist with listname, belonging to player player.
      */
@@ -56,8 +59,9 @@ public class GamelistService {
 
     /**
      * Creates a new gamelist under a specified player with a specified name.
+     *
      * @param player The player who created the gamelist.
-     * @param name The new gamelist's name.
+     * @param name   The new gamelist's name.
      * @return A completable future containing the created gamelist, if created successfully, or null otherwise.
      */
     public CompletableFuture<Gamelist> addNewList(Player player, String name) {
@@ -72,9 +76,10 @@ public class GamelistService {
 
     /**
      * Adds a new game to an existing gamelist.
-     * @param player The player to whom the list belongs to.
+     *
+     * @param player   The player to whom the list belongs to.
      * @param listname The name of the list being edited.
-     * @param gameid The game being added.
+     * @param gameid   The game being added.
      * @return The gamelist with the new game.
      */
     public CompletableFuture<Gamelist> addGameToList(Player player, String listname, Long gameid) {
@@ -90,9 +95,10 @@ public class GamelistService {
 
     /**
      * Deletes a game from a gamelist.
-     * @param player The player to whom the list belongs to.
+     *
+     * @param player   The player to whom the list belongs to.
      * @param listname The name of the list being modified.
-     * @param gameid The game being removed.
+     * @param gameid   The game being removed.
      * @return The modified gamelist.
      */
     public CompletableFuture<Gamelist> deleteGameFromList(Player player, String listname, Long gameid) {
@@ -108,7 +114,8 @@ public class GamelistService {
 
     /**
      * Deletes an existing gamelist.
-     * @param player The player to whom the list belongs.
+     *
+     * @param player   The player to whom the list belongs.
      * @param listname The name of the list being deleted.
      */
     public CompletableFuture<Void> deleteList(Player player, String listname) {
@@ -117,9 +124,10 @@ public class GamelistService {
 
     /**
      * Adds a tag to a gamelist.
-     * @param player The player to whom the gamelist belongs to.
+     *
+     * @param player   The player to whom the gamelist belongs to.
      * @param listname The name of the list being modified.
-     * @param tagname The name of the tag being added.
+     * @param tagname  The name of the tag being added.
      * @return The modified gamelist.
      */
     public CompletableFuture<Gamelist> addTagToList(Player player, String listname, String tagname) {
@@ -129,16 +137,12 @@ public class GamelistService {
         return CompletableFuture.allOf(completableFutures).thenCompose(x -> {
             Gamelist gamelist = gamelistCompletableFuture.join();
             Tag tag = tagCompletableFuture.join();
-            if (gamelist.hasTag(tag)) return CompletableFuture.completedFuture(null);
-            else {
-                gamelist.addTag(tagCompletableFuture.join());
-                return gamelistRepository.save(gamelist);
-            }
+            gamelist.addTag(tagCompletableFuture.join());
+            return gamelistRepository.save(gamelist);
         });
     }
 
     /**
-     *
      * @param player
      * @param gamelist
      * @param tag
@@ -169,9 +173,9 @@ public class GamelistService {
         CompletableFuture<Gamelist> gamelistCompletableFuture = gamelistRepository.findOneByIdPlayerAndIdName(player, listname);
         CompletableFuture[] completableFutures = {tagCompletableFuture, gamelistCompletableFuture};
         return CompletableFuture.allOf(completableFutures).thenCompose(x -> {
-           Gamelist gamelist = gamelistCompletableFuture.join();
-           gamelist.removeTag(tagCompletableFuture.join());
-           return gamelistRepository.save(gamelist);
+            Gamelist gamelist = gamelistCompletableFuture.join();
+            gamelist.removeTag(tagCompletableFuture.join());
+            return gamelistRepository.save(gamelist);
         });
     }
 

@@ -7,10 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Entry {
@@ -25,8 +22,9 @@ public class Entry {
     @Size(max=512)
     private String review;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Tag> tags = new ArrayList<>();
+    @ManyToMany
+    @OrderBy("name")
+    private Set<Tag> tags = new LinkedHashSet<>();
 
     @Column(nullable = false)
     private boolean isFavorite = false;
@@ -65,7 +63,9 @@ public class Entry {
     }
 
     public void setRating(Integer rating) {
-        if(rating == null) return;
+        if(rating == null) {
+            this.rating = null;
+        } else
         if(rating >= 1 && rating <= 10)
             this.rating = rating;
     }
@@ -86,7 +86,7 @@ public class Entry {
         isFavorite = favorite;
     }
 
-    public List<Tag> getTags() { return tags; }
+    public Set<Tag> getTags() { return tags; }
     public void addTag(Tag t){ tags.add(t); }
     public void removeTag(Tag t){ tags.remove(t); }
 }

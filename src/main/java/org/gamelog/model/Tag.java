@@ -14,7 +14,8 @@ public class Tag {
     private String name;
 
     @ManyToMany(mappedBy = "tags")
-    private Set<Gamelist> gamelists = new HashSet();
+    @OrderBy("id.name")
+    private Set<Gamelist> gamelists = new LinkedHashSet<>();
 
     protected Tag() {}
 

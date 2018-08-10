@@ -4,6 +4,7 @@
 <head>
     <title>Gamelog - Lists</title>
     <div th:replace="fragments/header" />
+    <script src="/js/lists.js"></script>
 </head>
 
 <body>
@@ -11,44 +12,67 @@
     <div class="container">
         <div th:if="${lists}">
             <div th:each="list : ${lists}">
-                    <div class="row">
-                        <div class="card deep-purple lighten-4">
-                            <div class="card-content">
-                                <font size="1" class="white-text">Name</font>
-                                <a th:href="'/lists/' + ${list.id.name}" th:text="${list.id.name}" class="card-title black-text" />
-                                <font size="1" class="white-text">Games</font>
-                                <p th:if="${#lists.isEmpty(list.games)}" class="black-text">No games.</p>
-                                <p>
-                                    <a th:each="game : ${list.getFirst10Games()}" th:href="'/game/' + ${game.id}">
-                                        <img th:src="${game.coverUrl} ? ${#strings.replace(game.coverUrl, 'cover_big', 'thumb')} : '/images/nocover.png'" width="90" />
-                                    </a>
-                                </p>
-                                <font size="1" class="white-text">Tags</font>
-                                <p th:if="${#lists.isEmpty(list.tags)}" class="black-text">No tags.</p>
-                                <p>
-                                    <div th:each="tag : ${list.tags}" class="chip">
-                                        <span th:text="${tag.name}"/>
-                                        <i class="close material-icons">close</i>
-                                    </div>
-                                </p>
-                            </div>
+                <div class="row">
+                    <div class="card deep-purple lighten-5">
+                        <div class="card-content">
+                            <font size="1" class="white-text">Name</font>
+                            <div class="clearfix" />
+                            <a th:href="'/lists/' + ${list.id.name}" th:text="${list.id.name}" class="card-title black-text left" />
+                            <a th:href="'#deleteConfirm' + ${list.id.name}" class="modal-trigger">
+                                <i class="close black-text material-icons right">close</i>
+                            </a>
+                            <div class="clearfix" />
+                            <font size="1" class="white-text">Games</font>
+                            <p th:if="${#lists.isEmpty(list.games)}" class="black-text">No games.</p>
+                            <p>
+                                <a th:each="game : ${list.getFirst10Games()}" th:href="'/game/' + ${game.id}">
+                                    <img th:src="${game.coverUrl} ? ${#strings.replace(game.coverUrl, 'cover_big', 'thumb')} : '/images/nocover.png'" width="90"
+                                    />
+                                </a>
+                            </p>
+                            <font size="1" class="white-text">Tags</font>
+                            <p th:if="${#lists.isEmpty(list.tags)}" class="black-text">No tags.</p>
+                            <p>
+                                <div th:each="tag : ${list.tags}" class="chip">
+                                    <span th:text="${tag.name}" />
+                                    <i class="close material-icons">close</i>
+                                </div>
+                            </p>
                         </div>
                     </div>
+                </div>
+                <div th:id="'deleteConfirm' + ${list.id.name}" class="modal modal-small">
+                    <div class="modal-content">
+                        <p>Are you sure you want to delete this list? This action cannot be undone.</p>
+                        <a id="delete-list-btn" class="btn deep-purple darken-4 right">Delete list</a>
+                        <form id="delete-list-form" th:action="@{/lists/delete}" method="post">
+                            <input type="hidden" name="listname" th:value="${list.id.name}" />
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-        <br/>
-        <h5>Add new list</h5>
-        <form th:action="@{/lists}" class="col s6" method="post">
-            <div class="row">
-                <div class="input-field col s5">
-                    <i class="material-icons prefix">add</i>
-                    <input type="text" placeholder="List name" name="listname" />
-                </div>
-                <div class="input-field col s1">
-                    <input type="submit" class="btn deep-purple darken-4" />
+        <div class="card deep-purple lighten-5" th:if="${#lists.isEmpty(lists)}">
+            <div class="card-content">
+                <span class="card-title">You have not made any lists.</span>
+            </div>
+        </div>
+        <div>
+            <div class="card deep-purple lighten-5">
+                <div class="card-content">
+                    <div class="card-title">Add new list</div>
+                        <form th:action="@{/lists}" method="post">
+                                <div class="input-field left-align">
+                                    <i class="material-icons prefix">add</i>
+                                    <input type="text" placeholder="List name" name="listname" />
+                                </div>
+                                <div class="input-field right-align">
+                                    <input type="submit" class="btn deep-purple darken-4" />
+                                </div>
+                        </form>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </body>
 

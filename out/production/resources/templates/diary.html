@@ -30,23 +30,25 @@
               </div>
               <font size="1" th:if="${#strings.isEmpty(entry.review)}">No review.</font>
             </div>
-            <div class="card-action row" style="margin-bottom: 0;">
-              <span th:if="${entry.date}" class="col s2 tooltipped" data-position="top" data-tooltip="Date">
-                <i class="inline-icon material-icons">date_range</i>
-                <span th:text="${entry.date}" /></span>
-              <div th:unless="${entry.date}" class="col s2" />
-              <div class="col s3" />
-              <span th:if="${entry.rating}" class="col s2 tooltipped" data-position="top" data-tooltip="Rating">
-                <i class="inline-icon material-icons">star</i>
-                <span class="star-rating" th:text="${entry.rating}" /></span>
-              <div th:unless="${entry.rating}" class="col s2" />
-              <div class="col s3" />
-              <span th:if="${entry.favorite}" class="col s2 tooltipped" data-position="top" data-tooltip="Favorite">
-                <i class="inline-icon material-icons">favorite</i>
-              </span>
-              <!-- Edit entry modal -->
-              <div th:id="'editEntryModal' + ${entry.id.game.id}" class="modal" style="overflow: visible;">
-                <div th:replace="/fragments/editEntryDiary" />
+            <div class="card-action">
+              <div class="row" style="margin-bottom: 0;">
+                <span th:if="${entry.date}" class="col s2 tooltipped" data-position="top" data-tooltip="Date">
+                  <i class="inline-icon material-icons">date_range</i>
+                  <span th:text="${entry.date}" /></span>
+                <div th:unless="${entry.date}" class="col s2" />
+                <div class="col s3" />
+                <span th:if="${entry.rating}" class="col s2 tooltipped" data-position="top" data-tooltip="Rating">
+                  <i class="inline-icon material-icons">star</i>
+                  <span class="star-rating" th:text="${entry.rating}" /></span>
+                <div th:unless="${entry.rating}" class="col s2" />
+                <div class="col s3" />
+                <span th:if="${entry.favorite}" class="col s2 tooltipped" data-position="top" data-tooltip="Favorite">
+                  <i class="inline-icon material-icons">favorite</i>
+                </span>
+                <!-- Edit entry modal -->
+                <div th:id="'editEntryModal' + ${entry.id.game.id}" class="modal" style="overflow: visible;">
+                  <div th:replace="/fragments/editEntryDiary" />
+                </div>
               </div>
             </div>
           </div>

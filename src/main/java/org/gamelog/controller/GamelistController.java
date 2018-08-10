@@ -57,9 +57,9 @@ public class GamelistController {
      * @param authentication Currently authenticated user.
      * @return A redirect to the list being tagged.
      */
-    // TODO: Make lists public or private. Change URIs so that other users can access lists. Make it AJAX.
-    @PostMapping(path = "/{listname}/addTag")
-    private Future<RedirectView> tagList(@RequestParam("tagname") String tagname, @PathVariable("listname") String listname, Authentication authentication){
+    // TODO: Make it AJAX.
+    @PostMapping(path = "/tag")
+    private Future<RedirectView> tagList(@RequestParam("tagname") String tagname, @RequestParam("listname") String listname, Authentication authentication){
         Player player = (Player) authentication.getPrincipal();
         return gamelistService.addTagToList(player, listname, tagname).thenApply(gamelist -> new RedirectView("/lists/" + listname));
     }
@@ -71,8 +71,8 @@ public class GamelistController {
      * @param authentication Currently authenticated user.
      * @return A redirect to "/list/{listname}"
      */
-    @PostMapping(path = "/{listname}/removeTag")
-    private Future<RedirectView> untagList(@RequestParam("tagname") String tagname, @PathVariable("listname") String listname, Authentication authentication){
+    @PostMapping(path = "/untag")
+    private Future<RedirectView> untagList(@RequestParam("tagname") String tagname, @RequestParam("listname") String listname, Authentication authentication){
         Player player = (Player) authentication.getPrincipal();
         return gamelistService.removeTagFromlist(player, listname, tagname).thenApply(gamelist -> new RedirectView("/lists/" + listname));
     }
@@ -102,11 +102,10 @@ public class GamelistController {
      * @param authentication Currently authenticated user.
      * @return A redirect to "/lists"
      */
-    @PostMapping(path = "/{listname}/delete")
-    private Future<RedirectView> deleteList(@PathVariable("listname") String listname, Authentication authentication) {
+    @PostMapping(path = "/delete")
+    private Future<RedirectView> deleteList(@RequestParam("listname") String listname, Authentication authentication) {
         Player player = (Player) authentication.getPrincipal();
         return gamelistService.deleteList(player, listname).thenApply(gamelist -> new RedirectView("/lists"));
-        // TODO: Ask teacher: What if I only want to redirect after I make sure the list has been deleted? Then it makes sense to have a CompletableFuture<Void>.
     }
 
     /**

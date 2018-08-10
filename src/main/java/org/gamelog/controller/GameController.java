@@ -1,7 +1,5 @@
 package org.gamelog.controller;
 
-import org.gamelog.model.Entry;
-import org.gamelog.model.Gamelist;
 import org.gamelog.model.Player;
 import org.gamelog.service.EntryService;
 import org.gamelog.service.GameService;
@@ -66,28 +64,31 @@ public class GameController {
     @GetMapping(path="/game/{gameid}")
     private Future<ModelAndView> getGamePage(@PathVariable("gameid") Long gameid, Authentication authentication){
         return gameService.findGameInfoById(gameid).thenCompose(game -> {
+
             ModelAndView modelAndView = new ModelAndView("game");
             modelAndView.addObject("game", game);
             // Only add the following objects to the model if user is authenticated
-            if(authentication != null) {
+            CompletableFuture futurePublicEntries = entryService.findPublicEntriesForGameById(game)
+                    .thenAccept(entries -> modelAndView.addObject("entries", entries));
+
+            if (authentication != null) {
                 Player player = (Player) authentication.getPrincipal();
-                CompletableFuture<Entry> futureEntry = entryService.findByPlayerAndGame(player, game);
-                CompletableFuture<Iterable<Gamelist>> futureGamelists = gamelistService.findAllByPlayerId(player);
-                CompletableFuture[] completableFutures = {futureEntry, futureGamelists};
-                CompletableFuture.allOf(completableFutures).thenAccept(x -> {
-                    Entry entry = futureEntry.join();
-                    Iterable<Gamelist> gamelists = futureGamelists.join();
-                    modelAndView.addObject("entry", entry);
-                    modelAndView.addObject("hasLists", gamelists != null);
-                    if(gamelists != null){
-                        modelAndView.addObject("myValidLists", gamelistService.validate(gamelists, game));
-                    }
-                }); // TODO: This code looks messy.
+                CompletableFuture futureEntry = entryService.findByPlayerAndGame(player, game)
+                        .thenAccept(entry -> modelAndView.addObject("entry", entry));
+                CompletableFuture futureGamelists = gamelistService.findAllByPlayerId(player)
+                        .thenAccept(gamelists -> {
+                            if (gamelists == null) {
+                                modelAndView.addObject("hasLists", false);
+                            } else {
+                                modelAndView.addObject("hasLists", true);
+                                modelAndView.addObject("myValidLists", gamelistService.validate(gamelists, game));
+                            }
+                        });
+                CompletableFuture[] completableFutures = {futurePublicEntries, futureEntry, futureGamelists};
+                return CompletableFuture.allOf(completableFutures).thenApply(__ -> modelAndView);
+            } else {
+                return futurePublicEntries.thenApply(__ -> modelAndView);
             }
-            return entryService.findPublicEntriesForGameById(game).thenApply(entries -> {
-                modelAndView.addObject("entries", entries);
-                return modelAndView;
-            });
         });
     }
 }

@@ -7,7 +7,7 @@
 }
 
 .modal {
-  width: 60% !important ; min-height: 50% !important; max-height: 100%% !important ;
+  width: 60% !important ; min-height: 50% !important; max-height: 100% !important ;
 }
 
 .textarea {
@@ -71,4 +71,8 @@ word-break: break-all;
   overflow: visible;
   width: 20% !important;
   min-height:20% !important;
+}
+
+.chip {
+  background-color: #d1c4e9 !important;
 }

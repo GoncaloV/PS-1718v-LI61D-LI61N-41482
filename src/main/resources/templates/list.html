@@ -8,43 +8,51 @@
 
 <body>
     <div th:replace="fragments/navbar" />
-    <h1 th:text="${list.id.name}"></h1>
-    <h2 th:text="'Tags for ' + ${list.id.name} + ':'" />
-    <div th:each="tag : ${tags}">
-        <form th:action="'/lists/' + ${list.id.name} + '/removeTag'" method="post">
-            <span th:text="${tag.name}" />
-            <input type="hidden" name="tagname" th:value="${tag.name}" />
-            <button type="submit" class="btn btn-sm">X</button>
-        </form>
-    </div>
-    <form th:action="'/lists/' + ${list.id.name} + '/addTag'" method="post">
-        <input type="text" name="tagname" placeholder="Tag name" />
-        <input type="submit" value="Add tag" />
-    </form>
-    <table class="table">
-        <tr>
-            <th>Game</th>
-            <th>Cover</th>
-            <th>Delete</th>
-        </tr>
-        <tr th:each="game : ${list.games}">
-            <td>
-                <a th:href="'/game/' + ${game.id}" th:text="${game.name}" />
-            </td>
-            <td>
-                <a th:href="'/game/' + ${game.id}">
-                    <img th:src="${game.coverUrl}" height="200" />
-                </a>
-            </td>
-            <td>
-                <form th:action="@{/lists/removeGame}" method="post">
-                    <input type="hidden" name="listname" th:value="${list.id.name}" />
-                    <input type="hidden" name="gameid" th:value="${game.id}" />
-                    <input type="submit" class="btn" value="Delete" />
+    <div class="container">
+        <div class="card deep-purple lighten-5">
+            <div class="card-content">
+                <font size="1" class="white-text">Name</font>
+                <div class="card-title" th:text="${list.id.name}" />
+                <font size="1" class="white-text">Tags</font>
+                <p th:if="${#lists.isEmpty(list.tags)}" class="black-text">No tags.</p>
+                <p>
+                    <div th:each="tag : ${list.tags}" class="chip">
+                        <span th:text="${tag.name}" />
+                        <i class="close material-icons">close</i>
+                    </div>
+                </p>
+                <form th:action="'/lists/tag'" method="post">
+                    <input type="hidden" name="listname" th:value="${list.id.name}"/>
+                    <input type="text" name="tagname" placeholder="Tag name" />
+                    <input type="submit" value="Add tag" />
                 </form>
-            </td>
-        </tr>
-    </table>
+                <table class="table">
+                    <tr>
+                        <th>Game</th>
+                        <th>Cover</th>
+                        <th>Delete</th>
+                    </tr>
+                    <tr th:each="game : ${list.games}">
+                        <td>
+                            <a th:href="'/game/' + ${game.id}" th:text="${game.name}" />
+                        </td>
+                        <td>
+                            <a th:href="'/game/' + ${game.id}">
+                                <img th:src="${game.coverUrl}" height="200" />
+                            </a>
+                        </td>
+                        <td>
+                            <form th:action="@{/lists/removeGame}" method="post">
+                                <input type="hidden" name="listname" th:value="${list.id.name}" />
+                                <input type="hidden" name="gameid" th:value="${game.id}" />
+                                <input type="submit" class="btn" value="Delete" />
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

@@ -1,53 +1,71 @@
-<div id="editEntryModal" class="modal" style="overflow: visible;" >
+<div id="editEntryModal" class="modal" style="overflow: visible;">
   <div class="modal-content">
-    <h4 th:text="'Edit entry for ' + ${game.name}"/>
+    <h4 th:text="'Edit entry for ' + ${game.name}" />
     <form th:action="@{/diary}" class="col s12" method="post">
 
       <div class="input-field">
         <h6>Rating</h6>
         <th:block th:each="i: ${#numbers.sequence(1, 10)}">
-        <span><label>
-          <input th:if="${entry.rating} == ${i}" name="rating" type="radio" th:value="${i}" th:checked="true"/>
-          <input th:if="${entry.rating} != ${i}" name="rating" type="radio" th:value="${i}" />
-          <span th:text="${i}"/>
-        </label>  </span>
-      </th:block>
-      <a class="right" id="clear-button">Clear</a>
-    </div>
-    <div class="input-field">
-      <h6>Review</h6>
-      <textarea  data-length="255" cols="20" rows="5" maxlength="255" class="materialize-textarea" name="review" th:text="${entry.review}"/>
-    </div>
-    <div class="left">
-      <span><label>
-        <input th:if="${entry.favorite}" type="checkbox" name="favorite" th:checked="true"/>
-        <input th:unless="${entry.favorite}" type="checkbox" name="favorite" />
-        <span>Favorite</span></label></span>
+          <span>
+            <label>
+              <input th:if="${entry.rating} == ${i}" name="rating" type="radio" th:value="${i}" th:checked="true" />
+              <input th:if="${entry.rating} != ${i}" name="rating" type="radio" th:value="${i}" />
+              <span th:text="${i}" />
+            </label>
+          </span>
+        </th:block>
+        <span>
+          <label>
+            <input th:unless="${entry.rating}" name="rating" type="radio" th:value="${null}" th:checked="true" />
+            <input th:if="${entry.rating}" name="rating" type="radio" th:value="${null}" />
+            <span>No rating</span>
+          </label>
+        </span>
+        <!-- TODO: Make the clear button better -->
+      </div>
+      <div class="input-field">
+        <h6>Review</h6>
+        <textarea data-length="255" cols="20" rows="5" maxlength="255" class="materialize-textarea" name="review" th:text="${entry.review}"
+        />
+      </div>
+      <div class="left">
+        <span>
+          <label>
+            <input th:if="${entry.favorite}" type="checkbox" name="favorite" th:checked="true" />
+            <input th:unless="${entry.favorite}" type="checkbox" name="favorite" />
+            <span>Favorite</span>
+          </label>
+        </span>
       </div>
       <div class="right">
-        <span><label>
-          <input th:if="${entry.private}" type="checkbox" name="secret" th:checked="true"/>
-          <input th:unless="${entry.private}" type="checkbox" name="secret" />
-          <span>Private</span></label></span>
-        </div>
-        <div class="clearfix"/>
-        <div class="input-field">
-          <i class="material-icons prefix">date_range</i>
-          <input type="text" name="date" th:value="${entry.date}" class="datepicker"/>
-        </div>
-        <input type="hidden" name="gameid" th:value="${game.id}"/>
-        <a href="#deleteConfirm" class="btn deep-purple darken-4 left modal-trigger"><i class="material-icons">delete</i></a>
-        <input class="btn deep-purple darken-4 right" type="submit" value="Apply"/>
-      </form>
-    </div>
+        <span>
+          <label>
+            <input th:if="${entry.private}" type="checkbox" name="secret" th:checked="true" />
+            <input th:unless="${entry.private}" type="checkbox" name="secret" />
+            <span>Private</span>
+          </label>
+        </span>
+      </div>
+      <div class="clearfix" />
+      <div class="input-field">
+        <i class="material-icons prefix">date_range</i>
+        <input type="text" name="date" th:value="${entry.date}" class="datepicker" />
+      </div>
+      <input type="hidden" name="gameid" th:value="${game.id}" />
+      <a href="#deleteConfirm" class="btn deep-purple darken-4 left modal-trigger">
+        <i class="material-icons">delete</i>
+      </a>
+      <input class="btn deep-purple darken-4 right" type="submit" value="Apply" />
+    </form>
   </div>
+</div>
 
-  <div id="deleteConfirm" class="modal modal-small">
-    <div class="modal-content">
-      <p>Are you sure you want to delete this entry? This action cannot be undone.</p>
-      <a id="delete-entry-btn" class="btn deep-purple darken-4 right">Delete entry</a>
-      <form id="delete-entry-form" th:action="@{/diary/delete}" method="post">
-        <input type="hidden" name="gameid" th:value="${game.id}"/>
-      </form>
-    </div>
+<div id="deleteConfirm" class="modal modal-small">
+  <div class="modal-content">
+    <p>Are you sure you want to delete this entry? This action cannot be undone.</p>
+    <a id="delete-entry-btn" class="btn deep-purple darken-4 right">Delete entry</a>
+    <form id="delete-entry-form" th:action="@{/diary/delete}" method="post">
+      <input type="hidden" name="gameid" th:value="${game.id}" />
+    </form>
   </div>
+</div>

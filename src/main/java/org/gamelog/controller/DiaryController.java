@@ -62,6 +62,21 @@ public class DiaryController {
         return entryService.saveEntry(rating, review, favorite, secret, date, gameid, player).thenApply(entry -> new RedirectView("/game/" + gameid));
     }
 
+    @PostMapping("/postentryajax")
+    @ResponseBody
+    private Future<ResponseEntity<String>> postEntryAjax(@RequestParam(value = "rating", required = false) Integer rating,
+                                           @RequestParam(value = "review", required = false) String review,
+                                           @RequestParam(value = "favorite", required = false) boolean favorite,
+                                           @RequestParam(value = "secret", required = false) boolean secret,
+                                           @RequestParam(value = "date", required = false) @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date,
+                                           @RequestParam("gameid") long gameid,
+                                           Authentication authentication){
+        Player player = (Player) authentication.getPrincipal();
+        return entryService.saveEntry(rating, review, favorite, secret, date, gameid, player)
+                .thenApply(__ -> new ResponseEntity<String>(HttpStatus.OK))
+                .exceptionally(e -> new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR));
+    }
+
     /**
      * Deletes an existing entry.
      * @param gameid The game the entry is writing about.

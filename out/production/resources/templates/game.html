@@ -1,48 +1,70 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <title th:text="'Gamelog - ' + ${game.name}"></title>
-  <div th:replace="fragments/header"/>
+  <div th:replace="fragments/header" />
   <script src="/js/game.js"></script>
 </head>
+
 <body>
-  <div th:replace="fragments/navbar"/>
+  <div th:replace="fragments/navbar" />
 
   <div class="container center-align">
-    <img class="cover-image left" th:src="${game.coverUrl} ? ${game.coverUrl} : '/images/nocover.png'" th:title="${game.name}"/>
-    <h1 th:text="${game.name}"></h1>
-    <p align="justify" th:text="${game.summary}"/>
-    <div class="clearfix"/>
-    <hr/>
-    <div class="row game-data">
-      <span class="col s2 tooltipped" data-position="top" data-tooltip="Plays"><i class="inline-icon material-icons">gamepad</i><span th:text="${game.plays}"/></span>
-      <div class="col s3"/>
-      <span class="col s2 tooltipped" data-position="top" data-tooltip="Rating"><i class="inline-icon material-icons">star</i><span class="star-rating" th:text="${game.averageRatings} ? ${game.averageRatings} : 'No ratings yet'"/></span>
-      <div class="col s3"/>
-      <span class="col s2 tooltipped" data-position="top" data-tooltip="Favorites"><span th:text="${game.favorites}"/><i class="inline-icon material-icons">favorite</i></span>
+    <div class="card deep-purple lighten-5">
+      <img class="cover-image left" th:src="${game.coverUrl} ? ${game.coverUrl} : '/images/nocover.png'" th:title="${game.name}"/>
+      <h1 th:text="${game.name}"></h1>
+      <p align="justify" th:text="${game.summary}" />
+      <div class="clearfix" />
+      <hr/>
+      <div class="row game-data">
+        <span class="col s2 tooltipped" data-position="top" data-tooltip="Plays">
+          <i class="inline-icon material-icons">gamepad</i>
+          <span th:text="${game.plays}" />
+        </span>
+        <div class="col s3" />
+        <span class="col s2 tooltipped" data-position="top" data-tooltip="Rating">
+          <i class="inline-icon material-icons">star</i>
+          <span class="star-rating" th:text="${game.averageRatings} ? ${game.averageRatings} : 'No ratings yet'"
+          /></span>
+        <div class="col s3" />
+        <span class="col s2 tooltipped" data-position="top" data-tooltip="Favorites">
+          <span th:text="${game.favorites}" />
+          <i class="inline-icon material-icons">favorite</i>
+        </span>
+      </div>
+      <hr/>
     </div>
-    <hr/>
 
     <!-- User Reviews -->
     <div th:each="entry : ${entries}">
       <div class="card deep-purple lighten-5">
         <div class="card-content">
-          <b class="left" th:text="${entry.id.player.name}"/>
-          <div class="clearfix"/>
-          <hr/>
-          <div th:if="${!#strings.isEmpty(entry.review)}">
-            <font size="1">Review</font>
-            <p class="review" th:text="${entry.review}"/>
-            <hr/>
+          <div class="left">
+            <b th:text="${entry.id.player.name} + ' '" />
+            <font size="2">played this.</font>
           </div>
+          <div class="clearfix" />
+          <div th:if="${!#strings.isEmpty(entry.review)}">
+            <hr/>
+            <font size="1">Review</font>
+            <p class="review" th:text="${entry.review}" />
+          </div>
+          <hr th:if="${entry.date!=null or entry.rating!=null or entry.favorite==true}"/>
           <div class="row" style="margin-bottom: 0;">
-            <span th:if="${entry.date}" class="col s2 tooltipped" data-position="top" data-tooltip="Date"><i class="inline-icon material-icons">date_range</i><span th:text="${entry.date}"/></span>
-            <div th:unless="${entry.date}" class="col s2"/>
-            <div class="col s3"/>
-            <span th:if="${entry.rating}" class="col s2 tooltipped" data-position="top" data-tooltip="Rating"><i class="inline-icon material-icons">star</i><span class="star-rating" th:text="${entry.rating}"/></span>
-            <div th:unless="${entry.rating}" class="col s2"/>
-            <div class="col s3"/>
-            <span th:if="${entry.favorite}" class="col s2 tooltipped" data-position="top" data-tooltip="Favorite"><i class="inline-icon material-icons">favorite</i></span>
+            <span th:if="${entry.date}" class="col s2 tooltipped" data-position="top" data-tooltip="Date">
+              <i class="inline-icon material-icons">date_range</i>
+              <span th:text="${entry.date}" /></span>
+            <div th:unless="${entry.date}" class="col s2" />
+            <div class="col s3" />
+            <span th:if="${entry.rating}" class="col s2 tooltipped" data-position="top" data-tooltip="Rating">
+              <i class="inline-icon material-icons">star</i>
+              <span class="star-rating" th:text="${entry.rating}" /></span>
+            <div th:unless="${entry.rating}" class="col s2" />
+            <div class="col s3" />
+            <span th:if="${entry.favorite}" class="col s2 tooltipped" data-position="top" data-tooltip="Favorite">
+              <i class="inline-icon material-icons">favorite</i>
+            </span>
           </div>
         </div>
       </div>
@@ -55,9 +77,24 @@
       <i class="large material-icons">add</i>
     </a>
     <ul>
-      <li><a href="#addToListModal" id="add_to_list" class="btn-floating deep-purple darken-4 tooltipped modal-trigger" data-position="left" data-tooltip="Add to list"><i class="material-icons">playlist_add</i></a></li>
-      <li th:if="${entry} == null"><a href="#addEntryModal" id="new_entry" class="btn-floating deep-purple darken-4 tooltipped modal-trigger" data-position="left" data-tooltip="New entry"><i class="material-icons">mode_edit</i></a></li>
-      <li th:if="${entry} != null"><a href="#editEntryModal" id="edit_entry" class="btn-floating deep-purple darken-4 tooltipped modal-trigger" data-position="left" data-tooltip="Edit entry"><i class="material-icons">mode_edit</i></a></li>
+      <li>
+        <a href="#addToListModal" id="add_to_list" class="btn-floating deep-purple darken-4 tooltipped modal-trigger" data-position="left"
+          data-tooltip="Add to list">
+          <i class="material-icons">playlist_add</i>
+        </a>
+      </li>
+      <li th:if="${entry} == null">
+        <a href="#addEntryModal" id="new_entry" class="btn-floating deep-purple darken-4 tooltipped modal-trigger" data-position="left"
+          data-tooltip="New entry">
+          <i class="material-icons">mode_edit</i>
+        </a>
+      </li>
+      <li th:if="${entry} != null">
+        <a href="#editEntryModal" id="edit_entry" class="btn-floating deep-purple darken-4 tooltipped modal-trigger" data-position="left"
+          data-tooltip="Edit entry">
+          <i class="material-icons">mode_edit</i>
+        </a>
+      </li>
 
     </ul>
   </div>
@@ -73,7 +110,8 @@
   <div th:replace="fragments/addEntry" />
   <!-- Edit entry modal -->
   <div th:if="${entry}">
-    <div th:replace="fragments/editEntry"/>
+    <div th:replace="fragments/editEntry" />
   </div>
 </body>
+
 </html>

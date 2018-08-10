@@ -1,25 +1,45 @@
-<div id="addEntryModal" class="modal" style="overflow: visible;" >
+<div id="addEntryModal" class="modal" style="overflow: visible;">
   <div class="modal-content">
     <h4>Add to Diary</h4>
     <form th:action="@{/diary}" method="post">
       <h6>Rating</h6>
       <th:block th:each="i: ${#numbers.sequence(1, 10)}">
-      <span><label><input name="rating" type="radio" th:value="${i}"/><span th:text="${i}"/></label></span>
-    </th:block>
-    <a id="clear-button">Clear</a>
-    <div class="input-field">
+        <span>
+          <label>
+            <input name="rating" type="radio" th:value="${i}" />
+            <span th:text="${i}" />
+          </label>
+        </span>
+      </th:block>
+      <span>
+          <label>
+            <input name="rating" type="radio" th:value="${null}" th:checked="true" />
+            <span>No rating</span>
+          </label>
+        </span>
+      <div class="input-field">
         <h6>Review</h6>
-        <textarea  data-length="255" cols="20" rows="5" maxlength="255" class="materialize-textarea" name="review"/>
+        <textarea data-length="255" cols="20" rows="5" maxlength="255" class="materialize-textarea" name="review" />
       </div>
-        <span class="left"><label><input type="checkbox" name="favorite"></input><span>Favorite</span></label></span>
-        <span class="right"><label><input type="checkbox" name="secret" th:checked="true"></input><span>Private</span></label></span>
-        <div class="clearfix"/>
-        <div class="input-field">
-          <i class="material-icons prefix">date_range</i>
-          <input type="text" name="date" class="datepicker"/>
-        </div>
-        <input type="hidden" name="gameid" th:value="${game.id}"/>
-        <input class="btn deep-purple darken-4 right" type="submit" value="New entry"/>
+      <span class="left">
+        <label>
+          <input type="checkbox" name="favorite"></input>
+          <span>Favorite</span>
+        </label>
+      </span>
+      <span class="right">
+        <label>
+          <input type="checkbox" name="secret" th:checked="true"/>
+          <span>Private</span>
+        </label>
+      </span>
+      <div class="clearfix" />
+      <div class="input-field">
+        <i class="material-icons prefix">date_range</i>
+        <input type="text" name="date" class="datepicker" />
+      </div>
+      <input type="hidden" name="gameid" th:value="${game.id}" />
+      <input class="btn deep-purple darken-4 right" type="submit" value="New entry" />
     </form>
   </div>
 </div>

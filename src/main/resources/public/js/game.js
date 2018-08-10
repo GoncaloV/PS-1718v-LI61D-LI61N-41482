@@ -40,9 +40,17 @@ $(document).ready(function(){
 
   });
 
+  $('#clear-rating-btn').click(_ => {
+    console.log('estsgnsfd');
+    $('input[name=rating]').each((index, e) => {
+      console.log(e.checked);
+      e.checked=false;
+    });
+  });
+
   $('#delete-entry-btn').click(() => {
     $.post({
-      url: '/delete_entry',
+      url: '/diary/delete',
       data: $("#delete-entry-form").serialize(),
       timeout: 10000
     }).done(data => {

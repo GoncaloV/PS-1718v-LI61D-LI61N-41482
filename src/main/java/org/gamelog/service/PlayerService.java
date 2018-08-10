@@ -41,7 +41,7 @@ public class PlayerService implements UserDetailsService {
         Player player = findByName(usernameUpperCase).join();
         if (player != null) return player;
         else throw new UsernameNotFoundException(username);
-    } // TODO: Ask teacher: Could I do this asynchronously?
+    }
 
     /**
      * Registers a new player in the database. First checks if a player under the desired name is already in the database.
