@@ -61,7 +61,7 @@ public class GameController {
      * @return A completable future containing a model and view with the template "game.html" with model data about the
      * game, user entries and lists, and public entries and lists.
      */
-    @GetMapping(path="/game/{gameid}")
+    @GetMapping(path="/game/{gameid}") //TODO: Try doing the rating using the grid.
     private Future<ModelAndView> getGamePage(@PathVariable("gameid") Long gameid, Authentication authentication){
         return gameService.findGameInfoById(gameid).thenCompose(game -> {
 

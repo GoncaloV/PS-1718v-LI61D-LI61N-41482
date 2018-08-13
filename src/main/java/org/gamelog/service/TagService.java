@@ -18,7 +18,8 @@ public class TagService {
      * @param tagname The name of the tag to be created.
      * @return The tag created.
      */
-    public CompletableFuture<Tag> createTag(String tagname) {
+    public CompletableFuture<Tag> createTag(String tagname) throws Exception {
+        if(!isAlphanumeric(tagname)) throw new Exception("Tag name not alphanumeric.");
         return findTag(tagname).thenCompose(tag -> tag == null ? tagRepository.save(new Tag(tagname)) : null);
     }
 
@@ -49,5 +50,14 @@ public class TagService {
 
     public CompletableFuture<Iterable<Tag>> findAllTagsForGamelist(Gamelist gamelist){
         return tagRepository.findAllByGamelists(gamelist);
+    }
+
+    public boolean isAlphanumeric(String s) {
+        for (int i=0; i<s.length(); i++) {
+            char c = s.charAt(i);
+            if (c < 0x30 || (c >= 0x3a && c <= 0x40) || (c > 0x5a && c <= 0x60) || c > 0x7a)
+                return false;
+        }
+        return true;
     }
 }

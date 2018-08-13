@@ -10,7 +10,7 @@ import java.util.*;
 public class Tag {
     @Id
     @NotBlank
-    @Size(max=20)
+    @Size(min=1, max=20)
     private String name;
 
     @ManyToMany(mappedBy = "tags")
@@ -27,5 +27,14 @@ public class Tag {
 
     public Set<Gamelist> getGamelists() {
         return gamelists;
+    }
+
+    public boolean isAlphanumeric2(String name) {
+        for (int i=0; i<name.length(); i++) {
+            char c = name.charAt(i);
+            if (c < 0x30 || (c >= 0x3a && c <= 0x40) || (c > 0x5a && c <= 0x60) || c > 0x7a)
+                return false;
+        }
+        return true;
     }
 }

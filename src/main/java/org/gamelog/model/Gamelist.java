@@ -7,7 +7,7 @@ import java.util.*;
 public class Gamelist {
     @EmbeddedId
     private GamelistId id;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @OrderBy("id")
     private Set<Game> games = new LinkedHashSet<>();
     @ManyToMany

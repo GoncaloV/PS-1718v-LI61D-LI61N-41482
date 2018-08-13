@@ -41,9 +41,7 @@ $(document).ready(function(){
   });
 
   $('#clear-rating-btn').click(_ => {
-    console.log('estsgnsfd');
     $('input[name=rating]').each((index, e) => {
-      console.log(e.checked);
       e.checked=false;
     });
   });

@@ -76,3 +76,15 @@ word-break: break-all;
 .chip {
   background-color: #d1c4e9 !important;
 }
+
+.clear-tag-btn {
+  cursor: pointer;
+  float: right;
+  font-size: 16px;
+  line-height: 32px;
+  padding-left: 8px;
+}
+
+.clear-game-btn {
+  cursor: pointer;
+}

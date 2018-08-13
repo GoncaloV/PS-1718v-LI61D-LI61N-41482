@@ -50,7 +50,8 @@ public class PlayerService implements UserDetailsService {
      * @return A completable future containing: Null, if a player under that name already exists; Another completable future containing the player created, if it was created successfully.
      */
     @Async
-    public CompletableFuture<Player> createPlayer(String name, String password) {
+    public CompletableFuture<Player> createPlayer(String name, String password) throws Exception {
+        if(!isAlphanumeric(name)) throw new Exception("Player name not alphanumeric.");
         return playerRepository.findPlayerByNameIgnoreCase(name)
                 .thenCompose(player -> {
             if (player != null)
@@ -68,5 +69,14 @@ public class PlayerService implements UserDetailsService {
     @Async
     public CompletableFuture<Iterable<Player>> findAll() {
         return playerRepository.findAll();
+    }
+
+    public boolean isAlphanumeric(String s) {
+        for (int i=0; i<s.length(); i++) {
+            char c = s.charAt(i);
+            if (c < 0x30 || (c >= 0x3a && c <= 0x40) || (c > 0x5a && c <= 0x60) || c > 0x7a)
+                return false;
+        }
+        return true;
     }
 }

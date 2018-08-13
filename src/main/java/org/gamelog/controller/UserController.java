@@ -53,7 +53,7 @@ public class UserController {
      */
     @PostMapping(path="/register")
     @ResponseBody
-    public CompletableFuture<Boolean> postRegister(@RequestParam("name") String name, @RequestParam("password") String password){
+    public CompletableFuture<Boolean> postRegister(@RequestParam("name") String name, @RequestParam("password") String password) throws Exception {
         return playerService.createPlayer(name, password).thenApply(player -> player == null);
     }
 

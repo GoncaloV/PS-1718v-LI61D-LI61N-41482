@@ -11,31 +11,32 @@
   <div th:replace="fragments/navbar" />
 
   <div class="container center-align">
-    <div class="card deep-purple lighten-5">
-      <img class="cover-image left" th:src="${game.coverUrl} ? ${game.coverUrl} : '/images/nocover.png'" th:title="${game.name}"/>
-      <h1 th:text="${game.name}"></h1>
-      <p align="justify" th:text="${game.summary}" />
-      <div class="clearfix" />
-      <hr/>
-      <div class="row game-data">
-        <span class="col s2 tooltipped" data-position="top" data-tooltip="Plays">
-          <i class="inline-icon material-icons">gamepad</i>
-          <span th:text="${game.plays}" />
-        </span>
-        <div class="col s3" />
-        <span class="col s2 tooltipped" data-position="top" data-tooltip="Rating">
-          <i class="inline-icon material-icons">star</i>
-          <span class="star-rating" th:text="${game.averageRatings} ? ${game.averageRatings} : 'No ratings yet'"
-          /></span>
-        <div class="col s3" />
-        <span class="col s2 tooltipped" data-position="top" data-tooltip="Favorites">
-          <span th:text="${game.favorites}" />
-          <i class="inline-icon material-icons">favorite</i>
-        </span>
+    <div class="card horizontal deep-purple lighten-5">
+      <div class="card-image valign-wrapper">
+        <img th:src="${game.coverUrl} ? ${game.coverUrl} : '/images/nocover.png'" th:title="${game.name}" />
       </div>
-      <hr/>
+      <div class="card-stacked">
+        <span class="card-title" th:text="${game.name}" />
+        <div class="card-content">
+          <p align="justify" th:text="${game.summary}" />
+        </div>
+        <div class="card-action">
+          <div class="row game-data">
+            <span class="col s4 tooltipped" data-position="top" data-tooltip="Plays">
+              <i class="inline-icon material-icons">gamepad</i>
+              <span th:text="${game.plays}" />
+            </span>
+            <span class="col s4 tooltipped" data-position="top" data-tooltip="Rating">
+              <i class="inline-icon material-icons">star</i>
+              <span class="star-rating" th:text="${game.averageRatings} ? ${game.averageRatings} : 'No ratings yet'" /></span>
+            <span class="col s4 tooltipped" data-position="top" data-tooltip="Favorites">
+              <span th:text="${game.favorites}" />
+              <i class="inline-icon material-icons">favorite</i>
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
-
     <!-- User Reviews -->
     <div th:each="entry : ${entries}">
       <div class="card deep-purple lighten-5">
@@ -50,7 +51,7 @@
             <font size="1">Review</font>
             <p class="review" th:text="${entry.review}" />
           </div>
-          <hr th:if="${entry.date!=null or entry.rating!=null or entry.favorite==true}"/>
+          <hr th:if="${entry.date!=null or entry.rating!=null or entry.favorite==true}" />
           <div class="row" style="margin-bottom: 0;">
             <span th:if="${entry.date}" class="col s2 tooltipped" data-position="top" data-tooltip="Date">
               <i class="inline-icon material-icons">date_range</i>
