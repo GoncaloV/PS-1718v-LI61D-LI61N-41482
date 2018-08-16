@@ -33,7 +33,7 @@ public class EntryTests {
     @Test
     @Transactional
     @Async
-    public void createEntryTest(){
+    public void createEntryTest() throws Exception {
         // TODO: Ask teacher: Async testing?
         Player p = playerService.createPlayer("TESTPLAYER", "TESTPASSWORD").join();
         Game g = new Game(1);
@@ -54,7 +54,7 @@ public class EntryTests {
     @Test
     @Transactional
     @Async
-    public void editEntryTest(){
+    public void editEntryTest() throws Exception {
         Player p = playerService.createPlayer("TESTPLAYER", "TESTPASSWORD").join();
         Game g = new Game(1);
         LocalDate now = LocalDate.now();

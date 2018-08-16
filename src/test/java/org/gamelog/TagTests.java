@@ -41,7 +41,7 @@ public class TagTests {
      */
     @Test
     @Transactional
-    public void testCreateFindDelete(){
+    public void testCreateFindDelete() throws Exception {
         final Tag CREATED_TAG = tagService.createTag(TAG_NAME).join();
         final Tag FOUND_TAG = tagService.findTag(TAG_NAME).join();
         assert CREATED_TAG == FOUND_TAG;

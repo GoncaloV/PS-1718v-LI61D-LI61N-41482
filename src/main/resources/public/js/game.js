@@ -11,7 +11,7 @@ $(document).ready(function(){
     autoClose: true,
     showClearBtn: true
   });
-  $('.textarea').characterCounter();
+  $('textarea').characterCounter();
   // Messy way of translating the numeric rating to stars.
   // First check if the rating is numeric (it could be the string "No ratings yet")
   $('.star-rating').each(function() {
@@ -50,11 +50,23 @@ $(document).ready(function(){
     $.post({
       url: '/diary/delete',
       data: $("#delete-entry-form").serialize(),
-      timeout: 10000
+      timeout: 5000
     }).done(data => {
       location.reload(true);
     }).fail(e => {
-      console.log(e);
+      alert(e); //TODO: Do better
+    });
+  });
+
+  $('#add-entry-btn').click((e) => {
+    $.post({
+      url: '/diary',
+      data: $("#add-entry-form").serialize(),
+      timeout: 5000
+    }).done(data => {
+      location.reload(true);
+    }).fail(e => {
+      alert(e); //TODO: Do better
     });
   });
 });

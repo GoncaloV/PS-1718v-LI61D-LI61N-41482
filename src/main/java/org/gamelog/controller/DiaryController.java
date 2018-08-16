@@ -39,30 +39,7 @@ public class DiaryController {
         });
     }
 
-    /**
-     * Posts a new entry or updates an existing one. TODO: Make it AJAX
-     * @param rating A rating from 1 to 10 for the game being written about.
-     * @param review A string describing the player's experience with the game.
-     * @param favorite Whether or not the game is marked as favorite.
-     * @param secret Whether or not the game is marked as private.
-     * @param date The date when the entry was written.
-     * @param gameid The id for the game being written about.
-     * @param authentication Request parameter to identify current user.
-     * @return A future containing a model and view with the entry.html template, containing data from the entry.
-     */
     @PostMapping
-    private Future<RedirectView> postEntry(@RequestParam(value = "rating", required = false) Integer rating,
-                                                @RequestParam(value = "review", required = false) String review,
-                                                @RequestParam(value = "favorite", required = false) boolean favorite,
-                                                @RequestParam(value = "secret", required = false) boolean secret,
-                                                @RequestParam(value = "date", required = false) @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date,
-                                                @RequestParam("gameid") long gameid,
-                                                Authentication authentication){
-        Player player = (Player) authentication.getPrincipal();
-        return entryService.saveEntry(rating, review, favorite, secret, date, gameid, player).thenApply(entry -> new RedirectView("/game/" + gameid));
-    }
-
-    @PostMapping("/postentryajax")
     @ResponseBody
     private Future<ResponseEntity<String>> postEntryAjax(@RequestParam(value = "rating", required = false) Integer rating,
                                            @RequestParam(value = "review", required = false) String review,

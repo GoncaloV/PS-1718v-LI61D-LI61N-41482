@@ -45,7 +45,7 @@ public class GamelistController {
      */
     // TODO: Make it ajax.
     @PostMapping
-    private Future<RedirectView> postNewList(Authentication authentication, @RequestParam("listname") String listname) throws Exception {
+    private Future<RedirectView> postNewList(Authentication authentication, @RequestParam("listname") String listname) {
         Player player = (Player) authentication.getPrincipal();
         return gamelistService.addNewList(player, listname).thenApply(gamelist -> new RedirectView("/lists"));
     }

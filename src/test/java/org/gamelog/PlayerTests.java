@@ -27,7 +27,7 @@ public class PlayerTests {
 
     @Test
     @Transactional
-    public void testFindOneById(){
+    public void testFindOneById() throws Exception {
         playerService.createPlayer(NAME, PASSWORD).thenAccept(p1 -> {
             playerService.findById(p1.getId()).thenAccept(p2 -> {
                 assertSame(p1, p2);
@@ -37,7 +37,7 @@ public class PlayerTests {
 
     @Test
     @Transactional
-    public void testFindOneByName(){
+    public void testFindOneByName() throws Exception {
         AtomicReference<Player> p1 = new AtomicReference<>();
         AtomicReference<Player> p2 = new AtomicReference<>();
         playerService.createPlayer(NAME, PASSWORD).thenAccept(x1 -> {
@@ -51,7 +51,7 @@ public class PlayerTests {
 
     @Test
     @Transactional
-    public void testDeleteOne(){
+    public void testDeleteOne() throws Exception {
         playerService.createPlayer(NAME, PASSWORD).thenAccept(p1 -> {
             playerService.delete(p1);
             playerService.findById(p1.getId()).thenAccept(p2 -> {
@@ -62,7 +62,7 @@ public class PlayerTests {
 
     @Test
     @Transactional
-    public void testDeleteAll(){
+    public void testDeleteAll() throws Exception {
         playerService.createPlayer(NAME, PASSWORD)
                 .thenAcceptBoth(playerService.createPlayer(NAME2, PASSWORD2), (p1, p2) -> {
                    playerService.deleteAll();

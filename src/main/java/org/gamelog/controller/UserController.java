@@ -52,9 +52,9 @@ public class UserController {
      * @return True if the user was created successfully, false if the username is taken.
      */
     @PostMapping(path="/register")
-    @ResponseBody
-    public CompletableFuture<Boolean> postRegister(@RequestParam("name") String name, @RequestParam("password") String password) throws Exception {
-        return playerService.createPlayer(name, password).thenApply(player -> player == null);
+    @ResponseBody //TODO: Return JSON instead of boolean.
+    public CompletableFuture<Boolean> postRegister(@RequestParam("name") String name, @RequestParam("password") String password) {
+        return playerService.createPlayer(name, password).thenApply(player -> player == null).exceptionally(__ -> false);
     }
 
     /**

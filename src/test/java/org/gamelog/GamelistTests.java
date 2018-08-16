@@ -41,7 +41,7 @@ public class GamelistTests {
      */
     @Test
     @Transactional
-    public void testAddNewTagToList(){
+    public void testAddNewTagToList() throws Exception {
         final Player PLAYER = playerService.createPlayer(PLAYER_NAME, PLAYER_PASSWORD).join(); //TODO: Fix tests?
         final Gamelist GAMELIST = gamelistService.addNewList(PLAYER, GAMELIST_NAME).join();
         gamelistService.addTagToList(PLAYER, GAMELIST_NAME, TAG_NAME);
@@ -56,7 +56,7 @@ public class GamelistTests {
      */
     @Test
     @Transactional
-    public void testAddExistingTagToList(){
+    public void testAddExistingTagToList() throws Exception {
         final Player PLAYER = playerService.createPlayer(PLAYER_NAME, PLAYER_PASSWORD).join();
         final Gamelist GAMELIST = gamelistService.addNewList(PLAYER, GAMELIST_NAME).join();
         final Tag TAG_CREATED = tagService.createTag(TAG_NAME).join();

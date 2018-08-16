@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.security.InvalidParameterException;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -50,8 +51,14 @@ public class PlayerService implements UserDetailsService {
      * @return A completable future containing: Null, if a player under that name already exists; Another completable future containing the player created, if it was created successfully.
      */
     @Async
-    public CompletableFuture<Player> createPlayer(String name, String password) throws Exception {
-        if(!isAlphanumeric(name)) throw new Exception("Player name not alphanumeric.");
+    public CompletableFuture<Player> createPlayer(String name, String password) {
+        if(!isAlphanumeric(name)){
+            try {
+                throw new InvalidParameterException("Player name not alphanumeric.");
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
         return playerRepository.findPlayerByNameIgnoreCase(name)
                 .thenCompose(player -> {
             if (player != null)
