@@ -2,7 +2,6 @@ package org.gamelog.repos;
 
 import org.gamelog.model.Gamelist;
 import org.gamelog.model.Tag;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.Repository;
 import org.springframework.scheduling.annotation.Async;
 

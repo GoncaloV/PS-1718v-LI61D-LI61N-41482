@@ -90,7 +90,7 @@ word-break: break-all;
 }
 
 .ui-datepicker {
-  background: #333;
-  border: 1px solid #555;
-  color: #EEE;
+  background: red;
+  border: 1px solid red;
+  color: red;
 }

@@ -34,7 +34,7 @@ public class EntryService {
         return entryRepository.findAllByIdPlayer(p);
     }
 
-    /** TODO: Multiple entries per game?
+    /**
      * Adds a new entry for a game for an existing player.
      * @param rating A score between 1 and 10 given to the game by the player.
      * @param review A text written about the game by the player.
@@ -69,7 +69,7 @@ public class EntryService {
         return entryRepository.findAll();
     }
 
-    /** TODO: Needs to be edited if multiple entries per game are allowed.
+    /**
      * Finds the entry a player made for a game.
      * @param player The player who wrote the entry.
      * @param game The game the entry was written about.

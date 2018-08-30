@@ -1,13 +1,14 @@
 package org.gamelog.model;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 public class Gamelist {
     @EmbeddedId
     private GamelistId id;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @OrderBy("id")
     private Set<Game> games = new LinkedHashSet<>();
     @ManyToMany

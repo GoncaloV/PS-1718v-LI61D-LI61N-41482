@@ -7,7 +7,6 @@ import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.Request;
 import org.gamelog.config.GameDeserializer;
 import org.gamelog.model.Game;
-import org.gamelog.model.Player;
 import org.gamelog.repos.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
 
 import static org.asynchttpclient.Dsl.asyncHttpClient;
 import static org.asynchttpclient.Dsl.get;

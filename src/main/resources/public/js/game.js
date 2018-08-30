@@ -54,7 +54,7 @@ $(document).ready(function(){
     }).done(data => {
       location.reload(true);
     }).fail(e => {
-      alert(e); //TODO: Do better
+      alert(e);
     });
   });
 
@@ -66,7 +66,7 @@ $(document).ready(function(){
     }).done(data => {
       location.reload(true);
     }).fail(e => {
-      alert(e); //TODO: Do better
+      alert(e);
     });
   });
 });

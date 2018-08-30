@@ -75,14 +75,8 @@ $(document).ready(function () {
                 url: 'register',
                 data: $("#register").serialize(),
                 timeout: 10000
-            }).done(function (exists) {
-                if (exists) {
-                    $("#alert_existing_name").find('span').text(`User "${name.val()}" already exists!`);
-                    $("#alert_existing_name").show();
-                    $("#loading").hide();
-                    $("#signup").show();
-                }
-                else {
+            }).done(function (data) {
+            console.log(data);
                     $("#loading_text").text(" Logging in...")
                     $("#login_name").val(name.val());
                     $("#login_pass").val(password.val());
@@ -93,7 +87,11 @@ $(document).ready(function () {
                     }).done(function(){
                         window.location.replace("/");
                     });
-                }
+            }).fail(data => {
+                                $("#alert_existing_name").find('span').text(`User "${name.val()}" already exists!`);
+                                $("#alert_existing_name").show();
+                                $("#loading").hide();
+                                $("#signup").show();
             });
         }
     });

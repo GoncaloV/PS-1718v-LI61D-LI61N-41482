@@ -7,11 +7,8 @@ import org.gamelog.model.Tag;
 import org.gamelog.repos.GamelistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.awt.image.ImageWatched;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 

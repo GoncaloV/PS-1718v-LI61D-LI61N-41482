@@ -43,7 +43,6 @@ public class GamelistController {
      * @param listname New list's name.
      * @return A redirect to "/lists".
      */
-    // TODO: Make it ajax.
     @PostMapping
     private Future<RedirectView> postNewList(Authentication authentication, @RequestParam("listname") String listname) {
         Player player = (Player) authentication.getPrincipal();
@@ -57,7 +56,6 @@ public class GamelistController {
      * @param authentication Currently authenticated user.
      * @return A redirect to the list being tagged.
      */
-    // TODO: Make it AJAX.
     @PostMapping(path = "/tag")
     private Future<RedirectView> tagList(@RequestParam("tagname") String tagname, @RequestParam("listname") String listname, Authentication authentication){
         Player player = (Player) authentication.getPrincipal();

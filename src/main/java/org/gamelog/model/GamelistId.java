@@ -3,7 +3,8 @@ package org.gamelog.model;
 import org.hibernate.validator.constraints.NotBlank;
 import org.jetbrains.annotations.NotNull;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;

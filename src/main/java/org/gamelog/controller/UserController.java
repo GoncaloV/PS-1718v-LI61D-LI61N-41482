@@ -1,6 +1,5 @@
 package org.gamelog.controller;
 
-import org.gamelog.model.Player;
 import org.gamelog.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,12 +48,14 @@ public class UserController {
      * Check if a username already exists and creates a user under that username if it's not taken.
      * @param name The username to register a new user with.
      * @param password The password to register a new user with.
-     * @return True if the user was created successfully, false if the username is taken.
+     * @return A response entity with code 200 if successful or 409 if the username is taken.
      */
     @PostMapping(path="/register")
-    @ResponseBody //TODO: Return JSON instead of boolean.
-    public CompletableFuture<Boolean> postRegister(@RequestParam("name") String name, @RequestParam("password") String password) {
-        return playerService.createPlayer(name, password).thenApply(player -> player == null).exceptionally(__ -> false);
+    @ResponseBody
+    public CompletableFuture<ResponseEntity<String>> postRegister(@RequestParam("name") String name, @RequestParam("password") String password) {
+        return playerService.createPlayer(name, password)
+                .thenApply(player -> new ResponseEntity<>("This username is available.", HttpStatus.OK))
+                .exceptionally(__ -> new ResponseEntity<>(HttpStatus.CONFLICT));
     }
 
     /**

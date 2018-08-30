@@ -6,6 +6,7 @@ import org.gamelog.model.Game;
 import org.gamelog.model.Player;
 import org.springframework.data.repository.Repository;
 import org.springframework.scheduling.annotation.Async;
+
 import java.util.concurrent.CompletableFuture;
 
 public interface EntryRepository extends Repository<Entry, EntryId> {

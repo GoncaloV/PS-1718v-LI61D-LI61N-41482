@@ -7,7 +7,64 @@
     <script type='text/javascript' src='/js/index.js' />
 </head>
 <nav th:replace="fragments/navbar" />
+
 <body>
+    <div class="container">
+        <div class="row">
+            <div class="col s4">
+                <div class="card deep-purple lighten-5 index-card">
+                    <div class="card-content">
+                        <span class="card-title">
+                            <i class="material-icons right">search</i>Search for games</span>
+                        <p>
+                            Use the search function to search for games.
+                        </p>
+                    </div>
+
+                    <div class="card-action">
+                        <form th:action="@{/search}" method="GET">
+                            <div class="input-field">
+                                <input type="text" name="query" required="required" placeholder="Search" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col s4">
+                <div class="card deep-purple lighten-5 index-card">
+                    <div class="card-content">
+                        <span class="card-title">
+                            <i class="material-icons right">games</i>Write in your diary</span>
+                        <p>
+                            Once you find a game, sign in and make an entry about it. Your diary page will contain all the entries you have made.
+                        </p>
+                    </div>
+
+                    <div class="card-action">
+                        <a th:if="${#httpServletRequest.remoteUser}" href="/diary">Your diary</a>
+                        <a th:unless="${#httpServletRequest.remoteUser}" href="/register">Sign up</a>
+                        <a th:unless="${#httpServletRequest.remoteUser}" href="/login">Sign in</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col s4">
+                <div class="card deep-purple lighten-5 index-card">
+                    <div class="card-content">
+                        <span class="card-title">
+                            <i class="material-icons right">playlist_add</i>Add to your list</span>
+                        <p>
+                            You can also make custom lists and add games to them.
+                        </p>
+                    </div>
+                    <div class="card-action">
+                        <a th:if="${#httpServletRequest.remoteUser}" href="/lists">Your lists</a>
+                        <a th:unless="${#httpServletRequest.remoteUser}" href="/register">Sign up</a>
+                        <a th:unless="${#httpServletRequest.remoteUser}" href="/login">Sign in</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
