@@ -8,10 +8,10 @@ import java.util.Set;
 public class Gamelist {
     @EmbeddedId
     private GamelistId id;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @OrderBy("id")
     private Set<Game> games = new LinkedHashSet<>();
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @OrderBy("name")
     private Set<Tag> tags = new LinkedHashSet<>();
 

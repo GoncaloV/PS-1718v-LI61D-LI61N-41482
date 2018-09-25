@@ -67,10 +67,9 @@ public class GameController {
 
             ModelAndView modelAndView = new ModelAndView("game");
             modelAndView.addObject("game", game);
-            // Only add the following objects to the model if user is authenticated
             CompletableFuture futurePublicEntries = entryService.findPublicEntriesForGameById(game)
                     .thenAccept(entries -> modelAndView.addObject("entries", entries));
-
+            // Only add the following objects to the model if user is authenticated
             if (authentication != null) {
                 Player player = (Player) authentication.getPrincipal();
                 CompletableFuture futureEntry = entryService.findByPlayerAndGame(player, game)

@@ -44,4 +44,7 @@ public interface GamelistRepository extends Repository<Gamelist, GamelistId> {
 
     @Async
     CompletableFuture<Gamelist> findOneByIdPlayerAndIdName(Player player, String gamelistname);
+
+    @Async
+    CompletableFuture<Iterable<Gamelist>> findAllByIdPlayer(Player player);
 }

@@ -30,7 +30,7 @@ public class GamelistService {
      * @return An iterable of all gamelists that belong to a player.
      */
     public CompletableFuture<Iterable<Gamelist>> findAllByPlayerId(Player player) {
-        return gamelistRepository.findTop5ByIdPlayer(player);
+        return gamelistRepository.findAllByIdPlayer(player);
     }
 
     /**
