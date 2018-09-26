@@ -128,13 +128,13 @@ public class GamelistService {
      * @return The modified gamelist.
      */
     public CompletableFuture<Gamelist> addTagToList(Player player, String listname, String tagname) {
-        CompletableFuture<Tag> tagCompletableFuture = tagService.findTag(tagname);
+        CompletableFuture<Tag> tagCompletableFuture = tagService.tryFindTag(tagname);
         CompletableFuture<Gamelist> gamelistCompletableFuture = gamelistRepository.findOneByIdPlayerAndIdName(player, listname);
         CompletableFuture[] completableFutures = {tagCompletableFuture, gamelistCompletableFuture};
         return CompletableFuture.allOf(completableFutures).thenCompose(x -> {
             Gamelist gamelist = gamelistCompletableFuture.join();
             Tag tag = tagCompletableFuture.join();
-            gamelist.addTag(tagCompletableFuture.join());
+            gamelist.addTag(tag);
             return gamelistRepository.save(gamelist);
         });
     }

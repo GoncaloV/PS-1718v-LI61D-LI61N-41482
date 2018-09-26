@@ -60,4 +60,20 @@ public class TagService {
         }
         return true;
     }
+
+    public CompletableFuture<Tag> tryFindTag(String tagname) {
+        return findTag(tagname).thenCompose(tag -> {
+            if (tag != null) return CompletableFuture.completedFuture(tag);
+            else {
+                try {
+                    return createTag(tagname).thenApply(tag1 -> {
+                        return tag1;
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return CompletableFuture.completedFuture(tag);
+            }
+        });
+    }
 }
